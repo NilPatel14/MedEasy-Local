@@ -88,15 +88,23 @@ h6 {
 .hero {
   margin-top: 0;
     width: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
     min-height: calc(100vh - 112px);
     padding: 80px 0;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    overflow: hidden;
+    /* overflow: hidden; */
   }
-  
+ #hero.show {
+    opacity: 1; /* Slide into view */
+  }
+
+
+
+
   .hero img {
     position: absolute;
     inset: 0;
@@ -198,6 +206,18 @@ h6 {
 
 
 /* ----------About---------- */
+
+.about {
+  transform: translateY(100%); /* Start off the bottom */
+  opacity: 0;
+  transition: transform 0.6s ease-out, opacity 0.6s ease-out;
+}
+
+.about.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
 
 .about .content h3 {
     font-size: 2rem;
@@ -352,6 +372,26 @@ h6 {
 /*--------------------------------------------------------------
 # Services Section
 --------------------------------------------------------------*/
+
+
+
+
+/* Initial hidden off-screen position */
+.service-item {
+  transform: translateX(-100%);
+  opacity: 0;
+  transition: transform 1.2s ease-out, opacity 1.2s ease-out;
+}
+
+.service-item.show-left {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.service-item.show-right {
+  transform: translateX(0);
+  opacity: 1;
+}
 
 .services a{
   
@@ -549,6 +589,17 @@ h6 {
 /*--------------------------------------------------------------
 # Contact Section
 --------------------------------------------------------------*/
+
+.contact {
+  transform: translateY(100%); /* Start off the bottom */
+  opacity: 0;
+  transition: transform 0.6s ease-out, opacity 0.6s ease-out;
+}
+
+.contact.show {
+  transform: translateY(0);
+  opacity: 1;
+}
 .contact .info-item+.info-item {
   margin-top: 40px;
 }
