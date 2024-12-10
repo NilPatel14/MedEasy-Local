@@ -1,0 +1,311 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedEasy</title>
+  
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@srexi/purecounterjs/dist/purecounter_vanilla.js"></script>
+
+    
+
+    <script src="https://kit.fontawesome.com/7763d0ea4c.js" crossorigin="anonymous"></script>
+    {% comment %} Javascript files {% endcomment %}
+    <script src="{% static 'js/script1.js' %}"></script>
+    
+</head>
+<body data-aos-easing="ease-in-out" data-aos-duration="600" data-aos-delay="0">
+    <div class="header sticky-top">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid w-80">
+              <a class="navbar-brand text-white font" id="Logo" href="#">MedEasy</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse item-atend" id="navbarNav">
+                <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link text-white" href="#" role="button">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link text-white" href="#about" role="button">About</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link text-white" href="#" role="button">Service</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link text-white" href="#" role="button">Contact</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+        </nav>
+    </div>
+    
+    <section id="hero" class="hero section light-background">
+
+        <img src="{% static 'assets/img/hero-bg.jpg' %}" alt="" data-aos="fade-in">
+  
+        <div class="container position-relative">
+  
+          <div class="welcome position-relative" data-aos="fade-down" data-aos-delay="100">
+            <h2>WELCOME TO MedEasy</h2>
+            <p>MedEasy is used to digitalize hospital management system.</p>
+          </div><!-- End Welcome -->
+  
+          <div class="content row gy-4">
+            <div class="col-lg-4 d-flex align-items-stretch">
+              <div class="why-box" data-aos="zoom-out" data-aos-delay="200">
+                <h3>Why Choose MedEasy?</h3>
+                <p>
+                    MedEasy is an innovative website and digital platform that is well crafted to digitalize hospital managment system. 
+                    Our main motive is to improve the efficiency of hospital administration and enhance patient care. 
+                </p>
+                <div class="text-center">
+                  <a href="#about" class="more-btn"><span>Learn More</span> <i class="bi bi-chevron-right"></i></a>
+                </div>
+              </div>
+            </div><!-- End Why Box -->
+  
+            <div class="col-lg-8 d-flex align-items-stretch">
+              <div class="d-flex flex-column justify-content-center">
+                <div class="row gy-4">
+  
+                  <div class="col-xl-4 d-flex align-items-stretch">
+                    <div class="icon-box" data-aos="zoom-out" data-aos-delay="300">
+                      <i class="bi bi-clipboard-data"></i>
+                      <h4>Electronic Health Records (EHR)</h4>
+                      <p> Centralized digital records allow healthcare providers instant access to patient information, including medical history,  medications.</p>
+
+                    </div>
+                  </div><!-- End Icon Box -->
+  
+                  <div class="col-xl-4 d-flex align-items-stretch">
+                    <div class="icon-box" data-aos="zoom-out" data-aos-delay="400">
+                      <i class="bi bi-gem"></i>
+                      <h4>Patient Engagment</h4>
+                      <p>Patients can schedule appointments, access lab results which enhance convenience and engagement. 
+                    </p>
+                    </div>
+                  </div><!-- End Icon Box -->
+  
+                  <div class="col-xl-4 d-flex align-items-stretch">
+                    <div class="icon-box" data-aos="zoom-out" data-aos-delay="500">
+                      <i class="bi bi-inboxes"></i>
+                      <h4>Easy Billing</h4>
+                      <p>Automatically calculated Bills and online payment options minimizes billing errors. It reduses the work of receptionist.</p>
+                    </div>
+                  </div><!-- End Icon Box -->
+  
+                </div>
+              </div>
+            </div>
+          </div><!-- End  Content-->
+  
+        </div>
+  
+      </section><!-- /Hero Section -->
+  
+    <!-- About Section -->
+    <section id="about" class="about section">
+
+        <div class="container">
+  
+          <div class="row gy-4 gx-5">
+  
+            <div class="col-lg-6 position-relative align-self-start" data-aos="fade-up" data-aos-delay="200">
+              <img src="{% static 'assets/img/about.jpg' %}" class="img-fluid" alt="">
+              <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8" class="glightbox pulsating-play-btn"></a>
+            </div>
+  
+            <div class="col-lg-6 content" data-aos="fade-up" data-aos-delay="100">
+              <h3>About Us</h3>
+              <p>
+                Dolor iure expedita id fuga asperiores qui sunt consequatur minima. Quidem voluptas deleniti. Sit quia molestiae quia quas qui magnam itaque veritatis dolores. Corrupti totam ut eius incidunt reiciendis veritatis asperiores placeat.
+              </p>
+              <ul>
+                <li>
+                  <i class="fa-solid fa-vial-circle-check"></i>
+                  <div>
+                    <h5>Ullamco laboris nisi ut aliquip consequat</h5>
+                    <p>Magni facilis facilis repellendus cum excepturi quaerat praesentium libre trade</p>
+                  </div>
+                </li>
+                <li>
+                  <i class="fa-solid fa-pump-medical"></i>
+                  <div>
+                    <h5>Magnam soluta odio exercitationem reprehenderi</h5>
+                    <p>Quo totam dolorum at pariatur aut distinctio dolorum laudantium illo direna pasata redi</p>
+                  </div>
+                </li>
+                <li>
+                  <i class="fa-solid fa-heart-circle-xmark"></i>
+                  <div>
+                    <h5>Voluptatem et qui exercitationem</h5>
+                    <p>Et velit et eos maiores est tempora et quos dolorem autem tempora incidunt maxime veniam</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+  
+          </div>
+  
+        </div>
+  
+      </section><!-- /About Section -->
+
+
+          <!-- Stats Section -->
+    <section id="stats" class="stats section light-background">
+  
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row gy-4">
+
+          <div class="col-lg-3 col-md-6 d-flex flex-column align-items-center">
+            <i class="fa-solid fa-user-doctor"></i>
+            <div class="stats-item">
+              <span id="sdNo">12</span>
+              <p>Doctors</p>
+            </div>
+          </div><!-- End Stats Item -->
+
+          <div class="col-lg-3 col-md-6 d-flex flex-column align-items-center">
+            <i class="fa-regular fa-hospital"></i>
+            <div class="stats-item">
+              <span id="spNo">23</span>
+              <p>Departments</p>
+            </div>
+          </div><!-- End Stats Item -->
+
+          <div class="col-lg-3 col-md-6 d-flex flex-column align-items-center">
+            <i class="fas fa-flask"></i>
+            <div class="stats-item">
+              <span id="srNo">3</span>
+              <p>Receptionists</p>
+            </div>
+          </div><!-- End Stats Item -->
+
+          <div class="col-lg-3 col-md-6 d-flex flex-column align-items-center">
+            <i class="fas fa-award"></i>
+            <div class="stats-item">
+              <span id="saNo">10</span>
+              <p>Awards</p>
+            </div>
+          </div><!-- End Stats Item -->
+
+        </div>
+
+      </div>
+
+    </section><!-- /Stats Section -->
+
+    <!-- Services Section -->
+    <section id="services" class="services section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Services</h2>
+        <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
+      </div><!-- End Section Title -->
+
+      <div class="container">
+
+        <div class="row gy-4">
+
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="service-item  position-relative">
+              <div class="icon">
+                <i class="fas fa-heartbeat"></i>
+              </div>
+              <a href="#" class="stretched-link">
+                <h3>Nesciunt Mete</h3>
+              </a>
+              <p>Provident nihil minus qui consequatur non omnis maiores. Eos accusantium minus dolores iure perferendis tempore et consequatur.</p>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+            <div class="service-item position-relative">
+              <div class="icon">
+                <i class="fas fa-pills"></i>
+              </div>
+              <a href="#" class="stretched-link">
+                <h3>Eosle Commodi</h3>
+              </a>
+              <p>Ut autem aut autem non a. Sint sint sit facilis nam iusto sint. Libero corrupti neque eum hic non ut nesciunt dolorem.</p>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+            <div class="service-item position-relative">
+              <div class="icon">
+                <i class="fas fa-hospital-user"></i>
+              </div>
+              <a href="#" class="stretched-link">
+                <h3>Ledo Markt</h3>
+              </a>
+              <p>Ut excepturi voluptatem nisi sed. Quidem fuga consequatur. Minus ea aut. Vel qui id voluptas adipisci eos earum corrupti.</p>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
+            <div class="service-item position-relative">
+              <div class="icon">
+                <i class="fas fa-dna"></i>
+              </div>
+              <a href="#" class="stretched-link">
+                <h3>Asperiores Commodit</h3>
+              </a>
+              <p>Non et temporibus minus omnis sed dolor esse consequatur. Cupiditate sed error ea fuga sit provident adipisci neque.</p>
+              <a href="#" class="stretched-link"></a>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
+            <div class="service-item position-relative">
+              <div class="icon">
+                <i class="fas fa-wheelchair"></i>
+              </div>
+              <a href="#" class="stretched-link">
+                <h3>Velit Doloremque</h3>
+              </a>
+              <p>Cumque et suscipit saepe. Est maiores autem enim facilis ut aut ipsam corporis aut. Sed animi at autem alias eius labore.</p>
+              <a href="#" class="stretched-link"></a>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
+            <div class="service-item position-relative">
+              <div class="icon">
+                <i class="fas fa-notes-medical"></i>
+              </div>
+              <a href="#" class="stretched-link">
+                <h3>Dolori Architecto</h3>
+              </a>
+              <p>Hic molestias ea quibusdam eos. Fugiat enim doloremque aut neque non et debitis iure. Corrupti recusandae ducimus enim.</p>
+              <a href="#" class="stretched-link"></a>
+            </div>
+          </div><!-- End Service Item -->
+
+        </div>
+
+      </div>
+
+    </section><!-- /Services Section -->
+
+
+
+
+  <div id="preloader"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+</body>
+</html>
+
