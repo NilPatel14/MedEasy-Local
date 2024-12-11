@@ -11,3 +11,11 @@ class ContactModel(models.Model):
 
     def __str__(self):
         return self.contact_name
+    
+class UserModel(models.Model):
+    user_id = models.AutoField(primary_key=True)
+    username = models.CharField(max_length=10)
+    password = models.CharField(max_length=7)
+
+    def __str__(self):
+        return self.username

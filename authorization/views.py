@@ -1,7 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from .models import *
 from .forms import *
 from django.contrib import messages
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import authenticate,login,logout
+from django.contrib.auth.models import  User
 
 
 # Create your views here.
@@ -18,5 +21,27 @@ def home(request):
     return render(request,"home.html",{"contactForm" : contactForm})
 
 def log_in_page(request):
-    template = "login.html"
-    return render(request,template)
+    if not request.user.is_authenticated:
+        if request.method == "POST":
+            form = AuthenticationForm(request, data=request.POST)
+            if form.is_valid():
+                login(request, form.get_user())
+                messages.success(request, "Login successful!")
+                return redirect("profile")  # Redirect to a relevant page
+            else:
+                messages.error(request, "Invalid username or password.")
+        else:
+            form = AuthenticationForm()
+        template = "login.html"
+        return render(request, template, {'login_form': form})
+    else:
+        return redirect('profile')
+   
+
+def log_out(request):
+    logout(request)
+    return redirect("log_in")
+
+def profile(request):
+        template = "profile.html"
+        return render(request, template, {'user': request.user})
