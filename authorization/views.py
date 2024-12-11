@@ -16,3 +16,7 @@ def home(request):
     else:
         contactForm = Contact_Form()
     return render(request,"home.html",{"contactForm" : contactForm})
+
+def log_in_page(request):
+    template = "login.html"
+    return render(request,template)
