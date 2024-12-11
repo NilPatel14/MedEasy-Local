@@ -30,7 +30,8 @@ section{
   }
   
 .navbar {
-    background-color: #023b6d;
+    /* background-color: #023b6d; */
+    background-color: #1977CA;
     display: flex;
     justify-content: space-between;
 }
