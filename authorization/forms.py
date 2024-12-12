@@ -1,6 +1,6 @@
 from django import forms
 from .models import *
-
+from django.contrib.auth.forms import AuthenticationForm
 
 class Contact_Form(forms.ModelForm):
     contact_name = forms.CharField(widget=forms.TextInput(attrs={
@@ -24,11 +24,10 @@ class Contact_Form(forms.ModelForm):
         fields = [field.name for field in ContactModel._meta.fields if field.name != 'contact_id']
         model = ContactModel
 
-        
 class User_Form(forms.ModelForm):
     class Meta:
-        model = UserModel
-        fields = ['username','password']
+        model = UserModel  # Use your custom UserModel here
+        fields = ['username', 'password']
         widgets = {
             'username': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -38,5 +37,4 @@ class User_Form(forms.ModelForm):
                 'class': 'form-control',
                 'placeholder': 'Enter your password',
             }),
-            # Add widgets for other fields if needed
         }
