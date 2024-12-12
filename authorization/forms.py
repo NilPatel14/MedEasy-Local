@@ -38,3 +38,8 @@ class User_Form(forms.ModelForm):
                 'placeholder': 'Enter your password',
             }),
         }
+
+class registrationForm(forms.ModelForm):
+    class Meta:
+        model = UserModel  # Use your custom UserModel here
+        fields = "__all__"

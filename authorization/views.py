@@ -56,9 +56,10 @@
 
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from .forms import *
 from django.contrib.auth import authenticate, login, logout
 from .models import UserModel
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm,UserCreationForm
 from .forms import User_Form, Contact_Form
 
 
@@ -109,3 +110,19 @@ def profile(request):
         return render(request, "profile.html", {'user': request.user})
     else:
         return redirect("log_in")
+
+
+
+# --------Registration----------
+def registrationurl(request):
+    if request.method == "POST":
+        form = registrationForm(request.post)
+        if form.is_valid():
+            form.save()
+            messages.success(request,"User created successfully..")
+        else:
+            messages.error(request,"Something went wrong..!!")
+    else:
+        form = registrationForm()
+    template = "registration.html"
+    return render(request,template,{"form" : form})
