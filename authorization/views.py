@@ -23,15 +23,22 @@ def home(request):
 def log_in_page(request):
     if not request.user.is_authenticated:
         if request.method == "POST":
-            form = AuthenticationForm(request, data=request.POST)
+            form = User_Form(request.POST)
+            
             if form.is_valid():
-                login(request, form.get_user())
-                messages.success(request, "Login successful!")
-                return redirect("profile")  # Redirect to a relevant page
-            else:
-                messages.error(request, "Invalid username or password.")
+                username = form.cleaned_data['username']
+                pwd = form.cleaned_data['password']
+                data = UserModel.objects.all()
+                for i in data:
+                    if username == i.username and pwd == i.password:
+                        # user = User(username=username,password = pwd)
+                        # login(request,user)
+                        messages.success(request, "Login successful!")
+                        return redirect("profile")  # Redirect to a relevant page
+                else:
+                    messages.error(request, "Invalid username or password.")
         else:
-            form = AuthenticationForm()
+            form = User_Form()
         template = "login.html"
         return render(request, template, {'login_form': form})
     else:

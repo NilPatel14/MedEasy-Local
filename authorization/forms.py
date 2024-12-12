@@ -23,18 +23,20 @@ class Contact_Form(forms.ModelForm):
     class Meta:
         fields = [field.name for field in ContactModel._meta.fields if field.name != 'contact_id']
         model = ContactModel
+
         
 class User_Form(forms.ModelForm):
-    username = forms.CharField(widget=forms.TextInput(attrs={
-        'class' : 'form-control' ,
-        
-    }))
-    password = forms.CharField(widget=forms.PasswordInput(attrs={
-        'class' : 'form-control' ,
-
-    }))
-
     class Meta:
-        fields = [field.name for field in ContactModel._meta.fields if field.name != 'user_id']
-        models = UserModel
-        
+        model = UserModel
+        fields = ['username','password']
+        widgets = {
+            'username': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter your username',
+            }),
+            'password': forms.PasswordInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter your password',
+            }),
+            # Add widgets for other fields if needed
+        }

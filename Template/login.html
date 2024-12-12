@@ -32,28 +32,11 @@
                                             <h5 class="card-title text-center pb-0 fs-4">Login to Your Account</h5>
                                             <p class="text-center small">Enter your username & password to login</p>
                                         </div>
-
+                                        <div class="formContainer d-flex justify-content-center align-items-center"></div>
                                         <form method="post" class="row g-3 needs-validation" novalidate>
                                             {% csrf_token %}
                                             {% if login_form %}
-                                                <div class="col-12">
-                                                    <label class="form-label">
-                                                        Username
-                                                    </label>
-                                                    <div class="input-group has-validation">
-                                                        <span class="input-group-text" id="inputGroupPrepend">@</span>
-                                                        {{login_form.username}}
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-12">
-                                                    <label for="" class="form-label">
-                                                        Password
-                                                    </label>
-                                                    <div class="input-group has-validation">
-                                                        {{login_form.password}}
-                                                    </div>
-                                                </div>
+                                                {{login_form.as_p}}
                                             {% endif %}
                                             <!-- <div class="col-12">
                                                 <label for="yourUsername" class="form-label">Username</label>
@@ -87,6 +70,7 @@
                                                         href="#">Create an account</a></p>
                                             </div>
                                         </form>
+                                    </div>
                                     </div>
                                 </div>
 

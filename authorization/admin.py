@@ -3,4 +3,5 @@ from .models import *
 
 
 admin.site.register(ContactModel)
-# Register your models here.
+admin.site.register(UserModel)
+admin.site.register(usertypeModel)
