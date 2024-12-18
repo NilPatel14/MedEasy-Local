@@ -1,17 +1,8 @@
-
 {% extends "common.html" %}
 {% load static %}
 
 {% block css %}
   <link rel="stylesheet" href="{% static 'css/style1.css' %}">
-  <style>
-    .radio-group {
-      display: flex;
-      flex-direction: row; /* Ensure horizontal layout */
-      gap: 15px; /* Space between buttons */
-      align-items: center; /* Align vertically if needed */
-    }
-  </style>
 {% endblock %}
 
 {% block nav %}
@@ -45,10 +36,10 @@
                       <label class="form-label">{{ field.label }}</label>
 
                       {% if field.widget.input_type == "radio" %}
-                        <!-- Radio Buttons Container (Horizontal layout enforced) -->
-                        <div class="radio-group">
+                        <!-- Radio Buttons Container (Flexbox applied here) -->
+                        <div class="d-flex flex-row radio-group">
                           {% for choice in field %}
-                            <div class="form-check">
+                            <div class="form-check me-3"> <!-- Add margin-end for spacing -->
                               <input class="form-check-input" type="radio" name="{{ field.name }}" value="{{ choice.value }}" id="{{ choice.id_for_label }}">
                               <label class="form-check-label" for="{{ choice.id_for_label }}">{{ choice.choice_label }}</label>
                             </div>

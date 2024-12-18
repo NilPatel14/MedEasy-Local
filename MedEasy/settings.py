@@ -80,7 +80,7 @@ pymysql.install_as_MySQLdb()
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'portfolio',
+        'NAME': 'medeasy',
         'USER': 'root',
         'PASSWORD': '',
         'HOST': '127.0.0.1',
@@ -143,3 +143,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # settings.py
 
+AUTH_USER_MODEL ='authorization.User'

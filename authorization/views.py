@@ -58,7 +58,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import *
 from django.contrib.auth import authenticate, login, logout
-from .models import UserModel
+from .models import *
 from django.contrib.auth.forms import AuthenticationForm,UserCreationForm
 from .forms import User_Form, Contact_Form
 
@@ -82,6 +82,7 @@ def log_in_page(request):
     if not request.user.is_authenticated:
         if request.method == "POST":
             form = User_Form(request.POST)
+            msg = None
             if form.is_valid():
                 username = form.cleaned_data['username']
                 password = form.cleaned_data['password']
@@ -91,6 +92,7 @@ def log_in_page(request):
                     messages.success(request, "Login successful!")
                     return redirect("profile")
                 else:
+                    print('something went wrong')
                     messages.error(request, "Invalid username or password.")
         else:
             form = User_Form()
@@ -114,15 +116,22 @@ def profile(request):
 
 
 # --------Registration----------
-def registrationurl(request):
-    if request.method == "POST":
-        form = registrationForm(request.post)
-        if form.is_valid():
-            form.save()
-            messages.success(request,"User created successfully..")
+def register(request):
+    print("hiii")
+    if not request.user.is_authenticated:
+        if request.method == "POST":
+            form = registrationForm(request.POST or None)
+            if form.is_valid():
+                print("User created")
+                user = form.save()
+                print(user)
+                messages.success(request,"User created successfully...:)")
+                return redirect("log_in") 
+            else:
+                messages.error(request,"Something is wrong with data !!")
         else:
-            messages.error(request,"Something went wrong..!!")
+            form = registrationForm()
+        template = "registration.html"
+        return render(request,template,{"form" : form})
     else:
-        form = registrationForm()
-    template = "registration.html"
-    return render(request,template,{"form" : form})
+        return redirect('profile')

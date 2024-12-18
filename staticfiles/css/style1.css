@@ -1,0 +1,22 @@
+/* Align radio buttons horizontally */
+.radio-group {
+    display: flex; /* Apply Flexbox */
+    justify-content: space-between; /* Distribute the radio buttons evenly */
+    align-items: center; /* Vertically center them */
+    gap: 15px; /* Adjust space between radio buttons */
+  }
+  
+  .form-check-inline {
+    margin-right: 10px; /* Adjust space between radio buttons */
+  }
+  
+  /* Optional: Center the form inputs if needed */
+  .form-group {
+    display: flex;
+    flex-direction: column; /* Stack form fields vertically */
+  }
+  
+  .form-label {
+    margin-bottom: 0.5rem; /* Add space between label and input */
+  }
+  
