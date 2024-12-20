@@ -76,32 +76,64 @@ def generate_otp():
 
 
 
-def send_otp_email(request,email):
+# def send_otp_email(request):
         
    # Get the email from the form data
     # if request.method == 'POST':
         # email = request.POST.get('email')
         # email= 'deepdave3205@gmail.com'
         
-        otp = generate_otp()  # Generate OTP
+    #     otp = generate_otp()  # Generate OTP
 
-        # Save OTP in session or a temporary model (using session for this example)
-        request.session['otp'] = otp
+    #     # Save OTP in session or a temporary model (using session for this example)
+    #     request.session['otp'] = otp
 
-        # Send OTP to user's email
-        subject = 'Your OTP for Email Verification'
-        message = f'Your OTP for email verification is: {otp}'
-        from_email = settings.DEFAULT_FROM_EMAIL  # or provide your email here
+    #     # Send OTP to user's email
+    #     subject = 'Your OTP for Email Verification'
+    #     message = f'Your OTP for email verification is: {otp}'
+    #     from_email = settings.DEFAULT_FROM_EMAIL  # or provide your email here
         
-        send_mail(subject, message, from_email, [email])
+    #     send_mail(subject, message, from_email, [email])
 
-        # Provide feedback to the user
-        messages.success(request, 'OTP sent to your email address.')
-        return redirect('registration')
-    # else:
-    #     # email = request.GET.get('email')
-    #     print(email,"From get")
+    #     # Provide feedback to the user
+    #     messages.success(request, 'OTP sent to your email address.')
     #     return redirect('registrationurl')
+    # # else:
+    # #     # email = request.GET.get('email')
+    # #     print(email,"From get")
+    # #     return redirect('registrationurl')
+import json
+from django.http import JsonResponse
+
+def send_otp_email(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)  # Parse the JSON data
+            email = data.get('email')  # Extract email from JSON
+            
+            if not email:
+                return JsonResponse({"status": "error", "message": "Email not provided"})
+            
+            # Proceed with OTP logic...
+            print(f"Received email: {email}")  # Print to verify
+
+            # Your OTP sending logic here
+            otp = random.randint(100000, 999999)
+            request.session['otp'] = otp
+            send_mail(
+                "Your OTP Code",
+                f"Your OTP is {otp}",
+                settings.DEFAULT_FROM_EMAIL,
+                [email],
+            )
+            return JsonResponse({"status": "success", "message": "OTP sent!"})
+
+        except json.JSONDecodeError:
+            return JsonResponse({"status": "error", "message": "Invalid JSON data"})
+
+    return JsonResponse({"status": "error", "message": "Invalid request"})
+
+
 
 def verify_otp(request):
     if request.method == "POST":
@@ -116,19 +148,66 @@ def verify_otp(request):
     return render(request,'registration.html')
 
 # ===========   Registration    ==============
+# def register(request):
+#     if not request.user.is_authenticated:
+#         if request.method == "POST":
+#             form = registrationForm(request.POST or None)
+#             if form.is_valid():
+#                 form.save()
+#                 email_entered = request.POST.get('email',None)
+#                 print(email_entered)
+#                 # Create user object without committing to the database
+#                 otp = str(form.cleaned_data['email'])
+#                 if (verify_otp(otp)):
+#                     user = form.save(commit=False)
+
+                    
+#                     # Assign default user type and roles (example: Patient)
+#                     try:
+#                         # Fetch the 'Patient' usertype instance from usertypeModel
+#                         patient_usertype = usertypeModel.objects.get(usertype="Patient")
+#                         user.usertype = patient_usertype
+#                         user.is_patient = True
+
+#                         # Validate before saving
+#                         user.full_clean()
+#                         user.save()
+    
+#                         messages.success(request, "User created successfully!")
+#                         return redirect("log_in")
+#                     except usertypeModel.DoesNotExist:
+#                         messages.error(request, "The specified usertype 'Patient' does not exist.")
+#                     except Exception as e:
+#                         messages.error(request, f"Error: {str(e)}")
+#                 else:
+#                     send_otp_email(form.cleaned_data['email'])
+#                     messages.error(request, "Something is wrong with the data!")
+#             else:
+#                 messages.error(request,"Enter valid OPT")
+#         else:
+#             form = registrationForm()
+
+#         return render(request, "registration.html", {"form": form})
+#     else:
+#         return redirect("profile")
+
+
+
 def register(request):
     if not request.user.is_authenticated:
         if request.method == "POST":
             form = registrationForm(request.POST or None)
             if form.is_valid():
                 form.save()
-                email_entered = request.POST.get('email',None)
+                email_entered = request.POST.get('email', None)
                 print(email_entered)
-                # Create user object without committing to the database
-                if (verify_otp(form.cleaned_data['email'])):
+
+                # Extract OTP from the form or somewhere else
+                otp = request.POST.get('otp')  # Assuming the OTP is entered by the user
+
+                if verify_otp(request):  # Pass the OTP directly
                     user = form.save(commit=False)
 
-                    
                     # Assign default user type and roles (example: Patient)
                     try:
                         # Fetch the 'Patient' usertype instance from usertypeModel
@@ -139,7 +218,7 @@ def register(request):
                         # Validate before saving
                         user.full_clean()
                         user.save()
-    
+
                         messages.success(request, "User created successfully!")
                         return redirect("log_in")
                     except usertypeModel.DoesNotExist:
@@ -150,12 +229,10 @@ def register(request):
                     send_otp_email(form.cleaned_data['email'])
                     messages.error(request, "Something is wrong with the data!")
             else:
-                messages.error(request,"Enter valid OPT")
+                messages.error(request, "Enter a valid OTP")
         else:
             form = registrationForm()
 
         return render(request, "registration.html", {"form": form})
     else:
         return redirect("profile")
-
-

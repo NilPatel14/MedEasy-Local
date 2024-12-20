@@ -36,6 +36,12 @@ section{
     justify-content: space-between;
 }
 
+.nav-link:hover #login {
+  background-color: #ffffff; 
+  color: #2c4964 !important; 
+  border: 2px solid #ffffff;
+}
+
 .navbar-brand.text-custom {
     color: white;
 }

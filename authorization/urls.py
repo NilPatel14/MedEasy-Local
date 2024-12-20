@@ -7,5 +7,6 @@ urlpatterns = [
     path('log_out/',log_out,name="log_out"),
     path('profile/',profile,name="profile"),
     path('registrationurl/',register,name="registrationurl"),
-    path('send_otp_email/<email>',send_otp_email,name="send_otp_email")
+    # path('send_otp_email/',send_otp_email,name="send_otp_email")
+    path('send-otp/', send_otp_email, name='send_otp_email'),
 ]

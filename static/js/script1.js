@@ -199,11 +199,49 @@ document.addEventListener('DOMContentLoaded', () => {
   
 // }
 
-document.querySelector('form').addEventListener('submit', function(event) {
-  event.preventDefault(); // Prevent the form from submitting normally
-  
-  const email = document.querySelector('input[name="email"]').value;
-  
-  // You can add further logic here, such as validation or AJAX calls
-});
+// document.getElementById('sendOtpButton').addEventListener('click', function(event) {
+//     console.log("OTP button clicked");
+    
+//     event.preventDefault(); // Prevent the form from submitting immediately
 
+//     // Get email value
+//     let email = document.getElementsByName('email')[0].value; // Access the first email field
+
+//     // Set the cookie with the email
+//     document.cookie = "email=" + encodeURIComponent(email) + "; path=/"; // You can set the expiry if needed
+
+//     // You can add further logic here, like calling an AJAX function to send the OTP to the server
+
+//     // Now, manually submit the form after the OTP is sent or after completing the logic
+//     document.querySelector('form').submit();
+// });
+
+
+document.getElementById('sendOtpButton').addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent the form from submitting
+
+    let email = document.getElementsByName('email')[0].value; // Get email value from the form
+
+    // Make an AJAX request to Django to send the OTP
+    fetch('/send-otp/', { // Use the correct URL for your Django view
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json', // If you're using JSON
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value // CSRF token
+        },
+        body: JSON.stringify({ email: email }) // Send the email in JSON body
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            console.log('OTP sent successfully!');
+            alert(data.message); // Optional: Show success message to the user
+        } else {
+            console.log('Error:', data.message);
+            alert(data.message); // Optional: Show error message
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+});
