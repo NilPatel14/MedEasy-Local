@@ -2,74 +2,83 @@
 {% load static %}
 
 {% block nav %}
-
 <div class="container-fluid w-80 d-flex align-items-center justify-content-center">
-<a class="navbar-brand text-white font " id="Logo" href="{% url 'home' %}">MedEasy</a>
-                
+  <a class="navbar-brand text-white font" id="Logo" href="{% url 'home' %}">MedEasy</a>
+</div>
 {% endblock %}
 
 {% block content %}
-{% comment %} <div class="d-flex justify-content-center align-items-center vh-100"> {% endcomment %}
-
-
-    {% comment %} <div class="d-flex justify-content-center align-items-center" style="height: 70vh;"> {% endcomment %}
-
-
-        <main>
-            <div class="container">
-
-                <section
-                    class="section register min-vh-70 d-flex flex-column align-items-center justify-content-center py-4">
+<main>
+  <div class="container">
+    <section class="section register min-vh-70 d-flex flex-column align-items-center justify-content-center py-4">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+            <div class="card mb-3">
+              <div class="card-body">
+                <div class="pt-4 pb-2">
+                  <h5 class="card-title text-center pb-0 fs-4" style="color: #1977CA !important;">Login to Your Account</h5>
+                  <p class="text-center small">Enter your username & password to login</p>
+                </div>
+                {% if messages %}
+                <div class="alert alert-info">
+                  {% for message in messages %}
+                    <p>{{ message }}</p>
+                  {% endfor %}
+                </div>
+              {% endif %}
+                <div class="formContainer d-flex justify-content-center align-items-center">
+                  <form method="post" class="row g-3 needs-validation" style="color: #1977CA !important;" novalidate>
+                    {% csrf_token %}
                     
- 
-                    <div class="container">
-                        <div class="row justify-content-center">
-                            <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+                    {% if login_form %}
+                    {% for field in login_form %}
+                    <div class="col-md-12 form-group">
+                      <label class="form-label">{{ field.label }}</label>
 
-                                <div class="card mb-3">
-                                    <div class="card-body">
-                                        <div class="pt-4 pb-2">
-                                            <h5 class="card-title text-center pb-0 fs-4" style="color: #1977CA !important;">Login to Your Account</h5>
-                                            <p class="text-center small">Enter your username & password to login</p>
-                                        </div>
-                                        <div class="formContainer d-flex justify-content-center align-items-center">
-                                        
-                                            <form method="post" class="row g-3 needs-validation" style="color: #1977CA !important;" novalidate>
-                                                {% csrf_token %}
-                                                {% if login_form %}
-                                                    {{login_form.as_p}}
-                                                {% endif %}
-                                                <div class="error">
-                                                    {% if form.errors %}
-                                                    
-                                                        {{form.errors}}
-                                                    
-                                                    {% endif %}
-                                                </div>
-                                                <div class="col-12">
-                                                    <button class="btn btn-primary w-100" type="submit">Login</button>
-                                                </div>
-                                                <div class="col-12">
-                                                    <p class="small mb-0">Don't have an account? <a
-                                                            href="{% url 'registrationurl' %}">Create an account</a></p>
-                                                </div>
-                                            </form>
-                                                
-                                        </div>
-                                    </div>
-                                    </div>
-                                </div>
+                      <!-- For other fields -->
+                      {{ field }}
 
-
-                            </div>
+                      <!-- Displaying error messages in red rectangle -->
+                      {% if field.errors %}
+                        <div class="error-message">
+                          {% for error in field.errors %}
+                            <p>{{ error }}</p>
+                          {% endfor %}
                         </div>
+                      {% endif %}
                     </div>
+                  {% endfor %}
 
-                </section>
+                    {% endif %}
+                    
+                    <!-- Show error message only once in a red box -->
+                    {% if form.errors %}
+                    <div class="error-message">
+                      <ul>
+                        {% for field in form %}
+                          {% for error in field.errors %}
+                            <li>{{ error }}</li>
+                          {% endfor %}
+                        {% endfor %}
+                      </ul>
+                    </div>
+                    {% endif %}
 
+                    <div class="col-12">
+                      <button class="btn btn-primary w-100" type="submit">Login</button>
+                    </div>
+                    <div class="col-12">
+                      <p class="small mb-0">Don't have an account? <a href="{% url 'registrationurl' %}">Create an account</a></p>
+                    </div>
+                  </form>
+                </div>
+              </div>
             </div>
-        </main><!-- End #main -->
-
-        {% comment %}
-    </div> {% endcomment %}
-    {% endblock content %}
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+{% endblock content %}

@@ -804,3 +804,50 @@ h6 {
 }
 
 
+
+
+/* Error message  */
+
+/* Style for error messages */
+/* Style for error messages */    /* Custom CSS for the message box */
+    .alert {
+      max-height: 60px;  /* Set the maximum height */
+      overflow-y: hidden;   /* Enable scrolling if content overflows */
+      padding: 10px;      /* Adjust padding for a more compact look */
+      font-size: 14px;    /* Reduce font size */
+    }
+
+    .error-message {
+      background-color: #f8d7da; /* Light red background */
+      color: #721c24; /* Dark red text */
+      border: 1px solid #f5c6cb; /* Light red border */
+      padding: 10px;
+      margin: 5px 0;
+      max-height: 50px;
+    }
+
+    /* Optional: Add margin to separate from other content */
+    .error-message ul {
+      list-style-type: none;
+      padding-left: 0;
+      margin: 0;
+    }
+    .error-message li {
+      padding: 5px 0;
+    }
+
+
+
+    /*  for adhhar card input */
+    input[type="text"], input[type="number"] {
+      overflow: hidden;   /* Hide the scrollbar */
+      white-space: nowrap; /* Prevent the content from wrapping */
+      text-overflow: ellipsis; /* Optionally add ellipsis when text overflows */
+  }
+  
+  /* Optional: Apply width and max-width to ensure input does not overflow */
+  input[name="adhhar_no"] {
+      width: 100%;  /* Make the input field responsive */
+      max-width: 100%;  /* Prevent the input from stretching beyond its container */
+      box-sizing: border-box; /* Ensures padding doesn't cause overflow */
+  }

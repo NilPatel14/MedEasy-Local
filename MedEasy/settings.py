@@ -40,6 +40,11 @@ INSTALLED_APPS = [
     'authorization'
 ]
 
+
+
+# Enable the messages framework
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -49,6 +54,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+# Define the level of messages to display (info, success, error, etc.)
+MESSAGE_LEVEL = 20  # This will display error, info, and success messages.
+
 
 ROOT_URLCONF = 'MedEasy.urls'
 
@@ -144,3 +152,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # settings.py
 
 AUTH_USER_MODEL ='authorization.User'
+
+# LOgin url
+LOGIN_URL = '/log_in/'  # Replace with your login view URL
+
+    
+#EMAIL SETTINGS
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'hetjain0009@gmail.com'
+EMAIL_HOST_PASSWORD = 'nucfhljyllyaceds'
