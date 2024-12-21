@@ -1,6 +1,8 @@
 from django.urls import path
 from .views import *
 
+app_name = "authorization"
+
 urlpatterns = [
     path('',home,name="home"),
     path('log_in/',log_in_page,name="log_in"),

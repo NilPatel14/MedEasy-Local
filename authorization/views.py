@@ -23,7 +23,7 @@ def home(request):
             messages.error(request, "Enter valid data")
     else:
         contactForm = Contact_Form()
-    return render(request, "home.html", {"contactForm": contactForm})
+    return render(request, "Home/home.html", {"contactForm": contactForm})
 
 
 
@@ -40,7 +40,20 @@ def log_in_page(request):
                 if user:
                     login(request, user)
                     messages.success(request, "Login successful!")
-                    return redirect("profile")
+                    user = User.objects.get(username=username)
+
+                    usertype = str(user.usertype)
+                    if(usertype == 'Doctor'):
+                        return redirect("/doctor/profile/")
+                    elif(usertype == 'Patient'):
+                        pass
+                    elif(usertype == 'Admin'):
+                        # return redirect("/admin/profile/")
+                        pass
+                    elif(usertype == "Receptionist"):
+                        # return redirect("/receptionist/profile/")
+                        pass
+
                 else:
                     print('something went wrong')
                     messages.error(request, "Invalid username or password.")
@@ -50,22 +63,22 @@ def log_in_page(request):
         else:
             form = User_Form()
         
-        return render(request, "login.html", {'login_form': form})
+        return render(request, "Home/login.html", {'login_form': form})
     else:
-        return redirect("profile")
+        return redirect("Doctor:profile")
 
 
 def log_out(request):
     logout(request)
     messages.success(request, "Logged out successfully.")
-    return redirect("log_in")
+    return redirect("authorization:log_in")
 
 
 def profile(request):
     if request.user.is_authenticated:
         return render(request, "profile.html", {'user': request.user})
     else:
-        return redirect("log_in")
+        return redirect("authorization:log_in")
 
 
 
@@ -74,34 +87,6 @@ def profile(request):
 def generate_otp():
     return random.randint(100000, 999999)
 
-
-
-# def send_otp_email(request):
-        
-   # Get the email from the form data
-    # if request.method == 'POST':
-        # email = request.POST.get('email')
-        # email= 'deepdave3205@gmail.com'
-        
-    #     otp = generate_otp()  # Generate OTP
-
-    #     # Save OTP in session or a temporary model (using session for this example)
-    #     request.session['otp'] = otp
-
-    #     # Send OTP to user's email
-    #     subject = 'Your OTP for Email Verification'
-    #     message = f'Your OTP for email verification is: {otp}'
-    #     from_email = settings.DEFAULT_FROM_EMAIL  # or provide your email here
-        
-    #     send_mail(subject, message, from_email, [email])
-
-    #     # Provide feedback to the user
-    #     messages.success(request, 'OTP sent to your email address.')
-    #     return redirect('registrationurl')
-    # # else:
-    # #     # email = request.GET.get('email')
-    # #     print(email,"From get")
-    # #     return redirect('registrationurl')
 import json
 from django.http import JsonResponse
 
@@ -145,51 +130,7 @@ def verify_otp(request):
             return True
         else:
             return False
-    return render(request,'registration.html')
-
-# ===========   Registration    ==============
-# def register(request):
-#     if not request.user.is_authenticated:
-#         if request.method == "POST":
-#             form = registrationForm(request.POST or None)
-#             if form.is_valid():
-#                 form.save()
-#                 email_entered = request.POST.get('email',None)
-#                 print(email_entered)
-#                 # Create user object without committing to the database
-#                 otp = str(form.cleaned_data['email'])
-#                 if (verify_otp(otp)):
-#                     user = form.save(commit=False)
-
-                    
-#                     # Assign default user type and roles (example: Patient)
-#                     try:
-#                         # Fetch the 'Patient' usertype instance from usertypeModel
-#                         patient_usertype = usertypeModel.objects.get(usertype="Patient")
-#                         user.usertype = patient_usertype
-#                         user.is_patient = True
-
-#                         # Validate before saving
-#                         user.full_clean()
-#                         user.save()
-    
-#                         messages.success(request, "User created successfully!")
-#                         return redirect("log_in")
-#                     except usertypeModel.DoesNotExist:
-#                         messages.error(request, "The specified usertype 'Patient' does not exist.")
-#                     except Exception as e:
-#                         messages.error(request, f"Error: {str(e)}")
-#                 else:
-#                     send_otp_email(form.cleaned_data['email'])
-#                     messages.error(request, "Something is wrong with the data!")
-#             else:
-#                 messages.error(request,"Enter valid OPT")
-#         else:
-#             form = registrationForm()
-
-#         return render(request, "registration.html", {"form": form})
-#     else:
-#         return redirect("profile")
+    return render(request,'Home/registration.html')
 
 
 
@@ -220,7 +161,7 @@ def register(request):
                         user.save()
 
                         messages.success(request, "User created successfully!")
-                        return redirect("log_in")
+                        return redirect("authorization:log_in")
                     except usertypeModel.DoesNotExist:
                         messages.error(request, "The specified usertype 'Patient' does not exist.")
                     except Exception as e:
@@ -233,6 +174,6 @@ def register(request):
         else:
             form = registrationForm()
 
-        return render(request, "registration.html", {"form": form})
+        return render(request, "Home/registration.html", {"form": form})
     else:
-        return redirect("profile")
+        return redirect("Doctor:index")

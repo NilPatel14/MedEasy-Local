@@ -5,7 +5,7 @@
 
 {% block nav %}
 <div class="container-fluid w-80 d-flex align-items-center justify-content-center">
-  <a class="navbar-brand text-white font" id="Logo" href="{% url 'home' %}">MedEasy</a>
+  <a class="navbar-brand text-white font" id="Logo" href="{% url 'authorization:home' %}">MedEasy</a>
 </div>
 {% endblock %}
 
@@ -53,7 +53,15 @@
                   {% endfor %}
 
                     {% endif %}
+                    {% if error_message %}
                     
+                  <div class="error-message">
+    <div class="alert alert-danger">
+        {{ error_message }}
+    </div>
+  </div>                    
+{% endif %}
+
                     <!-- Show error message only once in a red box -->
                     {% if form.errors %}
                     <div class="error-message">
@@ -71,7 +79,7 @@
                       <button class="btn btn-primary w-100" type="submit">Login</button>
                     </div>
                     <div class="col-12">
-                      <p class="small mb-0">Don't have an account? <a href="{% url 'registrationurl' %}">Create an account</a></p>
+                      <p class="small mb-0">Don't have an account? <a href="{% url 'authorization:registrationurl' %}">Create an account</a></p>
                     </div>
                   </form>
                 </div>
