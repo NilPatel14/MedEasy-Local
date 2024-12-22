@@ -33,3 +33,10 @@ def dashboard_show(request):
     else:
         return redirect("authorization:log_in")
     
+def prescription_show(request):
+    if request.user.is_authenticated:
+        template = "Doctor/prescription.html"
+        return render(request,template)
+    else:
+        return redirect("authorization:log_in")
+    
