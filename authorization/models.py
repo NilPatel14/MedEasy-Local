@@ -64,3 +64,8 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username
+    
+
+
+class Department_master(models.Model):
+    dept_id = models.IntegerField()
