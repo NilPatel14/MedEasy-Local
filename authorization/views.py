@@ -46,7 +46,7 @@ def log_in_page(request):
                     if(usertype == 'Doctor'):
                         return redirect("/doctor/profile/")
                     elif(usertype == 'Patient'):
-                        pass
+                        return redirect("/patient/profile/")
                     elif(usertype == 'Admin'):
                         # return redirect("/admin/profile/")
                         pass

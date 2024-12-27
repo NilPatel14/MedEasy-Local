@@ -25,6 +25,7 @@ urlpatterns = [
     path('',include("authorization.urls")),
     # path('doctor/',include("Doctor.urls")),
     path('doctor/', include('Doctor.urls', namespace='Doctor')), 
+    path('patient/',include('Patient.urls',namespace='Patient')),
 ]
 
 if settings.DEBUG:
