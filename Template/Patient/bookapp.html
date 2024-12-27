@@ -4,7 +4,20 @@
 {% block head %}
 <title> Patient Profile </title>
 <link rel="stylesheet" href="{%static 'css/bookAppointment.css'%}">
-  {% endblock %} 
+
+<script type="text/javascript">
+  $(document).ready(function() {
+      // Initialize date picker for the inputs with class 'datepicker'
+      $(".datepicker").datepicker({
+          dateFormat: 'yy-mm-dd',  // You can change the date format here
+          changeMonth: true,
+          changeYear: true,
+          showAnim: "fadeIn",  // Optional: Animation for the calendar
+      });
+  });
+</script>
+
+{% endblock %} 
 
 {% block elementBlock %}
 
@@ -72,63 +85,10 @@
     <form>
         <div class="container">
         <h4 class="card-title">Doctor Appointment Request Form</h4>
-        <form>
-            <div class="form-group">
-                <label for="name" class="large-label">Name:</label>
-                <input type="text" class="form-control large-textbox" id="name" name="name" placeholder="Enter Your Name" required>
-            </div>
-            <div class="form-group">
-                <label for="dob" class="large-label">Date of Birth:</label>
-                <input type="date" class="form-control large-textbox" id="dob" name="dob" placeholder="Enter Date of Birth" required>
-            </div>
-            <div class="form-group">
-                <label for="gender" class="large-label">Gender:</label>
-                <select id="gender" class="form-control large-textbox"  name="gender" placeholder="Select Gender" required>
-                    <option value="">Select</option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                    <option value="other">Other</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label for="address" class="large-label">Address:</label>
-                <input type="text" id="address" name="address" class="form-control large-textbox" placeholder="Street Address" required>
-            </div>
-            <div class="form-group">
-                <label for="city" class="large-label">City:</label>
-                <input type="text" class="form-control large-textbox" id="city" name="city" placeholder="Enter City Name" required>
-            </div>
-            <div class="form-group">
-                <label for="state" class="large-label">State:</label>
-                <input type="text" class="form-control large-textbox" id="state" name="state" placeholder="Enter State Name" required>
-            </div>
-            <div class="form-group">
-                <label for="zip" class="large-label">Zip Code:</label>
-                <input type="text" id="zip" name="zip" class="form-control large-textbox" placeholder="Enter Zip Cord" required>
-            </div>
-            <div class="form-group">
-                <label for="department" class="large-label">Which department would you like to get an appointment from?</label>
-                 <select id="procedure" class="form-control large-textbox" name="procedure" placeholder="Select Department" required>
-                    <option value="">Select</option>
-                    <option value="general">General Checkup</option>
-                    <option value="dental">Dental</option>
-                    <option value="cardiology">Cardiology</option>
-                </select>
-            
-            </div>
-            <div class="form-group">
-                <label for="symptoms" class="large-label">Symptoms:</label>
-                <input type="text" class="form-control large-textbox" placeholder="Enter Symptoms"  id="symptoms" name="symptoms" required>
-            </div>
-            <div class="form-group">
-                <label for="date" class="large-label">Preferred Appointment Date:</label>
-                <input type="date" class="form-control large-textbox" id="date" name="date" required>
-            </div>
-            <div class="form-group">
-                <label for="time" class="large-label">Preferred Appointment Time:</label>
-                <input type="time" class="form-control large-textbox" id="time" name="time" required>
-            </div>
+        <form method="post">
+          {% csrf_token %}
+            {{form.as_p}}
+            if()
             <div class="form-group">
                 <input type="submit" class="btn btn-primary submit-btn" value="Submit">
             </div>

@@ -39,7 +39,17 @@ def bill_payment(request):
 
 def Book_Appointment(request):
     if request.user.is_authenticated:
+        if request.method == 'POST':
+            form = Appointment_Booking_Form(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('Patient:dashboard_show')
+            else:
+                messages.error(request,"Something went wrong !!")
+                return render(request, 'Patient/Book_Appointment.html', {'form': form})
+        else:
+            form = Appointment_Booking_Form()
         template = "Patient/bookapp.html"
-        return render(request,template)
+        return render(request,template,{'form':form})
     else:
         return redirect('authorization:login')
