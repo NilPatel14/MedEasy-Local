@@ -134,15 +134,7 @@ body{
     color: var(--text-clr);
     display: flex;
     align-items: center;
-    gap: 1em !important;
-  }
-  #sidebar a #dash{
-    position: relative;
-    right: 0.9rem;
-    /* margin-right:12px ; */
-    /* font-size: 16px; */
-    /* display: flex; */
-    /* justify-content: space-between; */
+    gap: 1em;
   }
   #sidebar svg{
     flex-shrink: 0;

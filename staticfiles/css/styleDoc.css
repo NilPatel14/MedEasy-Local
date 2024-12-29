@@ -1,8 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Itim&display=swap');
+
+
 :root{
   /*--base-clr: #1977ca;
   --text-clr: #eeefca;*/
-  --line-clr: #3163c1ce;
+  /* --line-clr: #3163c1ce; */
+  --line-clr:#1977CA;
   --hover-clr: #eeeff5; 
   --accent-clr: #5e63ff;
   --secondary-text-clr: #5b6aac;
@@ -25,7 +29,7 @@
 
 .container h1{
   text-decoration: underline;
-  font-size: xx-large;
+  font-size: x;
 }
 
 table {
@@ -96,7 +100,9 @@ body{
 #sidebar.close{
     padding: 5px;
     width: 60px;
+    opacity: 1 !important;
   }
+
 #sidebar ul{
     list-style: none;
   }
@@ -116,9 +122,22 @@ body{
     box-shadow: 0 0 2px rgba(225, 228, 225, 0.919),
                 0 0 2px rgba(225, 228, 225, 0.919),
                 0 0 2px rgba(225, 228, 225, 0.919);
-    transition: box-shadow 0.3s ease-in-out
+    transition: box-shadow 0.3s ease-in-out;
+  
+    svg{
+      fill: #eeeff5;
+    }
+  }
+  #sideHead:hover a span{
+    color: #1977CA !important;
+  
+  }
+  #sideHead{
     
-    
+    font-family: "Itim", serif;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 2rem !important;
   }
   #sidebar ul li.active:hover a{
     color: #1977CA;
@@ -134,15 +153,7 @@ body{
     color: var(--text-clr);
     display: flex;
     align-items: center;
-    gap: 1em !important;
-  }
-  #sidebar a #dash{
-    position: relative;
-    right: 0.9rem;
-    /* margin-right:12px ; */
-    /* font-size: 16px; */
-    /* display: flex; */
-    /* justify-content: space-between; */
+    gap: 1em;
   }
   #sidebar svg{
     flex-shrink: 0;
@@ -190,27 +201,6 @@ main{
     margin-top: 5px;
     margin-bottom: 15px;
   }
-  .btnc{
-    background-color: rgb(237, 35, 35);
-    padding: 8px;
-    color: #eeeff5;
-    cursor: pointer;
-    font-size: 18px;
-    font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-weight: 500;
-    border: none;
-  }
-  .btne
-{
-    background-color: #1977CA;
-    color: white;
-    padding:8px;
-    cursor: pointer;
-    font-size: 18px;
-    font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-weight: 500;
-    border: none;
-}
   .container{
     border: 1.5px solid var(--line-clr);
     border-radius: 1em;

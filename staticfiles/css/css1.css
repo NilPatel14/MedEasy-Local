@@ -1,0 +1,94 @@
+/* Body styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex; /* Flexbox layout for sidebar and content */
+    height: 100vh; /* Full viewport height */
+    overflow: auto;
+}
+
+/* Sidebar styling */
+.sidebar {
+    position: fixed; /* Keeps sidebar fixed in place */
+    left: 0;
+    top: 0;
+    width: 250px; /* Fixed width */
+    height: 100%; /* Full height */
+    background-color: #012970;
+    color: #fff;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    overflow-y: auto; /* Allows scrolling if content overflows */
+}
+
+.sidebar h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Main content styling */
+.main-content {
+    margin-left: 250px; /* Matches the sidebar width */
+    width: calc(100% - 250px); /* Remaining width for the form */
+    padding: 20px;
+    display: flex;
+    justify-content: center; /* Center the form horizontally */
+    align-items: center; /* Center the form vertically */
+    box-sizing: border-box;
+    /* overflow: auto; Allows scrolling if content overflows */
+}
+
+/* Container styling */
+.container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px; /* Ensures the container doesn't get wider than 700px */
+
+    box-sizing: border-box;
+    margin: 20px;
+    overflow: hidden;
+}
+
+/* Form image styling */
+.form-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+    margin: 0 auto;
+    object-fit: cover;
+    max-height: 400px;
+}
+
+/* Card title styling */
+.card-title {
+    padding: 40px 0 35px 0;
+    font-size: 50px;
+    font-weight: 500;
+    color: #012970;
+    font-family: "Poppins", sans-serif;
+    text-align: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 200px; /* Smaller sidebar width */
+    }
+
+    .main-content {
+        margin-left: 200px; /* Matches the smaller sidebar width */
+        width: calc(100% - 200px);
+    }
+
+    .card-title {
+        font-size: 30px;
+    }
+}

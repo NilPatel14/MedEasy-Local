@@ -354,7 +354,6 @@ main{
     #sidebar {
     height: 60px;
     width: 100%;
-    /* max-width: 300px; */
     border-right: none;
     border-top: 1px solid var(--line-clr);
     padding: 0;
