@@ -1,4 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Itim&display=swap');
+
+
 :root{
   /*--base-clr: #1977ca;
   --text-clr: #eeefca;*/
@@ -6,7 +9,17 @@
   --hover-clr: #eeeff5; 
   --accent-clr: #5e63ff;
   --secondary-text-clr: #5b6aac;
+  
 }
+
+
+.font{
+  font-family: "Itim", serif !important;
+  font-weight: 500 !important;
+  font-style: normal !important;
+  font-size: 1.5rem !important;
+}
+
 *{  
   margin: 0;
   padding: 0;
@@ -99,15 +112,18 @@ body{
   }
 #sidebar ul{
     list-style: none;
+    margin-left: -30px;
   }
   #sidebar > ul > li:first-child{
     display: flex;
     justify-content: flex-end;
     margin-bottom: 16px;
     .logo{
-      font-weight: 600;
-      color:  #eeeff5;
-      font-size: x-large;
+      
+  font-family: "Itim", serif !important;
+  font-weight: 500 !important;
+  font-style: normal !important;
+  font-size: 1.5rem !important;
     }
   }
   #sidebar ul li.active a{
@@ -137,9 +153,9 @@ body{
     gap: 1em !important;
   }
   #sidebar a #dash{
-    position: relative;
-    right: 0.9rem;
-    /* margin-right:12px ; */
+    /* position: relative; */
+    /* right: 0.9rem; */
+    /* margin-right:12px !important; */
     /* font-size: 16px; */
     /* display: flex; */
     /* justify-content: space-between; */

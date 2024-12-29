@@ -1,5 +1,5 @@
 from django import forms
-from Patient.models import Appointment
+from Patient.models import *
 
 
 
@@ -10,7 +10,7 @@ GENDER_LIST = (
     ('Female','Female'),
     ('Other','Other')
 )
-# Editing date input
+# Editing date inputra
 class DateInput(forms.DateInput):
     input_type = 'date'
 
@@ -57,6 +57,74 @@ class Appointment_Booking_Form(forms.ModelForm):
                 'type' : 'radio'
 
             }
+        )
+    )
+    address = forms.CharField(
+        widget=forms.Textarea(
+            attrs={
+                'class': 'form-control',
+                'placeholder': "Enter address",
+                'rows': 5,
+                'cols': 20,
+
+            }
+        )
+    )
+
+    city = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': "Enter city",
+
+            }
+        )
+    )
+
+    state = forms.CharField(
+        widget= forms.TextInput(
+            attrs={
+                'class' : 'form-control',
+                'placeholder' : 'Enter state',
+            }
+        )
+    )
+    pincode = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': "Enter pincode",
+            }
+        )
+    )
+
+    department = forms.ModelChoiceField(
+        queryset=Department.objects.all(),
+        widget=forms.Select(
+            attrs={
+                'class': 'form-control',
+                'placeholder': "Select department"
+            }
+        )
+    )
+
+    symptoms = forms.CharField(
+        widget=forms.Textarea(
+            attrs={
+                'class': 'form-control',
+                'placeholder': "Enter symptoms",
+                'rows' : 5
+                }
+        )
+    )
+
+    preferred_time = forms.TimeField(
+        widget=forms.TimeInput(
+            attrs={
+                'class': 'form-control',
+                'type' : 'time',
+                'placeholder' : 'Enter preferred time',
+                }
         )
     )
     class Meta:

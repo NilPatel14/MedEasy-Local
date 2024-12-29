@@ -14,7 +14,10 @@ from django.http import JsonResponse
 
 
 def home(request):
+    if request.user.is_authenticated:
+        return redirect('authorization:log_out')
     if request.method == "POST":
+        
         contactForm = Contact_Form(request.POST)
         if contactForm.is_valid():
             contactForm.save()
@@ -39,7 +42,7 @@ def log_in_page(request):
                 user = authenticate(request, username=username, password=password)
                 if user:
                     login(request, user)
-                    messages.success(request, "Login successful!")
+                    # messages.success(request, "Login successful!")
                     user = User.objects.get(username=username)
 
                     usertype = str(user.usertype)

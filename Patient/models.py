@@ -11,7 +11,6 @@ class Department(models.Model):
 
 # Create your models here.
 class Appointment(models.Model):
-    apt_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=30)
     dob = models.DateField()
     gender = models.CharField(max_length=15)

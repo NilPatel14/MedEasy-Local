@@ -10,7 +10,7 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
-from authorization.models import *
+from Patient.models import *
 
 # Create your views here.
 def index(request):
@@ -39,12 +39,19 @@ def bill_payment(request):
 
 def Book_Appointment(request):
     if request.user.is_authenticated:
-        if request.method == 'POST':
-            form = Appointment_Booking_Form(request.POST)
+        print(f"Request method: {request.method}") 
+        if request.method == "POST":
+            form = Appointment_Booking_Form(request.POST or None)
+            # user = Appointment.objects.all()
+            # user1 = max(Appointment.objects.all())
+            # print(user)
+            # print(user1)
             if form.is_valid():
+            
                 form.save()
                 return redirect('Patient:dashboard_show')
             else:
+                print("Something is wrong")
                 messages.error(request,"Something went wrong !!")
                 return render(request, 'Patient/Book_Appointment.html', {'form': form})
         else:
