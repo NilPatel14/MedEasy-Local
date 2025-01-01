@@ -10,7 +10,7 @@ from django.http import HttpResponse
 from django.conf import settings
 from django.core.mail import send_mail
 from django.http import JsonResponse
-
+from django.utils.timezone import now
 
 
 def home(request):
@@ -41,6 +41,8 @@ def log_in_page(request):
                 password = form.cleaned_data['password']
                 user = authenticate(request, username=username, password=password)
                 if user:
+                    user.last_login = now()
+                    user.save()
                     login(request, user)
                     # messages.success(request, "Login successful!")
                     user = User.objects.get(username=username)

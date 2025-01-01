@@ -18,6 +18,14 @@ class TimeInput(forms.TimeInput):
     input_type = 'time'
 
 class Appointment_Booking_Form(forms.ModelForm):
+
+    def clean_preferred_date(self):
+        preferred_date = self.cleaned_data['preferred_date']
+        if Appointment.objects.filter(user=self.instance.user, preferred_date=preferred_date).exists():
+            raise forms.ValidationError("You already have an appointment on this date.")
+        return preferred_date
+    
+    
     name = forms.CharField(
         widget=forms.TextInput(
             attrs={

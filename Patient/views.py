@@ -37,26 +37,40 @@ def bill_payment(request):
         return redirect('authorization:login')
     
 
+from django.utils.timezone import datetime
+
 def Book_Appointment(request):
+    msg = ""
     if request.user.is_authenticated:
-        print(f"Request method: {request.method}") 
         if request.method == "POST":
             form = Appointment_Booking_Form(request.POST or None)
-            # user = Appointment.objects.all()
-            # user1 = max(Appointment.objects.all())
-            # print(user)
-            # print(user1)
             if form.is_valid():
-            
-                form.save()
-                return redirect('Patient:dashboard_show')
+                preferred_date = form.cleaned_data['preferred_date']
+                # Check if the user already has an appointment on the preferred date
+                existing_appointment = Appointment.objects.filter(
+                    user=request.user,
+                    preferred_date=preferred_date
+                ).exists()
+
+                if existing_appointment:
+                    messages.error(request, "You already have an appointment on this date. Please select another date.")
+                    msg = "You already have an appointment on this date please select another date"
+                else:
+                    # Save the appointment
+                    appointment = form.save(commit=False)
+                    appointment.user = request.user  # Assuming the Appointment model has a `user` field
+                    appointment.save()
+                    return redirect('Patient:dashboard_show')
             else:
-                print("Something is wrong")
-                messages.error(request,"Something went wrong !!")
-                return render(request, 'Patient/Book_Appointment.html', {'form': form})
+                messages.error(request, "Something went wrong!!")
+
         else:
             form = Appointment_Booking_Form()
+
         template = "Patient/bookapp.html"
-        return render(request,template,{'form':form})
+        return render(request, template, {'form': form,'error_message':msg})
     else:
-        return redirect('authorization:login')
+        return redirect('authorization:log_in')
+
+
+
