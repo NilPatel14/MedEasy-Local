@@ -74,19 +74,50 @@
                             <thead id="thead">
                                 <tr>
                                     <th>Appointment id</th>
-                                    <th>Patient id</th>
+                                    <!-- <th>Patient id</th> -->
                                     <th>Patient Name</th>
                                     <th>Appointment Date</th>
-                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Status</th>
+                                    
+                                    <th>Appointed Doctor</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
+
+                                {% for i in data %}
+                                  <td>
+                                    {{i.id}}
+                                  </td>
+                                  <td>
+                                    {{i.name}}
+                                  </td>
+                                  <td>
+                                    {{i.preferred_date}}
+                                  </td>
+                                  <td>
+                                    {{i.preferred_time}}
+                                  </td>
+                                  <td>
+
+                                  </td>
+                                  <td>
+                                    {% for j in department_users%}
+                                    {% for k in j %}
+                                      {{k}}
+                                    {% endfor %} 
+                                    {% endfor%}
+                                  </td>
+                                  <td>
+                                    <button class="btne"><i class="fa fa-edit"></i> Edit </button>
+                                    <button class="btnc"><i class="fa fa-trash"></i> Cancel </button>
+                                  </td>
+                                  </tr>
+                                {% endfor %}
                                 <!-- Add rows dynamically with JS or manually -->
                             </tbody>
                         </table>
-            <button class="btne"><i class="fa fa-edit"></i> Edit </button>
-            <button class="btnc"><i class="fa fa-trash"></i> Cancel 
-            </button>
            
                     </section>
         </div>
