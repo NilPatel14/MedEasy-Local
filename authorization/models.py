@@ -43,5 +43,5 @@ class User(AbstractUser):
     
 
 
-class Department_master(models.Model):
-    dept_id = models.IntegerField()
+# class Department_master(models.Model):
+#     dept_id = models.IntegerField()

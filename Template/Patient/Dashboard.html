@@ -1,6 +1,13 @@
 {% extends 'Patient/common.html' %}
 {% load static  %}
+{% block head %}
 
+      <!-- Font Awesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+<!-- Material Icons -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  {% endblock %}  
 
 
 {% block elementBlock %}
@@ -68,7 +75,7 @@
         <div class="container" id="mainc">
          <section class="card">
                       <header>
-                        <h1>Current Appointments</h1>
+                        <center><h1 style="color:#1b51a2;">Current Appointments</h1></center>
                       </header>  
                         <table id="table">
                             <thead id="thead">
@@ -85,30 +92,28 @@
                                 </tr>
                             </thead>
                             <tbody>
-
-                                {% for i in data %}
-                                  <td>
-                                    {{i.id}}
-                                  </td>
-                                  <td>
-                                    {{i.name}}
-                                  </td>
-                                  <td>
-                                    {{i.preferred_date}}
-                                  </td>
-                                  <td>
-                                    {{i.preferred_time}}
-                                  </td>
-                                  <td>
-
-                                  </td>
-                                  <td>
-                                    {% for j in department_users%}
-                                    {% for k in j %}
-                                      {{k}}
-                                    {% endfor %} 
-                                    {% endfor%}
-                                  </td>
+              {% for i in appointment_data %}
+              <td>
+                <span class="mySpan">{{ i.appointment.id }}</span>
+              </td>
+              <td>
+                <span class="mySpan">{{ i.appointment.name }}</span>
+              </td>
+              <td>
+                <span class="mySpan">{{ i.appointment.preferred_date }}</span>
+              </td>
+              <td>
+                <span class="mySpan">{{ i.appointment.preferred_time }}</span>
+              </td>
+              <td>
+                <span class="mySpan">{{ i.appointment.status }}</span>
+              </td>
+              <td>
+                {% for user in i.users_in_department %}
+                  <span class="mySpan">{{ user.first_name }} {{ user.last_name }}</span>
+                {% endfor %}
+              </td>
+            
                                   <td>
                                     <button class="btne"><i class="fa fa-edit"></i> Edit </button>
                                     <button class="btnc"><i class="fa fa-trash"></i> Cancel </button>

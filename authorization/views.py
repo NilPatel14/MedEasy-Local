@@ -75,7 +75,7 @@ def log_in_page(request):
 
 def log_out(request):
     logout(request)
-    messages.success(request, "Logged out successfully.")
+    # messages.success(request, "Logged out successfully.")
     return redirect("authorization:log_in")
 
 
@@ -165,7 +165,7 @@ def register(request):
                         user.full_clean()
                         user.save()
 
-                        messages.success(request, "User created successfully!")
+                        # messages.success(request, "User created successfully!")
                         return redirect("authorization:log_in")
                     except usertypeModel.DoesNotExist:
                         messages.error(request, "The specified usertype 'Patient' does not exist.")

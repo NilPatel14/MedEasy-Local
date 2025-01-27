@@ -23,35 +23,67 @@ def index(request):
     else:
         return redirect('authorization:login')
     
-from django.shortcuts import render, redirect
-from django.apps import apps
-from django.conf import settings
-from .models import Appointment
+
+# def dashboard_show(request):
+#     if request.user.is_authenticated:
+#         # Query all appointments
+#         data = Appointment.objects.all()
+        
+#         # Prepare a list to store users associated with the department
+#         department_users = []
+        
+#         # Iterate through the appointments to get users associated with the department
+#         for i in data:
+#             # Fetch the department ID from the appointment
+#             # dept_id = 0
+#             dept_id = i.department  # Assuming 'department' is a ForeignKey in Appointment model
+            
+#             # Fetch all users related to this department (assuming 'UserModel' has a foreign key to department)
+#             UserModel = apps.get_model(settings.AUTH_USER_MODEL)
+#             users_in_department = UserModel.objects.filter(department=dept_id)
+            
+#             department_users.append(users_in_department)
+
+#         # Pass both appointment data and users associated with each department to the template
+#         zipped_data = zip(data, department_users)
+#         template = "Patient/Dashboard.html"
+#         return render(request, template, {'data': data, 'department_users': department_users})
+#     else:
+#         # If user is not authenticated, redirect to login
+#         return redirect('authorization:login')
+
+
+
+
+
 
 def dashboard_show(request):
     if request.user.is_authenticated:
         # Query all appointments
-        data = Appointment.objects.all()
+        appointments = Appointment.objects.all()
         
-        # Prepare a list to store users associated with the department
-        department_users = []
+        # Create a list to store appointment data along with department users
+        appointment_data = []
         
-        # Iterate through the appointments to get users associated with the department
-        for i in data:
-            # Fetch the department ID from the appointment
-            # dept_id = 0
-            dept_id = i.department  # Assuming 'department' is a ForeignKey in Appointment model
+        for appointment in appointments:
+            # Get department related to this appointment
+            department = appointment.department  # Assuming department is a ForeignKey or related field
             
-            # Fetch all users related to this department (assuming 'UserModel' has a foreign key to department)
+            # Fetch all users linked to this department
+            # Assuming AUTH_USER_MODEL has a 'department' field
             UserModel = apps.get_model(settings.AUTH_USER_MODEL)
-            users_in_department = UserModel.objects.filter(department=dept_id)
-            
-            department_users.append(users_in_department)
+            users_in_department = UserModel.objects.filter(department=department)
+            # status = appointment.status
 
-        # Pass both appointment data and users associated with each department to the template
-        zipped_data = zip(data, department_users)
+            # Append appointment and department user details to the list
+            appointment_data.append({
+                'appointment': appointment,
+                'users_in_department': users_in_department,
+            })
+        
+        # Pass the structured data to the template
         template = "Patient/Dashboard.html"
-        return render(request, template, {'data': data, 'department_users': department_users})
+        return render(request, template, {'appointment_data': appointment_data})
     else:
         # If user is not authenticated, redirect to login
         return redirect('authorization:login')

@@ -27,8 +27,10 @@ class Appointment(models.Model):
     symptoms = models.CharField(max_length=200)
     preferred_date = models.DateField()
     preferred_time = models.TimeField()
+    status = models.CharField(max_length=10, default='pending')
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.name," : ",self.department
+        return self.name
 
 

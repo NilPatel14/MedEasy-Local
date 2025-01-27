@@ -6,17 +6,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <style>
-  .error-list {
-        color: red;
-        font-size: 0.9rem;
-        margin: 5px 0;
-        list-style: none;
-        padding: 0;
-    }
-
-    .error {
-        color: red;
-    }
     .form-image {
         max-width: 100vw;
         width: 100%;
@@ -28,6 +17,7 @@
     .container {
         padding: 0;
         position: relative;
+        
     }
 
     .container h2 {
@@ -45,10 +35,6 @@
         padding: 15px;
     }
 
-    a{
-      text-decoration: none !important;
-      
-    }
     .form-group .error {
         color: red;
         font-size: 0.9rem;
@@ -74,7 +60,7 @@
   </a>
 </li>
 <li class="active">
-  <a href="{% url 'Doctor:prescription' 1 %}">
+  <a href="{% url 'Doctor:prescription' %}">
     <svg fill="#000000" width="27px" height="27px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
       <path d="M 16 3 C 14.742188 3 13.847656 3.890625 13.40625 5 L 6 5 L 6 28 L 26 28 L 26 5 L 18.59375 5 C 18.152344 3.890625 17.257813 3 16 3 Z M 16 5 C 16.554688 5 17 5.445313 17 6 L 17 7 L 20 7 L 20 9 L 12 9 L 12 7 L 15 7 L 15 6 C 15 5.445313 15.445313 5 16 5 Z M 8 7 L 10 7 L 10 11 L 22 11 L 22 7 L 24 7 L 24 26 L 8 26 Z M 15 14 L 15 17 L 12 17 L 12 19 L 15 19 L 15 22 L 17 22 L 17 19 L 20 19 L 20 17 L 17 17 L 17 14 Z"/>
     </svg>
@@ -101,61 +87,58 @@
         {% if form %}
         <div class="form-group">
             <label for="patient-name" class="large-label">Patient Name</label>
-            {{ form.patient_name }}
+            <!-- <input type="text" id="patient-name" class="form-control large-textbox" name="patient-name" placeholder="Enter patient name" required> -->
+            
+            <div class="error" id="name-error"></div>
         </div>
-
         <div class="form-group">
             <label for="patient-age" class="large-label">Patient Age</label>
-            {{ form.patient_age }}
+            <input type="number" id="patient-age" class="form-control large-textbox" name="patient-age" placeholder="Enter patient age" required>
+            <div class="error" id="age-error"></div>
         </div>
-
+        <!-- <div class="form-group">
+            <label for="patient-phone" class="large-label">Phone</label>
+            <input type="tel" id="patient-phone" class="form-control large-textbox" name="patient-phone" placeholder="Enter phone number" required>
+            <div class="error" id="phone-error"></div>
+        </div> -->
         <div class="form-group">
             <label class="large-label">Gender</label>
-            {{ form.gender }}
+            <div class="radio-group">
+                <label class="large-label">
+                  <input type="radio" name="gender" value="male" required> Male</label>
+                <label class="large-label"><input type="radio" name="gender" value="female"> Female</label>
+                <label class="large-label"><input type="radio" name="gender" value="other"> Other</label>
+            </div>
+            <div class="error" id="gender-error"></div>
         </div>
-
-        
-        <div class="form-group">
-          <label class="large-label">Symptoms</label>
-          {{ form.problem }}
-      </div>
-
         <div class="form-group">
             <label for="diagnosis" class="large-label">Diagnosis</label>
-            {{ form.diagnosis }}
+            <textarea id="diagnosis" name="diagnosis" rows="3" class="form-control large-textbox" placeholder="Enter diagnosis details" required></textarea>
+            <div class="error" id="diagnosis-error"></div>
         </div>
-
         <div class="form-group">
-          <label for="prescription" class="large-label">Prescription</label>
-          {{ form.prescription_details }}
+            <label for="prescription" class="large-label">Prescription</label>
+            <textarea id="prescription" name="prescription" rows="3" class="form-control large-textbox" placeholder="Enter prescription details" required></textarea>
+            <div class="error" id="prescription-error"></div>
+        </div>
+        
+        <div class="form-group" >
+          <label class="large-label">OPD/IPD</label>
+          <div class="radio-group">
+              <label class="large-label"><input type="radio" name="gender" value="IPD" required> IPD</label>
+              <label class="large-label"><input type="radio" name="gender" value="OPD"> OPD</label>
+              <!-- <label class="large-label"><input type="radio" name="gender" value="other"> Other</label> -->
+          </div>
+          <div class="error" id="gender-error"></div>
       </div>
-
-      <div class="form-group">
-        <label for="medication" class="large-label">Medication</label>
-        {{ form.medication }}
-    </div>
-
-    <div class="form-group">
-      <label for="duration" class="large-label">Duration</label>
-      {{ form.duration }}
-  </div>
-
-  
-
-    
-        <div class="form-group">
-            <label class="large-label">Frequency</label>
-            {{ form.frequency }}
-        </div>
-
-        <div class="form-group">
-            <label class="large-label">IPD/OPD</label>
-            {{ form.ipd_opd }}
-        </div>
-
+        <!-- <div class="form-group">
+            <input type="checkbox" id="certification" name="certification" class="large-textbox" required>
+            <label class="large-label" for="certification">I certify that the above information is true and accurate</label>
+            <div class="error" id="certification-error"></div>
+        </div> -->
         <button type="submit" class="btn btn-primary">Submit</button>
-        {% endif %}
-      </form>
+        {% endform %}
+    </form>
     </div>
 </div>
 {% endblock %}
