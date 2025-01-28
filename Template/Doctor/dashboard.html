@@ -63,18 +63,18 @@
                   
                                   {% if data %}
                                   {% for i in data %}
-                                  <tr>
+                                  <tr onclick="location.href='{% url 'Doctor:prescription' i.id %}'" style="cursor: pointer;">
                                     
                                     <td>
-                                        <a href="{% url 'Doctor:prescription' i.id %}">
+                                        <!-- <a href="{% url 'Doctor:prescription' i.id %}"> -->
                                                 {{i.id}}
-                                              </a>
+                                              <!-- </a> -->
                                       </td>
                                       <td>
                                         
-                                        <a href="{% url 'Doctor:prescription' i.id %}">
+                                        <!-- <a href="{% url 'Doctor:prescription' i.id %}"> -->
                                         {{i.name}}
-                                      </a>
+                                      <!-- </a> -->
                                       </td>
                                       <td>
                                         {{i.preferred_date}}
@@ -93,7 +93,7 @@
                 
                         <!-- New Patient Section -->
                         <section class="card">
-                            <h2>New Patient</h2>
+                            <h2>OPD Patient</h2>
                             <table>
                                 <thead>
                                     <tr>
@@ -103,42 +103,57 @@
                                         <th>Age</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>000031</td>
-                                        <td>Mr. John Doe</td>
-                                        <td>Jan 19, 2020 06:56:08</td>
-                                        <td>40</td>
-                                    </tr>
+                                              <tbody>
+                  {% if opd %}
+                  {% for i in opd %}
+                        <tr onclick="location.href='{% url 'Doctor:prescription' i.appointment_id.id %}'" style="cursor: pointer;">
+
+                          <td>{{ i.prescription_id }}</td>
+                          <td>{{ i.patient_name }}</td>
+                          <td>{{ i.created_at|date:"d/m/Y" }}</td>
+                          <td>{{ i.patient_age }}</td>
+                      </tr>
+                  {% endfor %}
+              {% else %}
+                  <tr>
+                      <td colspan="4">No OPD patients found.</td>
+                  </tr>
+              {% endif %}
+              
                                 </tbody>
                             </table>
                         </section>
                 
                         <!-- Visited Patient Section -->
                         <section class="card">
-                            <h2>Visited Patient</h2>
+                            <h2>IPD Patient</h2>
                             <table>
                                 <thead>
-                                    <tr>
-                                        <th>OPD No.</th>
-                                        <th>Patient Name</th>
-                                        <th>Date</th>
-                                        <th>Department</th>
+                                    <tr >
+                                          <th>Patient No.</th>
+                                          <th>Patient Name</th>
+                                          <th>Date</th>
+                                          <th>Age</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>OP-000015</td>
-                                        <td>Mr. John Doe</td>
-                                        <td>Jan 19, 2020 07:13:29</td>
-                                        <td>Anaesthetics</td>
-                                    </tr>
-                                    <tr>
-                                        <td>OP-000021</td>
-                                        <td>Mr. John Doe</td>
-                                        <td>Jan 19, 2020 07:16:44</td>
-                                        <td>Anaesthetics</td>
-                                    </tr>
+                  {% if ipd %}
+                  {% for i in ipd %}
+                        <tr onclick="location.href='{% url 'Doctor:prescription' i.appointment_id.id %}'" style="cursor: pointer;">
+
+                          <td>{{ i.prescription_id }}</td>
+                          <td>{{ i.patient_name }}</td>
+                          <td>{{ i.created_at|date:"d/m/Y" }}</td>
+                          <td>{{ i.patient_age }}</td>
+                      </tr>
+                  {% endfor %}
+              {% else %}
+                  <tr>
+                      <td colspan="4">No IPD patients found.</td>
+                  </tr>
+              {% endif %}
+              
+                                    
                                 </tbody>
                             </table>
                         </section>

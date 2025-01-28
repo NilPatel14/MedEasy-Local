@@ -19,7 +19,21 @@ class Prescription(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.prescription_id:
-            self.prescription_id = f"RX-{now().strftime('%Y%m%d%H%M%S')}"
+            if self.ipd_opd == 'IPD':
+                a = 1
+                if a>=1:
+                    a = a + 1
+                else:
+                    a = 1
+                self.prescription_id = f"IPD-0{a}"
+            else:
+                a = 1
+                if a>=1:
+                    a = a + 1
+                else:
+                    a = 1
+                self.prescription_id = f"OPD-0{a}"
+
         super(Prescription, self).save(*args, **kwargs)
 
     def __str__(self):

@@ -34,11 +34,45 @@ def dashboard_show(request):
         # users_in_department = UserModel.objects.filter(department=department)
         # Use filter to get a queryset of all appointments for the department with id 1
         appointments = Appointment.objects.filter(department_id=dep)
-        
+        pre = Prescription.objects.filter(appointment_id__in=appointments)
+        opd = pre.filter(ipd_opd="OPD")
+        ipd = pre.filter(ipd_opd="IPD")
         template = "Doctor/dashboard.html"
-        return render(request, template, {'data': appointments})
+        return render(request, template, {'data': appointments,'pre':pre,'ipd':ipd,'opd':opd})
     else:
         return redirect("authorization:log_in")
+# import logging
+
+# logger = logging.getLogger(__name__)
+
+# def dashboard_show(request):
+#     if request.user.is_authenticated:
+#         try:
+#             dep = request.user.department_id
+#             appointments = Appointment.objects.filter(department_id=dep)
+#             pre = Prescription.objects.filter(appointment_id__in=appointments)
+
+#             # Filter prescriptions by IPD/OPD
+#             opd = pre.filter(ipd_opd="OPD")
+#             ipd = pre.filter(ipd_opd="IPD")
+
+#             logger.debug("Appointments: %s", appointments)
+#             logger.debug("Prescriptions: %s", pre)
+#             logger.debug("OPD Prescriptions: %s", opd)
+#             logger.debug("IPD Prescriptions: %s", ipd)
+
+#             template = "Doctor/dashboard.html"
+#             return render(request, template, {
+#                 'data': appointments,
+#                 'pre': pre,
+#                 'ipd': ipd,
+#                 'opd': opd
+#             })
+#         except Exception as e:
+#             logger.error("Error fetching data: %s", e)
+#             return render(request, "error.html", {"message": "Error fetching data."})
+#     else:
+#         return redirect("authorization:log_in")
 
 
 
@@ -112,7 +146,7 @@ def prescription_show(request, id=1):
                 appointment = Appointment.objects.get(id=id)
             except Appointment.DoesNotExist:
                 messages.error(request, "Appointment not found.")
-                return redirect("Doctor:dashboard_show")
+                return redirect("Doctor:dashboard")
 
             # Pre-fill form with appointment data
             initial_data = {
