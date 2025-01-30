@@ -147,4 +147,9 @@ def Book_Appointment(request):
         return redirect('authorization:log_in')
 
 
-
+def check_history(request):
+    if request.user.is_authenticated:
+        template = "Patient/checkhistory.html"
+        return render(request,template)
+    else:
+        return redirect('authorization:login')
