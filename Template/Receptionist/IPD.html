@@ -115,6 +115,8 @@
                 <tbody>
                   {% if ipd %}
                   {% for i in ipd %}
+                  {% if i.created_at|date:"d/m/Y" == today|date:"d/m/Y" %}
+
                         <tr>
 
                           <td>{{ i.prescription_id }}</td>
@@ -124,6 +126,9 @@
                      <td><span class="icon-container"><i class="fas fa-trash-alt delete-icon" id="deleteIcon" title="Clear date"></i></span></td>
 
                       </tr>
+                      {% endif %}
+
+                      
                   {% endfor %}
               {% else %}
                   <tr>
@@ -133,9 +138,11 @@
               
                 </tbody>
                 </table>
+                </section>
                 <br/>
+                <br>
                 <!-- New Patient Section -->
-                <section class="card">
+                <!-- <section class="card">
                 <h2>New Patient</h2><br/>
                 <table>
                 <thead>
@@ -167,6 +174,7 @@
                 </tr>
                 </tbody>
                 </table>
+                </section> -->
                 <br/>
                 <!-- Visited Patient Section -->
                 <section class="card">
@@ -188,22 +196,27 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>IP-000015</td>
-                    <td>Mr. John Doe</td>
-                    <td>Jan 19, 2020 07:13:29</td>
-                    <td>Anaesthetics</td>
-                    <td>Dr. Rishi Shah</td>
-                    <td><span class="icon-container"><i class="fas fa-trash-alt delete-icon" id="deleteIcon" title="Clear date"></i></span></td>
-                </tr>
-                <tr>
-                    <td>IP-000021</td>
-                    <td>Mr. John Doe</td>
-                    <td>Jan 19, 2020 07:16:44</td>
-                    <td>Anaesthetics</td>
-                    <td>Dr. Rishi Shah</td>
-                    <td><span class="icon-container"><i class="fas fa-trash-alt delete-icon" id="deleteIcon" title="Clear date"></i></span></td>
-                </tr>
+                  {% if ipd %}
+                  {% for i in ipd %}
+                  {% if i.appointment_id.status == "Completed" %}
+
+                        <tr  >
+
+                          <td>{{ i.prescription_id }}</td>
+                          <td>{{ i.patient_name }}</td>
+                          <td>{{ i.created_at|date:"d/m/Y" }}</td>
+                          <td>{{ i.patient_age }}</td>
+                          <td>{{ i.appointment_id.department }}</td>
+                     <td><span class="icon-container"><i class="fas fa-trash-alt delete-icon" id="deleteIcon" title="Clear date"></i></span></td>
+
+                      </tr>
+                      {% endif %}
+                      {% endfor %}
+              {% else %}
+                  <tr>
+                      <td colspan="5">No OPD patients found.</td>
+                  </tr>
+              {% endif %}
                 </tbody>
                 </table>
             </section>

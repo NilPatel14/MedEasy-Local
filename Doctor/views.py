@@ -149,6 +149,8 @@ def prescription_show(request, id=1):
                 return redirect("Doctor:dashboard")
 
             # Pre-fill form with appointment data
+            appointment.status = 'Completed'
+            appointment.save()
             initial_data = {
                 'patient_name': appointment.name,
                 'patient_age': calculate_age(appointment.dob),

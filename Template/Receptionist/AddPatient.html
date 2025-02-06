@@ -87,68 +87,80 @@
         </a>
       </li>
 {% endblock %}
+
 {% block content %}
-          <main class="dashboard">
-        <header>
-            <h1>Dashboard</h1>
-        </header>
-        <div style="text-align: center; margin: 20px;">
-        <br/>
-            
-            <div style="display: flex; align-items: center; justify-content: center; gap: 20px;">
-            
-            <a href="{% url 'Receptionist:OPD' %}" class="animated-button opd">OPD</a>
+<main>
+  <div id="hero"></div>
+  <div class="container">
+    <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-8 col-md-10 d-flex align-items-center justify-content-center">
+            <!-- Square Box -->
+            <div class="card shadow-lg border-0" style="width: 100%; max-width: 500px;">
+              <div class="card-body p-4">
+                <div class="text-center mb-4">
+                  <h5 class="card-title fs-4">Create an Account</h5>
+                  <p class="small">Enter your personal details to create an account</p>
+                </div>
 
+                {% if messages %}
+                <div class="alert alert-info">
+                  {% for message in messages %}
+                    <p>{{ message }}</p>
+                  {% endfor %}
+                </div>
+                {% endif %}
 
-            <!-- Chart Container -->
-            <canvas id="patientChart" style="max-width: 250px; max-height: 250px;"></canvas>
-            
-            <a href="{% url 'Receptionist:IPD' %}" class="animated-button ipd">IPD</a>
-            </div>
-        </div>
+                {% if form %}
+                <!-- Form Layout with Grid -->
+                <form method="post" class="row g-3 needs-validation" style="color: #1977CA !important;" novalidate>
+                  {% csrf_token %}
+                  
+                  {% for field in form %}
+                    <div class="col-md-6 form-group">
+                      <label class="form-label">{{ field.label }}</label>
 
-    <section class="card">
-            <a href="{% url 'Receptionist:AddPatientRecord' %}"><button class="white-button">+ Add Patient</button></a><br/><br/>
-            <h2>Today's Patient</h2>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>No.</th>
-                            <th>Patient Name</th>
-                            <th>Date</th>
-                            <th>Doctor Name</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-              {% for i in appointment_data %}
-                        <tr>
-                            <td>
-                <span class="mySpan">{{ i.appointment.id }}</span>
-                            </td>
-                            <td>
-                <span class="mySpan">{{ i.appointment.name }}</span>
+                      <!-- For other fields -->
+                      {{ field }}
 
-                            </td>
-                            <td>
-                <span class="mySpan">{{ i.appointment.preferred_date }}</span>
-                              
-                            </td>
-                        
-                            <td>
-                              
-                {% for user in i.users_in_department %}
-                <span class="mySpan">{{ user.first_name }} {{ user.last_name }}</span>
-              {% endfor %}
-                            </td>
-                        </tr>
-              {% endfor %}
+                      {% if field.name == "email" %}
+                      
+                        <!-- Add the button next to the email field -->
+                        <button type="button" id="sendOtpButton" class="email-button">Verify Email</button>
+                      {% endif %}
 
-                    </tbody>
-                </table>
-            </div>
-        </section>
-    </main>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="{% static 'js/scriptReceptionist.js' %}"></script>
+                      <!-- Displaying error messages in red rectangle -->
+                      {% if field.errors %}
+                        <div class="error-message">
+                          {% for error in field.errors %}
+                            <p>{{ error }}</p>
+                          {% endfor %}
+                        </div>
+                      {% endif %}
+                    </div>
+                  {% endfor %}
+
+                  <div class="col-12 text-center mt-3">
+                    <button type="submit" class="btn btn-primary w-100">Create Account</button>
+                  </div>
+                </form>
+                {% endif %}
+
+                <div class="text-center mt-3">
+                  <p class="small mb-0">Already have an account? <a href="{% url 'authorization:log_in' %}">Log in</a></p>
+                </div>
+              </div>
+            </div> <!-- End Card -->
+          </div> <!-- End Column -->
+        </div> <!-- End Row -->
+      </div> <!-- End Container -->
+    </section>
+  </div>
+
+  <!-- Overlay -->
+  <div id="overlay" class="overlay">
+    <div class="spinner"></div>
+  </div>
+</main>
 {% endblock %}

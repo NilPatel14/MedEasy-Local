@@ -20,14 +20,16 @@ class Prescription(models.Model):
     def save(self, *args, **kwargs):
         if not self.prescription_id:
             if self.ipd_opd == 'IPD':
-                a = 1
+                # a = 1
+                a = Prescription.objects.filter(ipd_opd="IPD").count()
                 if a>=1:
                     a = a + 1
                 else:
                     a = 1
                 self.prescription_id = f"IPD-0{a}"
             else:
-                a = 1
+                # a = 1
+                a = Prescription.objects.filter(ipd_opd="OPD").count()
                 if a>=1:
                     a = a + 1
                 else:
