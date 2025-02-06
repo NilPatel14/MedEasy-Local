@@ -1,0 +1,197 @@
+/* CSS Variables for Theme Colors */
+:root {
+    --primary-color: #5e63ff;
+    --ipd-color: #4caf50;
+    --opd-color: #2196f3;
+    --background-light: #f8f9fc;
+    --font-main: 'Poppins', Arial, sans-serif;
+    --chart-start-color: #4caf50;
+    --chart-end-color: #2196f3;
+    --chart-midpoint: 70%;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+/* General Body Styling */
+body {
+    font-family: var(--font-main);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: var(--background-light);
+}
+header h1 {
+    text-align: center; /* Center the text */
+    margin: 0; /* Remove default margins */
+    font-size: 2.5rem; /* Adjust font size */
+    font-weight: 700; /* Bold font */
+    color: #5e63ff; /* Accent color */
+}
+/* Dashboard Layout */
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    padding: 20px;
+    background-color: var(--background-light);
+    border-radius: 10px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+/* Chart Styling */
+.chart-container {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 20px;
+    width: 280px;
+    height: 280px;
+}
+
+.bar {
+    position: relative;
+    width: 100px;
+    height: 300px;
+    display: flex;
+    align-items: flex-end;
+}
+
+.ipd {
+    background: linear-gradient(to top, var(--ipd-color), var(--ipd-color));
+    height: var(--ipd-height, 60%);
+}
+
+.opd {
+    background: linear-gradient(to top, var(--opd-color), var(--opd-color));
+    height: var(--opd-height, 80%);
+}
+
+.label {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+/* Button Styles */
+.white-button {
+    background-color: #1977CA;
+    color: white;
+    border: 2px solid #333;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.white-button:hover {
+    background-color: #333;
+    color: white;
+}
+.animated-button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px;
+    background-color: #4CAF50; /* Green */
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+#patientChart {
+    max-width: 250px;
+    max-height: 250px;
+    width: 100%; /* Optional: this will ensure the canvas is responsive */
+    height: auto; /* Optional: keeps the aspect ratio intact */
+}
+
+.icon-container {
+    display: inline-flex;
+    align-items: center;
+    align-content: center;
+    gap: 10px;
+    margin-left: 10px;
+}
+.calendar-icon, .delete-icon {
+    cursor: pointer;
+    color: white;
+}
+.delete-icon {
+    color: #dc3545;
+    align-content: center;
+}
+/* Hidden input styling */
+#datePicker {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+    opacity: 0;
+}
+/* General Container for Tables */
+.table-container {
+  flex: 1;
+  min-width: 400px;
+  margin-bottom: 20px; /* Add spacing between tables */
+}
+
+/* General Table Styles */
+table {
+  width: 100%;
+  border-collapse: collapse; /* Remove gaps between cells */
+  table-layout: fixed; /* Ensure fixed table layout for better control */
+}
+
+th, td {
+  padding: 10px;
+  border: 1px solid #ddd; /* Light border for cells */
+  text-align: left; /* Left-align all text */
+  word-wrap: break-word; /* Prevent long words from breaking layout */
+}
+
+th {
+  background-color: #1977CA; /* Blue background for headers */
+  color: white; /* White text for headers */
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2; /* Alternate row background color */
+}
+
+tr:hover {
+  background-color: #cce7ff; /* Slightly darker light blue on hover for better contrast */
+}
+
+/* Section Headers */
+.card h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #333; /* Neutral dark gray */
+  border-bottom: 2px solid #ccc; /* Subtle underline for section headers */
+  padding-bottom: 5px;
+}
+/* Responsive Design */
+@media (max-width: 768px) {
+    .chart-container {
+        width: 200px;
+        height: 200px;
+    }
+
+    table {
+        font-size: 0.9rem;
+    }
+    th, td {
+    padding: 8px; /* Adjust padding for smaller screens */
+  }
+}

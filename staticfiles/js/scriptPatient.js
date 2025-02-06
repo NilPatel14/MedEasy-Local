@@ -5,5 +5,3 @@ function toggleSidebar(){
   sidebar.classList.toggle('close')
   toggleButton.classList.toggle('rotate')
 }
-
-

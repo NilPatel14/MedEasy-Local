@@ -21,7 +21,7 @@ def index(request):
         template = "Patient/index.html"
         return render(request,template,{'name':name})
     else:
-        return redirect('authorization:login')
+        return redirect('authorization:log_in')
     
 
 # def dashboard_show(request):

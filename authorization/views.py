@@ -56,9 +56,8 @@ def log_in_page(request):
                         # return redirect("/admin/profile/")
                         pass
                     elif(usertype == "Receptionist"):
-                        # return redirect("/receptionist/profile/")
-                        pass
-
+                        return redirect("/receptionist/profile/")
+                        
                 else:
                     print('something went wrong')
                     messages.error(request, "Invalid username or password.")

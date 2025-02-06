@@ -1,0 +1,244 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Itim&display=swap');
+
+
+:root{
+  /*--base-clr: #1977ca;
+  --text-clr: #eeefca;*/
+  --line-clr: #3163c1ce;
+  --hover-clr: #eeeff5; 
+  --accent-clr: #5e63ff;
+  --secondary-text-clr: #5b6aac;
+  
+}
+/* General Styling for Consistency */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f9f9f9;
+  display: flex;
+  /* justify-content: center; */
+  /* align-items: center; */
+}
+
+/* Header Styling */
+header {
+  text-align: center;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+
+header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  animation: fadeIn 2s ease-in-out;
+}
+
+header nav {
+  font-size: 1rem;
+  color: gray;
+}
+
+/* Room Container Styling */
+.room-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 30px;
+  margin-top: 40px;
+  gap: 40px; /* Add space between image and form */
+
+}
+
+.room-image img {
+  width: 600px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  animation: zoomIn 1.5s ease-in-out;
+}
+
+.reservation-form {
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 400px;
+  animation: slideIn 1.5s ease-in-out;
+}
+
+.reservation-form h2 {
+  text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+}
+
+.reservation-form form label {
+  display: block;
+  margin: 15px 0 5px;
+}
+
+.reservation-form form input,
+.reservation-form form select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.add-details-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #f4a460;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.add-details-btn:hover {
+  background-color: #e69550;
+  transform: scale(1.05);
+  transition: 0.3s;
+}
+
+/* Animation Keyframes */
+@keyframes zoomIn {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+
+/* SIde bar */
+
+#sidebar{
+  box-sizing: border-box;
+  height: 100vh;
+  width: 250px;
+  padding: 5px 1em;
+  background-color: #1977CA;
+  color: #eeeff5;
+  border-right: 1px solid var(--line-clr);
+
+  position: sticky;
+  top: 0;
+  align-self: start;
+  transition: 300ms ease-in-out;
+  overflow: hidden;
+  text-wrap: nowrap;
+}  
+#sidebar.close{
+  padding: 5px;
+  width: 60px;
+}
+#sidebar ul{
+  list-style: none;
+  margin-left: -30px;
+}
+#sidebar > ul > li:first-child{
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+  .logo{
+    
+font-family: "Itim", serif !important;
+font-weight: 500 !important;
+font-style: normal !important;
+font-size: 1.5rem !important;
+  }
+}
+#sidebar ul li.active a{
+  color: #eeeff5;
+  border: 2px solid white;
+  box-shadow: 0 0 2px rgba(225, 228, 225, 0.919),
+              0 0 2px rgba(225, 228, 225, 0.919),
+              0 0 2px rgba(225, 228, 225, 0.919);
+  transition: box-shadow 0.3s ease-in-out
+  
+  
+}
+#sidebar ul li.active:hover a{
+  color: #1977CA;
+
+  svg{
+    fill: #1977CA;
+  }
+}
+#sidebar a, #sidebar .dropdown-btn, #sidebar .logo{
+  border-radius: .5em;
+  padding: .85em;
+  text-decoration: none;
+  color: var(--text-clr);
+  display: flex;
+  align-items: center;
+  gap: 1em !important;
+}
+#sidebar a #dash{
+  /* position: relative; */
+  /* right: 0.9rem; */
+  /* margin-right:12px !important; */
+  /* font-size: 16px; */
+  /* display: flex; */
+  /* justify-content: space-between; */
+}
+#sidebar svg{
+  flex-shrink: 0;
+  fill: #eeeff5;
+}
+#sidebar a:hover, #sidebar .dropdown-btn:hover{
+  background-color: var(--hover-clr);
+  color: #1977CA;
+  svg
+  {
+      fill: #1977CA;
+  }
+}
+svg.hover{
+  fill: #1977CA;
+}
+.rotate svg:last-child{
+  rotate: 180deg;
+}
+#toggle-btn{
+  margin-left: auto;
+  padding: 1em;
+  border: none;
+  border-radius: .5em;
+  background: none;
+  cursor: pointer;
+
+  svg{
+    transition: rotate 150ms ease;
+  }
+}
+#toggle-btn:hover{
+  background-color: var(--hover-clr);
+  svg
+  {
+      fill: #1977CA;
+  }
+}

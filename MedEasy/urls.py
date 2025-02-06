@@ -26,6 +26,7 @@ urlpatterns = [
     # path('doctor/',include("Doctor.urls")),
     path('doctor/', include('Doctor.urls', namespace='Doctor')), 
     path('patient/',include('Patient.urls',namespace='Patient')),
+    path('receptionist/',include('Receptionist.urls',namespace='Receptionist')),
 ]
 
 if settings.DEBUG:
