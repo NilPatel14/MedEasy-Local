@@ -4,14 +4,14 @@
 {% block head %}
     <title>Dashboard</title>
     <link rel="stylesheet" href="{% static 'css/addPatient.css' %}">
-
+    
     <style>
 
         main{
             /* position: inherit; */
-            position: absolute;
+            /* position: relative; */
             display: flex;
-            left: 0;
+            left:0;
             right: 0;
             top: 0;
             bottom: 0;
@@ -261,4 +261,6 @@
     <div class="spinner"></div>
   </div>
 </main>
+<script type="text/javascript" src="{%static 'js/scriptReceptionist.js' %}" ></script>
+
 {% endblock %}

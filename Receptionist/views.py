@@ -12,7 +12,8 @@ from authorization.views import verify_otp, send_otp_email
 from django.contrib import messages
 from django.http import HttpResponse
 from django.core.mail import send_mail
-
+import random
+from django.http import JsonResponse
 # Create your views here.
 
 
@@ -140,3 +141,54 @@ def IPD(request):
 def room(request):
     template="Receptionist/room.html"
     return render(request,template)
+
+
+
+def generate_otp():
+    return random.randint(100000, 999999)
+
+import json
+from django.http import JsonResponse
+
+def send_otp_email(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)  # Parse the JSON data
+            email = data.get('email')  # Extract email from JSON
+            
+            if not email:
+                return JsonResponse({"status": "error", "message": "Email not provided"})
+            
+            # Proceed with OTP logic...
+            print(f"Received email: {email}")  # Print to verify
+
+            # Your OTP sending logic here
+            otp = random.randint(100000, 999999)
+            request.session['otp'] = otp
+            send_mail(
+                "Your OTP Code",
+                f"Your OTP is {otp}",
+                settings.DEFAULT_FROM_EMAIL,
+                [email],
+            )
+            return JsonResponse({"status": "success", "message": "OTP sent!"})
+
+        except json.JSONDecodeError:
+            return JsonResponse({"status": "error", "message": "Invalid JSON data"})
+
+    return JsonResponse({"status": "error", "message": "Invalid request"})
+
+
+
+def verify_otp(request):
+    if request.method == "POST":
+        
+        entered_otp = request.POST.get('otp')
+        session_otp = request.session.get('otp')
+
+        if entered_otp == str(session_otp):
+            return True
+        else:
+            return False
+    return render(request,'Receptionist/AddPatient.html')
+

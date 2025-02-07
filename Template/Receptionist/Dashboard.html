@@ -4,6 +4,34 @@
 {% block head %}
     <title>Dashboard</title>
     <link rel="stylesheet" href="{% static 'css/stylesReceptionist.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js">
+
+    </script>
+    <script src="{% static 'js/scriptReceptionist.js' %}"></script>
+    <script>
+      
+const ctx = document.getElementById('patientChart').getContext('2d');
+    const patientChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['IPD', 'OPD'],
+            datasets: [{
+                label: 'Patient Distribution',
+                data: [40, 60], // Adjust IPD and OPD data as needed
+                backgroundColor: [' #FFC0CB', '#ADD8E6'], // 
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top'
+                }
+            }
+        }
+    });
+    </script>
 {% endblock %}
 
 {% block elementBlock %}
@@ -108,7 +136,7 @@
         </div>
 
     <section class="card">
-            <a href="{% url 'Receptionist:AddPatientRecord' %}"><button class="white-button">+ Add Patient</button></a><br/><br/>
+            <a href="{% url 'Receptionist:AddPatientRecord' %}"><center><button class="white-button">+ Add Patient</button></center></a><br/><br/>
             <h2>Today's Patient</h2>
             <div class="table-container">
                 <table>
