@@ -216,7 +216,7 @@ main{
     font-weight: 500;
     border: none;
   }
-  .btne
+.btne
 {
     background-color: #1977CA;
     color: white;
@@ -227,7 +227,7 @@ main{
     font-weight: 500;
     border: none;
 }
-  .container{
+.container{
     border: 1.5px solid var(--line-clr);
     border-radius: 1em;
     margin-bottom: 20px;
@@ -236,8 +236,8 @@ main{
     font-size: 15px;
   
     h2, p { margin-top: 1em }
-  }
-  .container2{
+}
+.container2{
     border: 1.5px solid var(--line-clr);
     border-radius: 1em;
     margin-bottom: 20px;
@@ -246,20 +246,68 @@ main{
     font-size: 25px;
   
     h2, p { margin-top: 1em }
-  }
-  
-  @media(max-width: 800px){
-    body{
+}
+.center-button {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh !important;
+        background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), 
+                          url("{% static 'assets/img/Patient/img1.jpg' %}");
+        background-size: cover;
+        background-position: center;
+        background-position: center;
+        background-repeat: no-repeat;
+        gap: 20px;
+}
+.button {
+    border-radius: 4px;
+    background-color: #1977ca;
+    border: none;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 28px;
+    padding: 20px;
+    width: 200px;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin: 5px;
+}
+.button span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+}
+
+.button span:after {
+    content: '\00bb';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: 0.5s;
+}
+.button:hover span {
+    padding-right: 25px;
+}
+.button:hover span:after {
+    opacity: 1;
+    right: 0;
+}
+@media(max-width: 800px){
+body{
       grid-template-columns: 1fr;
-    }
-    main{
+}
+main{
       padding: 2em 1em 60px 1em;
-    }
-    .container{
+}
+.container{
       border: none;
       padding: 0;
-    }
-    #sidebar{
+}
+#sidebar{
         height: 60px;
         width: 100%;
         border-right: none;
@@ -278,19 +326,18 @@ main{
         }
         ul li{
             height: 100%;
-          }
-          ul li span, ul li:first-child, .dropdown-btn svg:last-child{
+        }
+        ul li span, ul li:first-child, .dropdown-btn svg:last-child{
             display: none;
-          }
+        }
 }
 .dashboard {
-flex: 1;
-padding: 20px;
+  flex: 1;
+  padding: 20px;
 }
-
 header h1 {
-margin-bottom: 20px;
-font-size: 1.8rem;
+  margin-bottom: 20px;
+  font-size: 1.8rem;
 }
 
 }

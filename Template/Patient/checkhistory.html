@@ -6,65 +6,9 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 <!-- Material Icons -->
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-    <script type="text/javascript" src="main.js" defer></script>
-    <style>
- 
- .center-button {
-    display: flex;
-    flex-direction: column; /* Align items in a vertical column */
-    justify-content: center;
-    align-items: center;
-    height: 100vh; /* Full viewport height */
-    background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), 
-                      url('image/img1.jpg'); /* Add a semi-transparent white overlay */
-    background-size: cover; /* Scale the image to cover the entire container */
-    background-position: center; /* Center the image */
-    background-repeat: no-repeat; /* Prevent the image from repeating */
-    gap: 20px; /* Space between buttons */
-}
+<link rel="stylesheet" href="{%static 'css/stylePatient.css' %}">
+    <script type="text/javascript" src="{%static 'js/scriptPatient.js' %}" defer></script>
 
-  .button {
-    border-radius: 4px;
-    background-color: #1977ca;
-    border: none;
-    color: #FFFFFF;
-    text-align: center;
-    font-size: 28px;
-    padding: 20px;
-    width: 200px;
-    transition: all 0.5s;
-    cursor: pointer;
-    margin: 5px;
-  }
-
-  .button span {
-    cursor: pointer;
-    display: inline-block;
-    position: relative;
-    transition: 0.5s;
-  }
-
-  .button span:after {
-    content: '\00bb';
-    position: absolute;
-    opacity: 0;
-    top: 0;
-    right: -20px;
-    transition: 0.5s;
-  }
-
-  .button:hover span {
-    padding-right: 25px;
-  }
-
-  .button:hover span:after {
-    opacity: 1;
-    right: 0;
-  }
-  
-
-</style>
   {% endblock %}  
 
 
@@ -137,7 +81,7 @@
         
 {% block content %}
     <main>
-      <div class="center-button">
+      <div class="center-button" style="background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url({% static 'assets/img/Patient/img1.jpg' %});">
         <a href="prescription.html"><button class="button"><span>Check Prescription History</span></button></a>
         <a href="appointment.html"><button class="button"><span>Check Appointment History</span></button></a>
 

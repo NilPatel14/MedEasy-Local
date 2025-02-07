@@ -106,8 +106,10 @@ def dashboard_show(request):
     
 def bill_payment(request):
     if request.user.is_authenticated:
+        data = Appointment.objects.filter(id=request.user.id)
+        
         template = "Patient/Payment.html"
-        return render(request,template)
+        return render(request,template,{'data':data})
     else:
         return redirect('authorization:login')
     
