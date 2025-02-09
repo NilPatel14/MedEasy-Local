@@ -18,7 +18,7 @@ from django.core.mail import send_mail
 from .forms import BookingForm
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from .models import Bed, Room
+from .models import Bed, Room, Booking
 from django.contrib import messages
 # Create your views here.
 
@@ -196,32 +196,57 @@ def verify_otp(request):
 
 def room_details(request):
     if request.user.is_authenticated:
+        all_booking = Booking.objects.all()
+
+        # Check and update availability of rooms where check_out date has passed
+        for booking in all_booking:
+            if booking.check_out and booking.check_out < date.today() and not booking.room.availability:
+                booking.room.availability = True
+                booking.room.save()
+
         template = "Receptionist/roomdetails.html"
-        return render(request,template)
+        return render(request, template, {'all_booking': all_booking})
     else:
         return redirect('authorization:log_in')
-    
     
 def room(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
             form = BookingForm(request.POST)
             if form.is_valid():
-                form.save()
-                print(form)
+                # Get cleaned data from the form
+                check_in = form.cleaned_data['check_in']
+                check_out = form.cleaned_data['check_out']
+                
+                # Check if check_in date is in the past
+                if check_in < date.today():
+                    messages.error(request, 'Check-in date cannot be in the past.')
+                    return render(request, "Receptionist/room.html", {'form': form})
+
+                # Check if check_out date is before check_in date
+                if check_out < check_in:
+                    messages.error(request, 'Check-out date cannot be before check-in date.')
+                    return render(request, "Receptionist/room.html", {'form': form})
+
+                # Save the booking if the dates are valid
+                booking = form.save()
+
+                # Update room availability if necessary
+                if form.cleaned_data['room'].availability == True:
+                    form.cleaned_data['room'].availability = False
+                    form.cleaned_data['room'].save()
+
                 messages.success(request, 'Booking successful')
-                print(form.cleaned_data)
                 return redirect('Receptionist:room_details')
             else:
-                messages.error(request, 'Booking failed !! Choose someother date or room ')
-                print(form.errors)
+                messages.error(request, 'Booking failed! Please check the dates or room selection.')
         else:
             form = BookingForm()
-        template="Receptionist/room.html"
-        return render(request,template,{'form':form,})
-    else:
-        return redirect('authorization:log_in')  
 
+        template = "Receptionist/room.html"
+        return render(request, template, {'form': form})
+    else:
+        return redirect('authorization:log_in')
 
 import logging
 
