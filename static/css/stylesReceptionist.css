@@ -302,6 +302,10 @@ tr:hover {
   border-bottom: 2px solid #ccc; /* Subtle underline for section headers */
   padding-bottom: 5px;
 }
+
+
+
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .chart-container {

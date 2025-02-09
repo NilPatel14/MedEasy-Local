@@ -2,46 +2,58 @@
 {% load static %}
 
 {% block head %}
-    <title>Room Management</title>
-    <link rel="stylesheet" href="{% static 'css/room.css' %}">
-    <!-- <link rel="stylesheet" href="{% static 'css/stylesReceptionist.css' %}"> -->
-    <style>
-      .message {
-        padding: 10px;
-        margin: 10px 0;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-      }
+    <title>Room Enquiry</title>
+            <link rel="stylesheet" href="{% static 'css/stylesReceptionist.css' %}">
+        <style>
+        
+        #details1 {
+            display: none;
+        }
 
-      .message.success {
-        background-color: #d4edda;
-        color: #155724;
-        border-color: #c3e6cb;
-      }
+        .details-table {
+                display: none;
+        }
+        .filter-container {
+            display: flex;
+            justify-content: flex-start; /* Aligns dropdown to the left */
+            margin-bottom: 20px;
+            gap: 15px; 
+        }
+        select,button {
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #1977CA;
+            border-radius: 5px;
+            
+            background-color: #fff;
+            color:  #1977CA;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+        button:hover {
+            background-color: #fff;
+            color: #333;
+        }
+        select:hover {
+            background-color: #fff;
+            color: #333;
+        }
+        select:focus {
+            border-color: #1977CA;
+            box-shadow: 0px 0px 5px #1977CA;
+        }
+        option {
+            padding: 10px;
+        }
+        
 
-      .message.error {
-        background-color: #f8d7da;
-        color: #721c24;
-        border-color: #f5c6cb;
-      }
+        </style>
 
-      .message.info {
-        background-color: #d1ecf1;
-        color: #0c5460;
-        border-color: #bee5eb;
-      }
-
-      .message.warning {
-        background-color: #fff3cd;
-        color: #856404;
-        border-color: #ffeeba;
-      }
-    </style>
 {% endblock %}
 
-
 {% block elementBlock %}
-<li >
+<li>
     <a href="{% url 'Receptionist:profile' %}">
       <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
         <path
@@ -120,72 +132,96 @@
       <span>LogOut</span>
     </a>
   </li>
-  {% endblock %}
+{% endblock %}
+{% block content %}
 
-{%  block content %}
-  <header>
-    <h1>Our Rooms</h1>
-    <nav>
-      <a href="{% url 'Receptionist:dashboard' %}">Home</a> &gt; <a href="{% url 'Receptionist:room' %}">Rooms</a>
-    </nav>
-  </header>
-
-  <main>
-    <div class="room-container">
-      <div class="room-image">
-        <img src="{% static 'assets/img/img.jpg' %}" alt="Hospital Room">
-      </div>
-      <div class="reservation-form">
-        <h2>Reservation Form</h2>
-        <form id="reservationForm" method="POST">
-          {% csrf_token %}
-          <label for="patientName">Patient Name:</label>
-          <div id="patientName" name="patientName">{{form.patient}}</div>
-          <label for="roomNo">Room No:</label>
-          <div id="roomNo" name="roomNo">{{form.room}}</div>
-          <label for="bedNo">Bed No:</label>
-          <div id="bedNo" name="bedNo">{{form.bed}}</div>
-          <label for="checkin">Check In:</label>
-          <div id="checkin" name="checkin">{{form.check_in}}</div>
-          <label for="checkout">Check Out:</label>
-          <div id="checkout" name="checkout">{{form.check_out}}</div>
-
-          {% if messages %}
-            {% for message in messages %}
-              <p class="message {{ message.tags }}">{{ message }}</p>
-            {% endfor %}
-          {% endif %}            
-          
-          <input type="submit" class="add-details-btn" value="Add Details"></input>
-        </form>
-      </div>
-    </div>
-  </main>
-
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-$(document).ready(function() {
-    $("#id_room").change(function() {
-        var roomId = $(this).val();
-        if (roomId) {
-            $.ajax({
-              url: "{% url 'receptionist:get_beds' %}",
-                data: { room_id: roomId },
-                dataType: "json",
-                success: function(data) {
-                    var bedSelect = $("#id_bed");
-                    bedSelect.empty();
-                    bedSelect.append('<option value="">Select Bed</option>');
-                    $.each(data, function(index, bed) {
-                        bedSelect.append('<option value="' + bed.id + '">' + bed.bed_no + '</option>');
-                    });
-                }
-            });
-        } else {
-            $("#id_bed").empty().append('<option value="">Select Bed</option>');
-        }
-    });
-});
-</script>
-
+            <main class="dashboard">
+            <header>
+                <h1>Room Enquiry</h1><br><br>
+            </header>
+           <div class="filter-container">
+            <select id="ward">
+                <option>Select Room Type</option>
+                <option>General Ward</option>
+                <option>VIP</option>
+                <option>VVIP</option>
+            </select>
+            
+            <select id="filter">
+                <option value="all">All</option>
+                <option value="occupied">Occupied</option>
+                <option value="unoccupied">Unoccupied</option>
+            </select>
+            <a href="{% url 'Receptionist:room' %}"><button id="addPatientIPDButton">Assign Patient Room & BedAdd Details</button></a>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Status</th>
+                    <th>Floor</th>
+                    <th>Room No./Ward No.</th>
+                    <th>Room Type</th>
+                    <th>Total Beds</th>
+                    <th>Occupied Beds</th>
+                    <th>Unoccupied Beds</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr onclick="toggleDetails('details1')">
+                    <td class="clickable-status">Occupied</td>
+                    <td>Ground Floor</td>
+                    <td>101</td>
+                    <td>General Ward</td>
+                    <td>30</td>
+                    <td>29</td>
+                    <td>1</td>
+                </tr>
+                    <tr onclick="toggleDetails('details1')">
+                    <td class="clickable-status">Unoccupied</td>
+                    <td>Ground Floor</td>
+                    <td>101</td>
+                    <td>General Ward</td>
+                    <td>30</td>
+                    <td>29</td>
+                    <td>1</td>
+                </tr>
+            </tbody>
+        </table>
+        <br><br>
+        <!-- Second Table (Initially Hidden) -->
+        <table id="details1" class="details-table">
+            <thead>
+                <tr>
+                    <th>Status</th>
+                    <th>Bed No.</th>
+                    <th>Patient No.</th>
+                    <th>IOP No.</th>
+                    <th>Patient Name</th>
+                    <th>Date Admit</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Occupied</td>
+                    <td>RM-101-1</td>
+                    <td>000039</td>
+                    <td>IP-00025</td>
+                    <td>Mr. Ferdinand Dela Cruz</td>
+                    <td>Aug 22, 2018 08:15:03</td>
+                </tr>
+                <tr>
+                    <td>Vacant</td>
+                    <td>RM-101-2</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+        <script src="{% static 'js/room.js' %}"></script>
+        <script>
+        
+        </script>
 {% endblock %}

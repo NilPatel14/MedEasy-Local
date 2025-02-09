@@ -11,4 +11,6 @@ urlpatterns = [
     path("OPD/", OPD, name="OPD"),
     path("IPD/", IPD, name="IPD"),
     path("room/", room, name="room"),
+    path("room_details/", room_details, name="room_details"),
+    path('get-beds/', get_beds, name='get_beds'),
 ]

@@ -14,6 +14,12 @@ from django.http import HttpResponse
 from django.core.mail import send_mail
 import random
 from django.http import JsonResponse
+from django.core.mail import send_mail
+from .forms import BookingForm
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from .models import Bed, Room
+from django.contrib import messages
 # Create your views here.
 
 
@@ -138,11 +144,6 @@ def IPD(request):
         return redirect('authorization:log_in')
 
 
-def room(request):
-    template="Receptionist/room.html"
-    return render(request,template)
-
-
 
 def generate_otp():
     return random.randint(100000, 999999)
@@ -192,3 +193,49 @@ def verify_otp(request):
             return False
     return render(request,'Receptionist/AddPatient.html')
 
+
+def room_details(request):
+    if request.user.is_authenticated:
+        template = "Receptionist/roomdetails.html"
+        return render(request,template)
+    else:
+        return redirect('authorization:log_in')
+    
+    
+def room(request):
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            form = BookingForm(request.POST)
+            if form.is_valid():
+                form.save()
+                print(form)
+                messages.success(request, 'Booking successful')
+                print(form.cleaned_data)
+                return redirect('Receptionist:room_details')
+            else:
+                messages.error(request, 'Booking failed !! Choose someother date or room ')
+                print(form.errors)
+        else:
+            form = BookingForm()
+        template="Receptionist/room.html"
+        return render(request,template,{'form':form,})
+    else:
+        return redirect('authorization:log_in')  
+
+
+import logging
+
+logger = logging.getLogger(__name__)
+
+def get_beds(request):
+    room_id = request.GET.get('room_id')
+
+    if not room_id:
+        return JsonResponse({'error': 'Room ID is required'}, status=400)
+
+    try:
+        beds = Bed.objects.filter(room_id=room_id).values('id', 'bed_no')  # Use 'bed_no' instead of 'bed_number'
+        return JsonResponse(list(beds), safe=False)
+    except Exception as e:
+        logger.error(f"Error in get_beds view: {e}")  # Log the error
+        return JsonResponse({'error': str(e)}, status=500)

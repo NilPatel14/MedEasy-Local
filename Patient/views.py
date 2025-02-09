@@ -60,7 +60,7 @@ def index(request):
 def dashboard_show(request):
     if request.user.is_authenticated:
         # Query all appointments
-        appointments = Appointment.objects.all()
+        appointments = Appointment.objects.filter(user=request.user)
         
         # Create a list to store appointment data along with department users
         appointment_data = []
