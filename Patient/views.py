@@ -1,5 +1,6 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect , get_object_or_404
 from django.contrib import messages
+from django.contrib.auth import get_user_model
 from .forms import *
 from django.contrib.auth import authenticate, login, logout
 from .models import *
@@ -13,6 +14,8 @@ from django.conf import settings
 from django.apps import apps
 
 
+
+User = get_user_model()
 # Create your views here.
 def index(request):
     if request.user.is_authenticated:
@@ -56,6 +59,26 @@ def index(request):
 
 
 
+def edit_profile(request):
+    if request.user.is_authenticated:
+        user = request.user
+        id = user.id
+        user = get_object_or_404(User, id=id)  # Get the user instance or return 404
+        
+        if request.method == "POST":
+            form = EditProfileForm(request.POST, instance=user)
+            if form.is_valid():
+                form.save()
+                return redirect('Patient:profile')
+            else:
+                print(form.errors)
+        else:
+            form = EditProfileForm(instance=user)
+        
+        template = "Patient/editprofile.html"
+        return render(request, template, {'form': form})
+    else:
+        return redirect('authorization:login')
 
 def dashboard_show(request):
     if request.user.is_authenticated:

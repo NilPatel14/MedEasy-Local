@@ -138,3 +138,54 @@ class Appointment_Booking_Form(forms.ModelForm):
     class Meta:
         model = Appointment
         fields = ['name', 'dob', 'gender', 'address', 'city', 'state', 'pincode', 'department', 'symptoms', 'preferred_date', 'preferred_time']
+
+class EditProfileForm(forms.ModelForm):
+    username = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter username'
+        })
+    )
+    first_name = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter first name'
+        })
+    )
+    last_name = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter last name'
+        })
+    )
+    phone_no = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter phone number'
+        })
+    )
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter email'
+        })
+    )
+    otp = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter OTP'
+        }),
+        help_text="OTP will be sent to your email."
+    )
+    adhhar_no = forms.CharField(
+        required=False, 
+        
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter Aadhaar number',
+            'style': 'overflow: hidden;'
+        })
+    )
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email', 'otp', 'phone_no', 'adhhar_no',]
