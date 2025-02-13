@@ -99,21 +99,34 @@ body {
                 <!-- Form Layout with Grid -->
                 <form method="post" class="row g-3 needs-validation" style="color: #1977CA !important;" novalidate>
                   {% csrf_token %}
-                  
+                
                   {% for field in form %}
                     <div class="col-md-6 form-group">
-                      <label class="form-label">{{ field.label }}</label>
-
-                      <!-- For other fields -->
+                      <label class="form-label" for="{{ field.id_for_label }}">
+                        {% if field.name == "password1" %}
+                          Password
+                        {% elif field.name == "password2" %}
+                          Confirm Password
+                        {% elif field.name == "adhhar_no" %}
+                          Aadhaar Number
+                        {% elif field.name == "phone_no" %}
+                          Phone Number
+                        {% elif field.name == "otp" %}
+                          Enter OTP
+                        {% else %}
+                          {{ field.label }}
+                        {% endif %}
+                      </label>
+                
+                      <!-- Render the field -->
                       {{ field }}
-
+                
                       {% if field.name == "email" %}
-                      
-                        <!-- Add the button next to the email field -->
+                        <!-- OTP Button next to email field -->
                         <button type="button" id="sendOtpButton" class="email-button">Verify Email</button>
                       {% endif %}
-
-                      <!-- Displaying error messages in red rectangle -->
+                
+                      <!-- Error messages -->
                       {% if field.errors %}
                         <div class="error-message">
                           {% for error in field.errors %}
@@ -123,11 +136,12 @@ body {
                       {% endif %}
                     </div>
                   {% endfor %}
-
+                
                   <div class="col-12 text-center mt-3">
                     <button type="submit" class="btn btn-primary w-100">Create Account</button>
                   </div>
                 </form>
+                
                 {% endif %}
 
                 <div class="text-center mt-3">

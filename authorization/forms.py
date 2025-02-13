@@ -90,6 +90,7 @@ class registrationForm(UserCreationForm):
         help_text="OTP will be sent to your email."
     )
     adhhar_no = forms.CharField(
+        required=False,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': 'Enter Aadhaar number',

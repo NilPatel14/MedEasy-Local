@@ -34,7 +34,7 @@ class User(AbstractUser):
     is_patient = models.BooleanField(default=False)
     
     phone_no = models.CharField(max_length=10, blank=True, null=True)
-    adhhar_no = models.CharField(max_length=12,unique=True)
+    adhhar_no = models.CharField(max_length=12, blank=True, null=True)
     usertype = models.ForeignKey('usertypeModel',default=1, on_delete=models.CASCADE)
     department = models.ForeignKey('Patient.Department',blank=True,null=True,on_delete=models.CASCADE)
 
