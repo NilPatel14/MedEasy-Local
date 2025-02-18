@@ -1,0 +1,110 @@
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+.center-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+    background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), 
+                      url('image/image.jpg'); /* Add a semi-transparent white overlay */
+    background-size: cover; /* Scale the image to cover the entire container */
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Prevent the image from repeating */
+}
+
+.prescription-container {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(8px);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.header {
+    text-align: center;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    background-color: #3163c1ce;
+}
+
+.header .logo {
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+    background: #007bff;
+    color: white;
+    border-radius: 50%;
+    font-size: 40px;
+    line-height: 60px;
+    font-weight: bold;
+}
+
+.header h1 {
+    margin: 0;
+    color:white;
+}
+
+.doctor-info, .date-info, .prescription {
+    margin-bottom: 20px;
+}
+
+.prescription h2 {
+    text-decoration: underline;
+    color: #333;
+}
+
+.signature {
+    text-align: right;
+}
+
+.signature p {
+    margin: 0;
+    line-height: 1.5;
+}
+body, .prescription-container, .doctor-info, .date-info, .prescription, .signature p {
+    line-height: 1.8; /* Adjust as needed */
+}
+.head1
+{
+    color: #5b6aac;
+}
+.animated-heading {
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #007bff; /* Blue color */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.8s ease-in-out;
+}
+
+.animated-heading.animate {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Add a glowing effect */
+.animated-heading::after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #007bff, #00ffcc);
+  animation: glowing 1.5s infinite alternate;
+}
+
+@keyframes glowing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
