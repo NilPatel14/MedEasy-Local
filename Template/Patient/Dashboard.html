@@ -123,9 +123,9 @@
                 {% endfor %}
               </td>
                                   <td>
-                                    <a href="#"><button class="btne"><i class="fa fa-edit"></i> Edit </button></a>
+                                    <a href="{% url 'Patient:edit-appointment' i.appointment.id %}"><button class="btne"><i class="fa fa-edit"></i> Edit </button></a>
 
-                                    <button class="btnc"><i class="fa fa-trash"></i> Cancel </button>
+                                    <a href="{% url 'Patient:delete-appointment' i.appointment.id %}"><button class="btnc"><i class="fa fa-trash"></i> Cancel </button></a>
                                   </td>
                                   </tr>
                                 {% endfor %}

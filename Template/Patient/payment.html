@@ -92,9 +92,8 @@
   <h2 class="card-title">Bill Payment</h2>
   <img src="{% static 'assets/img/Patient/payment.jpg' %}" id="pay" height="200px"></img>
   <div><center><h3>~~ Your pending payment is ~~<br>
-    {% for i in data %}
-  {{i.department.amount}} Rs.</h3></center>
-  {% endfor %}
+    
+  {{data}} Rs.</h3></center>
 </div>
 
   </div>

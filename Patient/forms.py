@@ -189,3 +189,8 @@ class EditProfileForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'email', 'otp', 'phone_no', 'adhhar_no',]
+
+class EditAppointmentForm(forms.ModelForm):
+    class Meta:
+        model = Appointment
+        fields = ['name', 'dob', 'gender', 'address', 'city', 'state', 'pincode', 'department', 'symptoms',]

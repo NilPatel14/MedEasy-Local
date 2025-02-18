@@ -129,10 +129,17 @@ def dashboard_show(request):
     
 def bill_payment(request):
     if request.user.is_authenticated:
-        data = Appointment.objects.filter(id=request.user.id)
-        
+        data = Appointment.objects.filter(user_id=request.user.id)
+        sum = 0
+
+        for i in data:
+            print(i.department.amount)
+
+            sum = sum + i.department.amount
+            print("This is the sum")
+        print(sum)
         template = "Patient/Payment.html"
-        return render(request,template,{'data':data})
+        return render(request,template,{'data':sum})
     else:
         return redirect('authorization:login')
     
@@ -178,3 +185,31 @@ def check_history(request):
         return render(request,template)
     else:
         return redirect('authorization:login')
+    
+
+def edit_appointment(request, id):
+    if request.user.is_authenticated:
+        appointment = get_object_or_404(Appointment, id=id)
+        if request.method == "POST":
+            form = EditAppointmentForm(request.POST, instance=appointment)
+            if form.is_valid():
+                form.save()
+                return redirect('Patient:dashboard_show')
+            else:
+                print(form.errors)
+        else:
+            form = EditAppointmentForm(instance=appointment)
+        
+        template = "Patient/editappointment.html"
+        return render(request, template, {'form': form})
+    else:
+        return redirect('authorization:login')
+
+def delete_appointment(request, id):
+    if request.user.is_authenticated:
+        appointment = get_object_or_404(Appointment, id=id)
+        appointment.delete()
+        return redirect('Patient:dashboard_show')
+    else:
+        return redirect('authorization:login')
+    

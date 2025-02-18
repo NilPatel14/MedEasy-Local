@@ -10,4 +10,6 @@ urlpatterns = [
     path('appointment/',Book_Appointment,name="Book_Appointment"),
     path('check_history/',check_history,name="check_history"),
     path('edit-profile/',edit_profile,name="edit-profile"),
+    path('edit-appointment/<int:id>/',edit_appointment,name="edit-appointment"),
+    path('delete-appointment/<int:id>/',delete_appointment,name="delete-appointment"),
 ] 
