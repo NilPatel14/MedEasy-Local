@@ -108,7 +108,7 @@
         
           <div class="date-info vertical-line">
             {% for user in i.users_in_department %}
-            <p><strong class="head1" style="text-wrap: nowrap; margin-right: 10px;">Doctor Name :  Dr. {{ user.first_name }} {{ user.last_name }}</strong></p>
+            <p><strong class="head1" style="text-wrap: nowrap; margin-right: 10px;">Doctor Name :  Dr.  {{ user.last_name }}</strong></p>
           {%  endfor %}
           
             <p><strong class="head1">Patient Name:</strong> {{ i.appointment.name }}</p>

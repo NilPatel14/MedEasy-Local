@@ -88,32 +88,25 @@
     </div>
     <ul class="timeline">
       <!-- Timeline Item 1 -->
+
+      {% for i in appointment %}
       <li class="timeline-item">
         <div class="timeline-dot"></div>
         <div class="timeline-content">
-          <h3>October 25, 2024</h3>
-          <p><strong>Doctor:</strong> Dr. John Doe</p>
-          <p><strong>Purpose:</strong> General Checkup</p>
+
+          <h3>{{ i.appointment.preferred_date }}</h3>
+          
+          <p><strong>Name:</strong> {{ i.appointment.name }}</p>
+          {% for user in i.users_in_department %}
+          <p><strong>Doctor:</strong>  Dr.{{user.first_name}} {{ user.last_name }}</p>
+          {% endfor %}
+          <p><strong>Purpose:</strong> {{ i.appointment.symptoms }}</p>
+          
+          <p><strong>Time:</strong> {{ i.appointment.preferred_time }}</p>
+          <p><strong>Status:</strong> {{ i.appointment.status }}</p>
         </div>
       </li>
-      <!-- Timeline Item 2 -->
-      <li class="timeline-item">
-        <div class="timeline-dot"></div>
-        <div class="timeline-content">
-          <h3>November 12, 2024</h3>
-          <p><strong>Doctor:</strong> Dr. Jane Smith</p>
-          <p><strong>Purpose:</strong> Dental Cleaning</p>
-        </div>
-      </li>
-      <!-- Timeline Item 3 -->
-      <li class="timeline-item">
-        <div class="timeline-dot"></div>
-        <div class="timeline-content">
-          <h3>December 5, 2024</h3>
-          <p><strong>Doctor:</strong> Dr. Emily Brown</p>
-          <p><strong>Purpose:</strong> Eye Examination</p>
-        </div>
-      </li>
+      {% endfor %}
     </ul>
   </div>
 </main>

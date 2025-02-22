@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,7 +44,7 @@ INSTALLED_APPS = [
     'Receptionist',
 ]
 
-
+SITE_ID = 1
 
 # Enable the messages framework
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
@@ -162,8 +163,11 @@ LOGIN_URL = '/log_in/'  # Replace with your login view URL
     
 #EMAIL SETTINGS
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'hetjain0009@gmail.com'
 EMAIL_HOST_PASSWORD = 'nucfhljyllyaceds'
+EMAIL_USE_HTML = True  # Not required for Django but ensures formatting
+

@@ -1,0 +1,70 @@
+{% extends "common.html" %}
+{% load static %}
+
+
+{% block css %}
+<style>
+    .form-label {
+        color: #1977CA !important;
+    }
+</style>
+{% endblock %}
+
+{% block nav %}
+<div class="container-fluid w-80 d-flex align-items-center justify-content-center">
+    <a class="navbar-brand text-white font" id="Logo" href="{% url 'authorization:home' %}">MedEasy</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<main>
+    <div class="container">
+        <section class="section register min-vh-70 d-flex flex-column align-items-center justify-content-center py-4">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="pt-4 pb-2">
+                                    <h5 class="card-title text-center pb-0 fs-4" style="color: #1977CA !important;">
+                                        Forget Password of Your Account</h5>
+                                    <p class="text-center small">Enter your username & password</p>
+                                </div>
+                                {% if messages %}
+                                <div class="alert alert-info"
+                                    style="background-color: #f8d7da;     color: #721c24;border: 1px solid #f5c6cb;   ">
+                                    {% for message in messages %}
+                                    <p>{{ message }}</p>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                                <div class="formContainer d-flex justify-content-center align-items-center">
+                                    <form method="post" class="row g-3 needs-validation" novalidate>
+                                        {% csrf_token %}
+
+
+                                        
+                                        <div class="col-12">
+                                            <p class="small mb-0">Forget password ? <a
+                                                    href="{% url 'authorization:registrationurl' %}">Recover
+                                                    password</a></p>
+                                        </div>
+                                        <div class="col-12">
+                                            <button class="btn btn-primary w-100" type="submit">Forget</button>
+                                        </div>
+                                        <div class="col-12">
+                                            <p class="small mb-0">Don't have an account? <a
+                                                    href="{% url 'authorization:registrationurl' %}">Create an
+                                                    account</a></p>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+{% endblock content %}

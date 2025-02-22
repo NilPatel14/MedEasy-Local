@@ -1,7 +1,7 @@
 import re
 from django import forms
 from django.core.exceptions import ValidationError
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm,SetPasswordForm
 from .models import ContactModel, User
 
 class Contact_Form(forms.ModelForm):
@@ -134,3 +134,52 @@ class registrationForm(UserCreationForm):
             if len(phone_no) != 10 or not re.match(r'^[6-9]\d{9}$', phone_no):
                 raise ValidationError("Enter a valid phone number starting with 6, 7, 8, or 9.")
         return phone_no
+
+class Forget_Password(SetPasswordForm):
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter email'
+        })
+    )
+    otp = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter OTP'
+        }),
+        help_text="OTP will be sent to your email."
+    )
+    new_password1 = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter new password'
+        })
+    )
+    new_password2 = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Confirm new password'
+            })
+            )
+    class Meta:
+        model = User
+        fields = ['email', 'otp', 'new_password1', 'new_password2']
+        widgets = {
+            'new_password1': forms.PasswordInput(attrs={'class': 'form-control', 'placeholder':"Enter new password"}),
+            'new_password1': forms.PasswordInput(attrs={'class': 'form-control', 'placeholder':"Confirm new password"}),
+        }
+
+
+
+
+from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+class CustomPasswordResetForm(PasswordResetForm):
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if not User.objects.filter(email=email).exists():
+            raise forms.ValidationError("No account found with this email address.")
+        return email

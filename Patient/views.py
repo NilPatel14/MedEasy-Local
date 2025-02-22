@@ -86,10 +86,16 @@ def dashboard_show(request):
         # Query all appointments
         appointments = Appointment.objects.filter(user=request.user)
         
+       
         # Create a list to store appointment data along with department users
         appointment_data = []
         
         for appointment in appointments:
+
+            if appointment.preferred_date < datetime.now().date() and appointment.status == "Pending":
+                appointment.status = "Not Attended"
+                appointment.save()
+
             # Get department related to this appointment
             department = appointment.department  # Assuming department is a ForeignKey or related field
             
@@ -247,7 +253,30 @@ def Check_Prescription_History(request):
 
 def Check_Appointment_History(request):
     if request.user.is_authenticated:
+        appointments = Appointment.objects.filter(user=request.user)
+        
+        # Create a list to store appointment data along with department users
+        appointment_data = []
+        
+        for appointment in appointments:
+            # Get department related to this appointment
+            department = appointment.department  # Assuming department is a ForeignKey or related field
+            
+            # Fetch all users linked to this department
+            # Assuming AUTH_USER_MODEL has a 'department' field
+            UserModel = apps.get_model(settings.AUTH_USER_MODEL)
+            users_in_department = UserModel.objects.filter(department=department)
+            # status = appointment.status
+
+            # Append appointment and department user details to the list
+            appointment_data.append({
+                'appointment': appointment,
+                'users_in_department': users_in_department,
+            })
+        
+
+        prescripton = Prescription.objects.filter(appointment_id__in=appointments)
         template = "Patient/appointment.html"
-        return render(request,template)
+        return render(request,template,{'appointment':appointment_data,'prescription':prescripton})
     else:
         return redirect('authorization:login')

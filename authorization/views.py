@@ -181,3 +181,37 @@ def register(request):
         return render(request, "Home/registration.html", {"form": form})
     else:
         return redirect("Doctor:index")
+
+# def forget_password(request):
+#     if request.method == "POST":
+#         form = Forget_Password(user=request.user, data=request.POST)
+#         if form.is_valid():
+#             form.save()
+#             email_entered = request.POST.get('email', None)
+#             print(email_entered)
+#             otp = request.POST.get('otp')  # Assuming the OTP is entered by the user
+#             if email_entered:
+                        
+#                 if User.objects.filter(email=email_entered).exists():
+#                     if verify_otp(request):  # Pass the OTP directly
+#                         form.save()
+#                         messages.success(request, "Password changed successfully!")
+#                     else:
+#                         send_otp_email(form.cleaned_data['email'])
+#                         messages.error(request, "Something is wrong with the data!")
+#                 else:
+#                     messages.error(request, "Enter a valid email")
+#     else:
+#         form = Forget_Password(None)
+
+#     template = 'Home/ForgetPassword.html'
+#     return render(request, template, {'form': form})
+    
+from django.contrib.auth.views import PasswordResetView
+from django.urls import reverse_lazy
+from .forms import CustomPasswordResetForm
+
+class CustomPasswordResetView(PasswordResetView):
+    form_class = CustomPasswordResetForm
+    template_name = 'Home/password_reset_form.html'
+    success_url = reverse_lazy('authorization:password_reset_done')
