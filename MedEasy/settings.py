@@ -78,6 +78,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'authorization.middleware.BlockOldAdminURLsMiddleware',
 ]
 # Define the level of messages to display (info, success, error, etc.)
 MESSAGE_LEVEL = 20  # This will display error, info, and success messages.

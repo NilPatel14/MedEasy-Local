@@ -18,12 +18,17 @@ from django.contrib import admin
 from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth.decorators import login_required
 
+admin.site.login = login_required(admin.site.login)
 
 urlpatterns = [
-    path('jet/', include('jet.urls', 'jet')),  # Django JET URLS
+    # path('jet/', include('jet.urls', 'jet')),  # Django JET URLS
 
-    path('admin/', admin.site.urls),
+    # path('admin/', admin.site.urls),
+
+    path('jet/', include('jet.urls', namespace='jet')),  # Django JET URLs
+    path('secure-admin/', admin.site.urls),  # Django JET admin URL
     path('',include("authorization.urls")),
     # path('doctor/',include("Doctor.urls")),
     path('doctor/', include('Doctor.urls', namespace='Doctor')), 

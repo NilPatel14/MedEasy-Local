@@ -1,6 +1,11 @@
   {% extends 'common.html' %}
   {% load static %}
+  
+  
+  {% block css %}
+  <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
 
+  {% endblock %}  
   {% block nav %}
   <div class="container-fluid w-80">
     <a class="navbar-brand text-white font" id="Logo" href="{% url 'authorization:home' %}">MedEasy</a>

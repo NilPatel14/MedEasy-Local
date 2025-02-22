@@ -27,6 +27,7 @@ def index(request):
     else:
         return redirect("authorization:log_in")
     
+from datetime import datetime as dt
 def dashboard_show(request):
     if request.user.is_authenticated:
         # UserModel = apps.get_model(settings.AUTH_USER_MODEL)
@@ -37,8 +38,10 @@ def dashboard_show(request):
         pre = Prescription.objects.filter(appointment_id__in=appointments)
         opd = pre.filter(ipd_opd="OPD")
         ipd = pre.filter(ipd_opd="IPD")
+        date=str(dt.now().date())
+        print(date)
         template = "Doctor/dashboard.html"
-        return render(request, template, {'data': appointments,'pre':pre,'ipd':ipd,'opd':opd})
+        return render(request, template, {'data': appointments,'pre':pre,'ipd':ipd,'opd':opd,'date':date})
     else:
         return redirect("authorization:log_in")
 # import logging

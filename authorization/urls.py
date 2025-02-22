@@ -7,6 +7,8 @@ app_name = "authorization"
 
 urlpatterns = [
     path('', home, name="home"),
+    
+    # path('admin_page/',admin_page, name="admin_page"),
     path('log_in/', log_in_page, name="log_in"),
     path('log_out/', log_out, name="log_out"),
     path('profile/', profile, name="profile"),
