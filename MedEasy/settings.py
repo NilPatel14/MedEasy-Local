@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jet',
     'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -45,6 +46,26 @@ INSTALLED_APPS = [
 ]
 
 SITE_ID = 1
+JET_DEFAULT_THEME = 'light-blue'
+JET_THEMES = [
+    {
+        'theme': 'default',
+        'color': '#2C3E50',
+        'title': 'Default'
+    },
+    {
+        'theme': 'light-blue',
+        'color': '#1977CA',
+        'title': 'Light Blue'
+    },
+    {
+        'theme': 'light-green',
+        'color': '#44b78b',
+        'title': 'Light Green'
+    },
+    
+]
+
 
 # Enable the messages framework
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'

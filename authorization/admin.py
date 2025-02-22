@@ -1,35 +1,38 @@
 from django.contrib import admin
+from .models import ContactModel, usertypeModel, User
+
+# Register ContactModel
+class ContactModelAdmin(admin.ModelAdmin):
+    list_display = ('contact_id', 'contact_name', 'contact_email', 'contact_subject')
+    search_fields = ('contact_name', 'contact_email')
+
+admin.site.register(ContactModel, ContactModelAdmin)
+
+# Register usertypeModel
+class UsertypeModelAdmin(admin.ModelAdmin):
+    list_display = ('usertype_id', 'usertype')
+    search_fields = ('usertype',)
+
+admin.site.register(usertypeModel, UsertypeModelAdmin)
+
+# Custom User Admin
 from django.contrib.auth.admin import UserAdmin
-from .models import *
 
-
-from .models import User  # Import your custom User model
-
-# Register the custom User model
 class CustomUserAdmin(UserAdmin):
-    # Define the fields to be displayed in the user creation form
+    list_display = ('username', 'email', 'is_active', 'is_staff', 'is_superuser', 'is_admin', 'is_doctor', 'is_receptionist', 'is_patient', 'phone_no', 'adhhar_no', 'usertype', 'department')
+    search_fields = ('username', 'email', 'phone_no', 'adhhar_no')
+    list_filter = ('is_active', 'is_staff', 'is_admin', 'is_doctor', 'is_receptionist', 'is_patient', 'usertype')
+    fieldsets = (
+        (None, {'fields': ('username', 'password')}),
+        ('Personal Info', {'fields': ('email', 'phone_no', 'adhhar_no')}),
+        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'is_admin', 'is_doctor', 'is_receptionist', 'is_patient', 'usertype', 'department')}),
+        ('Important dates', {'fields': ('last_login', 'date_joined')}),
+    )
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'password1', 'password2', 'first_name', 'last_name', 'email', 'phone_no', 'adhhar_no', 'usertype','department'),
+            'fields': ('username', 'email', 'phone_no', 'adhhar_no', 'password1', 'password2', 'is_active', 'is_staff', 'is_admin', 'is_doctor', 'is_receptionist', 'is_patient', 'usertype', 'department')
         }),
     )
 
-    # Define the fields to be displayed when viewing/editing a user
-    fieldsets = (
-        (None, {'fields': ('username', 'password')}),
-        (('Personal info'), {'fields': ('first_name', 'last_name', 'email', 'phone_no', 'adhhar_no','usertype' )}),
-        (('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
-        (('Important dates'), {'fields': ('last_login', 'date_joined')}),
-    )
-
-    # Specify the fields to display in the list view
-    list_display = ('username', 'email', 'first_name', 'last_name', 'phone_no', 'adhhar_no', 'is_staff')
-    search_fields = ('username', 'email', 'first_name', 'last_name', 'phone_no', 'adhhar_no')
-    ordering = ('username',)
-
-# Register the custom UserAdmin with the User model
 admin.site.register(User, CustomUserAdmin)
-admin.site.register(ContactModel)
-# admin.site.register(User)
-admin.site.register(usertypeModel)
