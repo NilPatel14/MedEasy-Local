@@ -35,13 +35,16 @@ def dashboard_show(request):
         # users_in_department = UserModel.objects.filter(department=department)
         # Use filter to get a queryset of all appointments for the department with id 1
         appointments = Appointment.objects.filter(department_id=dep)
+        date=str(dt.now().date())
+        appointments1 = Appointment.objects.filter(preferred_date=date)
+
         pre = Prescription.objects.filter(appointment_id__in=appointments)
         opd = pre.filter(ipd_opd="OPD")
         ipd = pre.filter(ipd_opd="IPD")
-        date=str(dt.now().date())
         print(date)
+        print(type(date))
         template = "Doctor/dashboard.html"
-        return render(request, template, {'data': appointments,'pre':pre,'ipd':ipd,'opd':opd,'date':date})
+        return render(request, template, {'data': appointments,'pre':pre,'ipd':ipd,'opd':opd,'date':date,'data1':appointments1})
     else:
         return redirect("authorization:log_in")
 # import logging

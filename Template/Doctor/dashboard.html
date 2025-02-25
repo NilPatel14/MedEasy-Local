@@ -61,9 +61,10 @@
                                 </thead>
                                 <tbody>
                   
-                  {{date}}
+                
                                   {% if data %}
-                                  {% for i in data %}
+                                  {% for i in data1 %}
+                                  
                                   <tr onclick="location.href='{% url 'Doctor:prescription' i.id %}'" style="cursor: pointer;">
                                     
                                     <td>

@@ -13,6 +13,7 @@ from django.http import JsonResponse
 from django.utils.timezone import now
 
 
+
 def home(request):
     if request.user.is_authenticated:
         return redirect('authorization:log_out')
@@ -26,7 +27,12 @@ def home(request):
             messages.error(request, "Enter valid data")
     else:
         contactForm = Contact_Form()
-    return render(request, "Home/home.html", {"contactForm": contactForm})
+    receptionist_type = usertypeModel.objects.get(usertype="receptionist")  
+    receptionist_count = User.objects.filter(usertype=receptionist_type).count()
+    dept=Department.objects.all().count()
+    d1_type=usertypeModel.objects.get(usertype="Doctor")
+    d1_count=User.objects.filter(usertype=d1_type).count()  
+    return render(request, "Home/home.html", {"contactForm": contactForm,'receptionist_count':receptionist_count,'dept':dept,'d1_count':d1_count})
 
 
 
