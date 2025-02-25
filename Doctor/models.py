@@ -2,6 +2,8 @@ from django.db import models
 from django.utils.timezone import now
 from Patient.models import Appointment
 
+
+
 class Prescription(models.Model):
     prescription_id = models.CharField(max_length=255, unique=True,)
     patient_name = models.CharField(max_length=255)

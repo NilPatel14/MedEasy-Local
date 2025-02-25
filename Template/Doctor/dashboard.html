@@ -64,7 +64,6 @@
                   {{date}}
                                   {% if data %}
                                   {% for i in data %}
-                                  {% if i.appointment_date == date %}
                                   <tr onclick="location.href='{% url 'Doctor:prescription' i.id %}'" style="cursor: pointer;">
                                     
                                     <td>
@@ -85,7 +84,6 @@
                                         {{i.created_at|date:"d/m/Y"}}
                                       </td>
                                   </tr>
-                                  {% endif %}
                                   
                                   {% endfor %}
                                     {% endif %} 
