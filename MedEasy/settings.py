@@ -28,9 +28,11 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+
 # Application definition
 
 INSTALLED_APPS = [
+    'paypal.standard.ipn',
     'jet',
     'django.contrib.sites',
     'django.contrib.admin',
@@ -44,6 +46,10 @@ INSTALLED_APPS = [
     'Patient',
     'Receptionist',
 ]
+
+
+PAYPAL_RECEIVER_EMAIL = "hetjain0009@gmail.com"
+PAYPAL_TEST = True  # Set to False in production
 
 SITE_ID = 1
 JET_DEFAULT_THEME = 'light-blue'
