@@ -30,6 +30,7 @@ urlpatterns = [
     path('jet/', include('jet.urls', namespace='jet')),  # Django JET URLs
     path('secure-admin/', admin.site.urls),  # Django JET admin URL
     path('',include("authorization.urls")),
+    path('',include('paypal.standard.ipn.urls')),
     # path('doctor/',include("Doctor.urls")),
     path('doctor/', include('Doctor.urls', namespace='Doctor')), 
     path('patient/',include('Patient.urls',namespace='Patient')),
