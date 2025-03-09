@@ -100,52 +100,53 @@
                 {% endif %}
 
                 {% if form %}
-                <!-- Form Layout with Grid --><form method="post" class="row g-3 needs-validation" style="color: #1977CA !important;" novalidate>
-  {% csrf_token %}
-
-  {% for field in form %}
-    <div class="col-md-6 form-group">
-      <label class="form-label" for="{{ field.id_for_label }}">
-        {% if field.name == "password1" %}
-          Password
-        {% elif field.name == "password2" %}
-          Confirm Password
-        {% elif field.name == "adhhar_no" %}
-          Aadhaar Number
-        {% elif field.name == "phone_no" %}
-          Phone Number
-        {% elif field.name == "otp" %}
-          Enter OTP
-        {% else %}
-          {{ field.label }}
-        {% endif %}
-      </label>
-
-      <!-- Render the field -->
-      {{ field }}
-
-      {% if field.name == "email" %}
-        <!-- OTP Button next to email field -->
-        <button type="button" id="sendOtpButton" class="email-button">Verify Email</button>
-      {% endif %}
-
-      <!-- Error messages -->
-      {% if field.errors %}
-        <div class="error-message">
-          {% for error in field.errors %}
-            <p>{{ error }}</p>
-          {% endfor %}
-        </div>
-      {% endif %}
-    </div>
-  {% endfor %}
-
-  <div class="col-12 text-center mt-3">
-    <button type="submit" class="btn btn-primary w-100">Create Account</button>
-  </div>
-</form>
-
-                {% endif %}
+                <form method="post" class="row g-3 needs-validation" style="color: #1977CA !important; width: 400px !important;" novalidate>
+                  {% csrf_token %}
+              
+                  {% for field in form %}
+                    <div class="col-12 col-md-12 form-group mb-3">
+                      <label class="form-label" for="{{ field.id_for_label }}">
+                        {% if field.name == "password1" %}
+                          Password
+                        {% elif field.name == "password2" %}
+                          Confirm Password
+                        {% elif field.name == "adhhar_no" %}
+                          Aadhaar Number
+                        {% elif field.name == "phone_no" %}
+                          Phone Number
+                        {% elif field.name == "otp" %}
+                          Enter OTP
+                        {% else %}
+                          {{ field.label }}
+                        {% endif %}
+                      </label>
+              
+                      <!-- Apply Bootstrap class manually -->
+                      {{ field }}
+                      <script>
+                        document.getElementById("{{ field.id_for_label }}").classList.add("form-control");
+                      </script>
+              
+              
+                      {% if field.errors %}
+                        <div class="text-danger small mt-1">
+                          {% for error in field.errors %}
+                            <p>{{ error }}</p>
+                          {% endfor %}
+                        </div>
+                      {% endif %}
+                      
+                      {% if field.name == "email" %}
+                        <button type="button" id="sendOtpButton" class="btn btn-outline-primary mt-2">Verify Email</button>
+                      {% endif %}
+                    </div>
+                  {% endfor %}
+              
+                  <div class="col-12 text-center mt-3">
+                    <button type="submit" class="btn btn-primary w-50">Create Account</button>
+                  </div>
+                </form>
+              {% endif %}
 
                 <div class="text-center mt-3">
                   <p class="small mb-0">Already have an account? <a href="{% url 'authorization:log_in' %}">Log in</a></p>

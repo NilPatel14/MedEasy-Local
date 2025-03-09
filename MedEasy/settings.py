@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'Doctor',
     'Patient',
     'Receptionist',
+    'import_export',
 ]
 
 

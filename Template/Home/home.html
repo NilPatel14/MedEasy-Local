@@ -503,32 +503,61 @@
             
           <div class="col-lg-8">
           
-            <form method="post">
-            <div class="row gy-4">
-                {% csrf_token %}
-                {% if contactForm %}
-
-                  
-                  <div class="col-md-6">
-                    {{contactForm.contact_name}}
+            <form method="post" class="needs-validation" novalidate>
+              <div class="row gy-4">
+                  {% csrf_token %}
+                  {% if contactForm %}
+                      <div class="col-md-6">
+                          {{ contactForm.contact_name }}
+                          {% if contactForm.contact_name.errors %}
+                              <div class="text-danger">
+                                  {% for error in contactForm.contact_name.errors %}
+                                      <p>{{ error }}</p>
+                                  {% endfor %}
+                              </div>
+                          {% endif %}
+                      </div>
+          
+                      <div class="col-md-6">
+                          {{ contactForm.contact_email }}
+                          {% if contactForm.contact_email.errors %}
+                              <div class="text-danger">
+                                  {% for error in contactForm.contact_email.errors %}
+                                      <p>{{ error }}</p>
+                                  {% endfor %}
+                              </div>
+                          {% endif %}
+                      </div>
+          
+                      <div class="col-md-12">
+                          {{ contactForm.contact_subject }}
+                          {% if contactForm.contact_subject.errors %}
+                              <div class="text-danger">
+                                  {% for error in contactForm.contact_subject.errors %}
+                                      <p>{{ error }}</p>
+                                  {% endfor %}
+                              </div>
+                          {% endif %}
+                      </div>
+          
+                      <div class="col-md-12">
+                          {{ contactForm.contact_dis }}
+                          {% if contactForm.contact_dis.errors %}
+                              <div class="text-danger">
+                                  {% for error in contactForm.contact_dis.errors %}
+                                      <p>{{ error }}</p>
+                                  {% endfor %}
+                              </div>
+                          {% endif %}
+                      </div>
+                  {% endif %}
+          
+                  <div class="col-md-12 text-center">
+                      <button type="submit" class="btn btn-primary">Submit</button>
                   </div>
-                  <div class="col-md-6">
-                    {{contactForm.contact_email}}
-                  </div>
-                  <div class="col-md-12">
-                    {{contactForm.contact_subject}}
-                  </div>
-                  <div class="col-md-12">
-                    {{contactForm.contact_dis}}
-                  </div>
-                {% endif %}
-
-                <div class="col-md-12 text-center">
-                  <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
-            </div>
-              </form>
-
+              </div>
+          </form>
+          
           </div><!-- End Contact Form -->
 
         </div>

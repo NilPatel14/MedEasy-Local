@@ -1,7 +1,7 @@
 import re
 from django import forms
 from django.core.exceptions import ValidationError
-from django.contrib.auth.forms import UserCreationForm,SetPasswordForm
+from django.contrib.auth.forms import UserCreationForm, SetPasswordForm
 from .models import ContactModel, User
 
 class Contact_Form(forms.ModelForm):
@@ -34,6 +34,12 @@ class Contact_Form(forms.ModelForm):
     class Meta:
         model = ContactModel
         exclude = ['contact_id']  # Exclude non-editable fields
+
+    def clean_contact_email(self):
+        email = self.cleaned_data.get('contact_email')
+        if email and not re.match(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", email):
+            raise ValidationError("Please enter a valid email address.")
+        return email
 
 
 class User_Form(forms.Form):

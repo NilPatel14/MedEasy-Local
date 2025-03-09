@@ -84,7 +84,7 @@
         <div class="container" id="mainc">
          <section class="card">
                       <header>
-                        <center><h1 style="color:#1b51a2;">Current Appointments</h1></center>
+                        <center><h1 style="color:#1b51a2;">Today's Appointments</h1></center>
                       </header>  
                         <table id="table">
                             <thead id="thead">
@@ -134,6 +134,66 @@
                         </table>
            
                     </section>
+            <section class="card">
+                        <header>
+                          <center><h1 style="color:#1b51a2;">All Appointments</h1></center>
+                        </header>  
+                          <table id="table">
+                              <thead id="thead">
+                                  <tr>
+                                      <th>Appointment id</th>
+                                      <!-- <th>Patient id</th> -->
+                                      <th>Patient Name</th>
+                                      <th>Appointment Date</th>
+                                      <th>Time</th>
+                                      <th>Status</th>
+                                      
+                                      <th>Appointed Doctor</th>
+                                      <th></th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                {% for i in appointment_data1 %}
+                <td>
+                  <span class="mySpan">{{ i.appointment.id }}</span>
+                </td>
+                <td>
+                  <span class="mySpan">{{ i.appointment.name }}</span>
+                </td>
+                <td>
+                  <span class="mySpan">{{ i.appointment.preferred_date }}</span>
+                </td>
+                <td>
+                  <span class="mySpan">{{ i.appointment.preferred_time }}</span>
+                </td>
+                <td>
+                  <span class="mySpan">{{ i.appointment.status }}</span>
+                </td>
+                <td>
+                  {% for user in i.users_in_department %}
+                    <span class="mySpan">{{ user.first_name }} {{ user.last_name }}</span>
+                  {% endfor %}
+                </td><td>
+                  {% if i.appointment.id %}
+                    <a href="{% url 'Patient:edit-appointment' i.appointment.id %}">
+                      <button class="btne"><i class="fa fa-edit"></i> Edit </button>
+                    </a>
+                
+                    <a href="{% url 'Patient:delete-appointment' i.appointment.id %}">
+                      <button class="btnc"><i class="fa fa-trash"></i> Cancel </button>
+                    </a>
+                  {% else %}
+                    <span class="text-danger">No ID Available</span>
+                  {% endif %}
+                </td>
+                
+                                    </tr>
+                                  {% endfor %}
+                                  <!-- Add rows dynamically with JS or manually -->
+                              </tbody>
+                          </table>
+             
+                      </section>
         </div>
     </main>
 {% endblock %}
