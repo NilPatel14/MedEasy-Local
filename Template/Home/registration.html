@@ -13,7 +13,6 @@
     margin-top: 5px !important;
   }
 
-
   /* Style for email button */
   .email-button {
     margin-top: 5px;
@@ -67,13 +66,11 @@
 </style>
 {% endblock %}
 
-
 {% block nav %}
   <div class="container-fluid w-80 d-flex align-items-center justify-content-center">
     <a class="navbar-brand text-white font" id="Logo" href="{% url 'authorization:home' %}">MedEasy</a>
   </div>
 {% endblock %}
-
 
 {% block content %}
 <main>
@@ -127,7 +124,6 @@
                         document.getElementById("{{ field.id_for_label }}").classList.add("form-control");
                       </script>
               
-              
                       {% if field.errors %}
                         <div class="text-danger small mt-1">
                           {% for error in field.errors %}
@@ -168,6 +164,19 @@
 
 {% block js %}
 <script>
-  
+  document.getElementById('sendOtpButton').addEventListener('click', function() {
+    var emailField = document.getElementById('{{ form.email.id_for_label }}');
+    var email = emailField.value;
+    var emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    if (emailPattern.test(email)) {
+      // Email is valid, proceed to send OTP
+      alert('Sending OTP to ' + email);
+      // Add your OTP sending logic here
+    } else {
+      // Email is invalid, show an error message
+      alert('Please enter a valid email address.');
+    }
+  });
 </script>
 {% endblock %}

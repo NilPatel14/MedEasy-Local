@@ -152,11 +152,11 @@
       <option value="delux">Delux</option>
     </select>
 
-    <select id="filter">
+    <!-- <select id="filter">
       <option value="all">All</option>
       <option value="occupied">Occupied</option>
       <option value="unoccupied">Unoccupied</option>
-    </select>
+    </select> -->
     <a href="{% url 'Receptionist:room' %}"><button id="addPatientIPDButton">Assign Patient Room & BedAdd
         Details</button></a>
   </div>
@@ -237,23 +237,13 @@
   <script>
     function filterRooms() {
       var selectedType = document.getElementById('ward').value;
-      var selectedStatus = document.getElementById('filter').value;
       var rows = document.querySelectorAll('.room-row');
       rows.forEach(function(row) {
         var roomType = row.getAttribute('data-room-type');
-        var availability = row.getAttribute('data-availability');
         var showRow = true;
 
         if (selectedType !== 'all' && roomType !== selectedType) {
           showRow = false;
-        }
-
-        if (selectedStatus !== 'all') {
-          if (selectedStatus === 'occupied' && availability !== 'False') {
-            showRow = false;
-          } else if (selectedStatus === 'unoccupied' && availability !== 'True') {
-            showRow = false;
-          }
         }
 
         if (showRow) {
@@ -265,6 +255,5 @@
     }
 
     document.getElementById('ward').addEventListener('change', filterRooms);
-    document.getElementById('filter').addEventListener('change', filterRooms);
   </script>
 {% endblock %}

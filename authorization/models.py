@@ -12,6 +12,10 @@ class ContactModel(models.Model):
     contact_subject = models.CharField(max_length=20)
     contact_dis = models.CharField(max_length=100)
 
+    class Meta:
+        verbose_name = "Feedback"
+        verbose_name_plural = "Feedbacks"
+
     def __str__(self):
         return self.contact_name
 

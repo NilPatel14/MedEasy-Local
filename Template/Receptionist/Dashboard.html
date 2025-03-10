@@ -32,6 +32,49 @@ const ctx = document.getElementById('patientChart').getContext('2d');
         }
     });
     </script>
+    <style>
+/* General Button Styling */
+.styled-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Specific Button Styles */
+.opd-button {
+    background-color: #007bff;
+}
+
+.add-button {
+    background-color: #28a745;
+}
+
+.ipd-button {
+    background-color: #17a2b8;
+}
+
+/* Button Hover Effects */
+.styled-button:hover {
+    background-color: #0056b3; /* Darker shade for hover effect */
+    transform: scale(1.05); /* Slightly enlarges on hover */
+}
+
+/* Text decoration removal for the links around buttons */
+a {
+    text-decoration: none;
+}
+
+/* Button container adjustments */
+div {
+    margin-bottom: 20px;
+}
+
+      </style>
 {% endblock %}
 
 {% block elementBlock %}
@@ -120,23 +163,29 @@ const ctx = document.getElementById('patientChart').getContext('2d');
         <header>
             <h1>Dashboard</h1>
         </header>
-        <div style="text-align: center; margin: 20px;">
-        <br/>
-            
-            <div style="display: flex; align-items: center; justify-content: center; gap: 20px;">
-            
-            <a href="{% url 'Receptionist:OPD' %}" class="animated-button opd">OPD</a>
-
-
-            <!-- Chart Container -->
-            <canvas id="patientChart" style="max-width: 250px; max-height: 250px;"></canvas>
-            
-            <a href="{% url 'Receptionist:IPD' %}" class="animated-button ipd">IPD</a>
-            </div>
-        </div>
 
     <section class="card">
-            <a href="{% url 'Receptionist:AddPatientRecord' %}"><center><button class="white-button">+ Add Patient</button></center></a><br/><br/>
+      
+      <div style="text-align: center; margin: 20px;">
+        <br/>
+        
+        <div style="display: flex; align-items: center; justify-content: center; gap: 20px;">
+        
+            <a href="{% url 'Receptionist:OPD' %}" class="animated-button opd" style="text-decoration: none;">
+                <button class="styled-button opd-button">OPD</button>
+            </a>
+    
+            <a href="{% url 'Receptionist:AddPatientRecord' %}" style="text-decoration: none;">
+                <button class="styled-button add-button">+ Add Patient</button>
+            </a><br/><br/>
+    
+            <!-- Chart Container -->
+            <a href="{% url 'Receptionist:IPD' %}" class="animated-button ipd" style="text-decoration: none;">
+                <button class="styled-button ipd-button">IPD</button>
+            </a>
+        </div>
+    </div>
+    
             <h2>Today's Patient</h2>
             <div class="table-container">
                 <table>

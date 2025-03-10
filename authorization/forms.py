@@ -97,7 +97,6 @@ class registrationForm(UserCreationForm):
     )
     adhhar_no = forms.CharField(
         required=False, 
-        
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': 'Enter Aadhaar number',
@@ -123,8 +122,8 @@ class registrationForm(UserCreationForm):
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
-        if email and not re.match(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", email):
-            raise ValidationError("Please enter a valid email address.")
+        if User.objects.filter(email=email).exists():
+            raise ValidationError("This email is already in use.")
         return email
 
     def clean_adhhar_no(self):
@@ -165,18 +164,15 @@ class Forget_Password(SetPasswordForm):
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
             'placeholder': 'Confirm new password'
-            })
-            )
+        })
+    )
     class Meta:
         model = User
         fields = ['email', 'otp', 'new_password1', 'new_password2']
         widgets = {
             'new_password1': forms.PasswordInput(attrs={'class': 'form-control', 'placeholder':"Enter new password"}),
-            'new_password1': forms.PasswordInput(attrs={'class': 'form-control', 'placeholder':"Confirm new password"}),
+            'new_password2': forms.PasswordInput(attrs={'class': 'form-control', 'placeholder':"Confirm new password"}),
         }
-
-
-
 
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth import get_user_model

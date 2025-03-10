@@ -197,7 +197,7 @@ def verify_otp(request):
 def room_details(request):
     if request.user.is_authenticated:
         all_booking = Booking.objects.all()
-
+        
         # Check and update availability of rooms where check_out date has passed
         for booking in all_booking:
             if booking.check_out and booking.check_out < date.today() and not booking.room.availability:

@@ -1,3 +1,21 @@
+document.addEventListener('DOMContentLoaded', function () {
+    const toggleButton = document.getElementById('toggle-btn');
+    const sidebar = document.getElementById('sidebar');
+
+    // Check if the elements exist before trying to add event listeners
+    if (toggleButton && sidebar) {
+        toggleButton.addEventListener('click', function () {
+            toggleSidebar();
+        });
+    }
+
+    function toggleSidebar() {
+        // Toggle 'close' class on the sidebar and 'rotate' on the button
+        sidebar.classList.toggle('close');
+        toggleButton.classList.toggle('rotate');
+    }
+});
+
 
 document.addEventListener("DOMContentLoaded", function () {
             const calendarIcon = document.getElementById("calendarIcon");
