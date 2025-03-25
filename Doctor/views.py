@@ -36,7 +36,7 @@ def dashboard_show(request):
         # Use filter to get a queryset of all appointments for the department with id 1
         appointments = Appointment.objects.filter(department_id=dep)
         date=str(dt.now().date())
-        appointments1 = Appointment.objects.filter(preferred_date=date)
+        appointments1 = Appointment.objects.filter(preferred_date=date,department_id=dep)
 
         pre = Prescription.objects.filter(appointment_id__in=appointments)
         opd = pre.filter(ipd_opd="OPD")

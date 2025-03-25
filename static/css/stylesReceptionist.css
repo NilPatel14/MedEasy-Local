@@ -35,7 +35,7 @@
   background-color: #1977CA;
   color: #eeeff5;
   border-right: 1px solid var(--line-clr);
-
+  /* margin-left: -180px; */
   position: sticky;
   top: 0;
   align-self: start;
@@ -46,7 +46,7 @@
 #sidebar.close{
   padding: 5px;
   width: 60px;
-  margin-left: -190px;
+  margin-left: -190px !important;
 }
 #sidebar ul{
   list-style: none;
