@@ -118,17 +118,14 @@
                   {% if i.created_at|date:"d/m/Y" == today|date:"d/m/Y" %}
 
                         <tr>
-
                           <td>{{ i.prescription_id }}</td>
                           <td>{{ i.patient_name }}</td>
                           <td>{{ i.created_at|date:"d/m/Y" }}</td>
                           <td>{{ i.patient_age }}</td>
-                     <td><span class="icon-container"><i class="fas fa-trash-alt delete-icon" id="deleteIcon" title="Clear date"></i></span></td>
-
+                          <td>{{ i.appointment_id.department.dept_name }}</td>
+                          <td></td>
                       </tr>
                       {% endif %}
-
-                      
                   {% endfor %}
               {% else %}
                   <tr>
@@ -206,8 +203,8 @@
                           <td>{{ i.patient_name }}</td>
                           <td>{{ i.created_at|date:"d/m/Y" }}</td>
                           <td>{{ i.patient_age }}</td>
-                          <td>{{ i.appointment_id.department }}</td>
-                     <td><span class="icon-container"><i class="fas fa-trash-alt delete-icon" id="deleteIcon" title="Clear date"></i></span></td>
+                          <td>{{ i.appointment_id.department.dept_name }}</td>
+                          <td></td>
 
                       </tr>
                       {% endif %}

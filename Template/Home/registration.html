@@ -13,6 +13,15 @@
     margin-top: 5px !important;
   }
 
+  .alert-success {
+    color: #155724 !important;
+    background-color: #d4edda !important;
+    border: 1px solid #c3e6cb !important;
+    padding: 10px !important;
+    border-radius: 5px !important;
+    margin-top: 5px !important;
+  }
+
   /* Style for email button */
   .email-button {
     margin-top: 5px;
@@ -89,55 +98,59 @@
                 </div>
 
                 {% if messages %}
-                <div class="alert alert-info">
                   {% for message in messages %}
-                    <p>{{ message }}</p>
+                    <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-info{% endif %} py-2">
+                      {{ message }}
+                    </div>
                   {% endfor %}
-                </div>
                 {% endif %}
 
                 {% if form %}
                 <form method="post" class="row g-3 needs-validation" style="color: #1977CA !important; width: 400px !important;" novalidate>
                   {% csrf_token %}
-              
+
                   {% for field in form %}
+                    {% if field.name != "otp" %}
                     <div class="col-12 col-md-12 form-group mb-3">
                       <label class="form-label" for="{{ field.id_for_label }}">
-                        {% if field.name == "password1" %}
-                          Password
-                        {% elif field.name == "password2" %}
-                          Confirm Password
-                        {% elif field.name == "adhhar_no" %}
-                          Aadhaar Number
-                        {% elif field.name == "phone_no" %}
-                          Phone Number
-                        {% elif field.name == "otp" %}
-                          Enter OTP
-                        {% else %}
-                          {{ field.label }}
-                        {% endif %}
+                        {% if field.name == "password1" %}Password
+                        {% elif field.name == "password2" %}Confirm Password
+                        {% elif field.name == "adhhar_no" %}Aadhaar Number
+                        {% elif field.name == "phone_no" %}Phone Number
+                        {% else %}{{ field.label }}{% endif %}
                       </label>
-              
-                      <!-- Apply Bootstrap class manually -->
+
                       {{ field }}
-                      <script>
-                        document.getElementById("{{ field.id_for_label }}").classList.add("form-control");
-                      </script>
-              
+
                       {% if field.errors %}
                         <div class="text-danger small mt-1">
                           {% for error in field.errors %}
-                            <p>{{ error }}</p>
+                            <p class="mb-0">{{ error }}</p>
                           {% endfor %}
                         </div>
                       {% endif %}
-                      
+
                       {% if field.name == "email" %}
-                        <button type="button" id="sendOtpButton" class="btn btn-outline-primary mt-2">Verify Email</button>
+                        <div id="emailError" class="text-danger small mt-1"></div>
+                        <button type="button" id="sendOtpButton" class="btn btn-outline-primary btn-sm mt-2">Verify Email &amp; Send OTP</button>
+                        <span id="otpStatusMsg" class="small ms-2"></span>
                       {% endif %}
                     </div>
+                    {% endif %}
                   {% endfor %}
-              
+
+                  <!-- OTP field rendered separately after email -->
+                  <div class="col-12 col-md-12 form-group mb-3">
+                    <label class="form-label" for="{{ form.otp.id_for_label }}">Enter OTP</label>
+                    {{ form.otp }}
+                    {% if form.otp.errors %}
+                      <div class="text-danger small mt-1">
+                        {% for error in form.otp.errors %}<p class="mb-0">{{ error }}</p>{% endfor %}
+                      </div>
+                    {% endif %}
+                    <div id="otpFieldMsg" class="text-muted small mt-1">Enter the 6-digit OTP sent to your email.</div>
+                  </div>
+
                   <div class="col-12 text-center mt-3">
                     <button type="submit" class="btn btn-primary w-50">Create Account</button>
                   </div>
@@ -164,19 +177,57 @@
 
 {% block js %}
 <script>
-  document.getElementById('sendOtpButton').addEventListener('click', function() {
+  document.getElementById('sendOtpButton').addEventListener('click', function () {
+    var btn = this;
     var emailField = document.getElementById('{{ form.email.id_for_label }}');
-    var email = emailField.value;
+    var email = emailField.value.trim();
+    var emailError = document.getElementById('emailError');
+    var otpStatusMsg = document.getElementById('otpStatusMsg');
     var emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-    if (emailPattern.test(email)) {
-      // Email is valid, proceed to send OTP
-      alert('Sending OTP to ' + email);
-      // Add your OTP sending logic here
-    } else {
-      // Email is invalid, show an error message
-      alert('Please enter a valid email address.');
+    emailError.textContent = '';
+    otpStatusMsg.textContent = '';
+
+    if (!email) {
+      emailError.textContent = 'Please enter your email address.';
+      return;
     }
+    if (!emailPattern.test(email)) {
+      emailError.textContent = 'Please enter a valid email address (e.g. name@example.com).';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+
+    fetch('/send-otp/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+      },
+      body: JSON.stringify({ email: email })
+    })
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      btn.disabled = false;
+      if (data.status === 'success') {
+        btn.textContent = 'OTP Sent ✓';
+        btn.classList.remove('btn-outline-primary');
+        btn.classList.add('btn-success');
+        otpStatusMsg.style.color = 'green';
+        otpStatusMsg.textContent = 'OTP sent to ' + email + '. Check your inbox.';
+        document.getElementById('{{ form.otp.id_for_label }}').focus();
+      } else {
+        btn.textContent = 'Verify Email & Send OTP';
+        emailError.textContent = data.message || 'Failed to send OTP. Please try again.';
+      }
+    })
+    .catch(function () {
+      btn.disabled = false;
+      btn.textContent = 'Verify Email & Send OTP';
+      emailError.textContent = 'Network error. Please check your connection and try again.';
+    });
   });
 </script>
 {% endblock %}

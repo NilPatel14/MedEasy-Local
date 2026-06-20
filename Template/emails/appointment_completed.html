@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Appointment Completed – MedEasy</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f4f6f9;font-family:Arial,sans-serif;">
+
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f6f9;padding:30px 0;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+
+          <!-- Header -->
+          <tr>
+            <td style="background-color:#1977CA;padding:28px 40px;text-align:center;">
+              <h1 style="margin:0;color:#ffffff;font-size:26px;letter-spacing:1px;">MedEasy</h1>
+              <p style="margin:4px 0 0;color:#cce4f6;font-size:13px;">Hospital Management System</p>
+            </td>
+          </tr>
+
+          <!-- Green status bar -->
+          <tr>
+            <td style="background-color:#28a745;padding:12px 40px;text-align:center;">
+              <p style="margin:0;color:#ffffff;font-size:15px;font-weight:bold;">
+                ✔ &nbsp;Appointment Completed
+              </p>
+            </td>
+          </tr>
+
+          <!-- Body -->
+          <tr>
+            <td style="padding:36px 40px;">
+              <p style="margin:0 0 16px;font-size:16px;color:#333333;">
+                Dear <strong>{{ patient_name }}</strong>,
+              </p>
+              <p style="margin:0 0 24px;font-size:15px;color:#555555;line-height:1.6;">
+                Your appointment at <strong>MedEasy Hospital</strong> has been completed and your prescription is now ready. Please find the appointment details below.
+              </p>
+
+              <!-- Details card -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:28px;">
+                <tr>
+                  <td style="padding:20px 24px;">
+                    <table width="100%" cellpadding="6" cellspacing="0">
+                      <tr>
+                        <td style="font-size:13px;color:#888;width:40%;">Appointment ID</td>
+                        <td style="font-size:14px;color:#222;font-weight:bold;">#{{ appointment_id }}</td>
+                      </tr>
+                      <tr style="border-top:1px solid #e9ecef;">
+                        <td style="font-size:13px;color:#888;">Department</td>
+                        <td style="font-size:14px;color:#222;">{{ department }}</td>
+                      </tr>
+                      <tr style="border-top:1px solid #e9ecef;">
+                        <td style="font-size:13px;color:#888;">Doctor</td>
+                        <td style="font-size:14px;color:#222;">Dr. {{ doctor_name }}</td>
+                      </tr>
+                      <tr style="border-top:1px solid #e9ecef;">
+                        <td style="font-size:13px;color:#888;">Date</td>
+                        <td style="font-size:14px;color:#222;">{{ appointment_date }}</td>
+                      </tr>
+                      <tr style="border-top:1px solid #e9ecef;">
+                        <td style="font-size:13px;color:#888;">Status</td>
+                        <td style="font-size:14px;color:#28a745;font-weight:bold;">Completed</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- CTA Button -->
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td align="center">
+                    <a href="{{ prescription_link }}"
+                       style="display:inline-block;background-color:#1977CA;color:#ffffff;text-decoration:none;padding:14px 36px;border-radius:6px;font-size:15px;font-weight:bold;letter-spacing:0.5px;">
+                      View My Prescription
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="margin:28px 0 0;font-size:13px;color:#999;text-align:center;">
+                Or copy this link into your browser:<br/>
+                <span style="color:#1977CA;">{{ prescription_link }}</span>
+              </p>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="background-color:#f8fafc;border-top:1px solid #e2e8f0;padding:20px 40px;text-align:center;">
+              <p style="margin:0;font-size:12px;color:#aaa;">
+                This is an automated message from MedEasy Hospital. Please do not reply to this email.
+              </p>
+              <p style="margin:6px 0 0;font-size:12px;color:#aaa;">
+                &copy; MedEasy Hospital Management System
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>

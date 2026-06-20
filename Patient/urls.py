@@ -14,4 +14,7 @@ urlpatterns = [
     path('delete-appointment/<int:id>/',delete_appointment,name="delete-appointment"),
     path('Check_Prescription_History',Check_Prescription_History,name="Check_Prescription_History"),
     path('Check_Appointment_History',Check_Appointment_History,name="Check_Appointment_History"),
-] 
+    path('payment/', payment_page, name='payment_page'),
+    path('payment-success/', payment_success, name='payment_success'),
+    path('razorpay-success/', razorpay_success, name='razorpay_success'),
+]

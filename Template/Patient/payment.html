@@ -85,19 +85,30 @@
 {% endblock %}
 {% block content %}
 <main>
-    
-      
-  <div class="container">
-    
-  <h2 class="card-title">Bill Payment</h2>
-  <img src="{% static 'assets/img/Patient/payment.jpg' %}" id="pay" height="200px"></img>
-  <div><center><h3>~~ Your pending payment is ~~<br>
-    
-  {{data}} Rs.</h3></center>
-</div>
+  <div class="container" style="text-align:center; padding:40px;">
+    <h2 class="card-title">Bill Payment</h2>
 
+    <div style="margin-top:30px;">
+      {% if data > 0 %}
+        <h3>~~ Your pending payment is ~~</h3>
+        <h2 style="color:#27ae60; font-size:36px;">₹{{ data }} Rs.</h2>
+        <a href="{% url 'Patient:payment_page' %}" style="
+            display:inline-block;
+            margin-top:25px;
+            padding:14px 40px;
+            background-color:#3399cc;
+            color:white;
+            font-size:18px;
+            font-weight:bold;
+            border-radius:8px;
+            text-decoration:none;">
+          Proceed to Pay
+        </a>
+      {% else %}
+        <h3 style="color:#27ae60;">You have no pending dues.</h3>
+      {% endif %}
+    </div>
   </div>
-   <script type="text/javascript" src="main.js" defer></script>
-</main>  
+</main>
 
 {% endblock %}

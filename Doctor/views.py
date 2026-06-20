@@ -126,6 +126,26 @@ from django.shortcuts import render, redirect
 from .forms import Prescription_Form
 from .models import Appointment
 import datetime
+def _send_appointment_completed_email(request, appointment, doctor):
+    patient = appointment.user
+    if not patient.email:
+        return
+    prescription_link = request.build_absolute_uri('/patient/Check_Prescription_History')
+    patient_name = patient.get_full_name() or patient.username
+    doctor_name = doctor.get_full_name() or doctor.username
+    send_mail(
+        subject="Your Appointment is Completed - MedEasy",
+        message=(
+            f"Dear {patient_name},\n\n"
+            f"Your appointment #{appointment.id} with Dr. {doctor_name} "
+            f"({appointment.department.dept_name}) has been completed.\n\n"
+            f"View your prescription here:\n{prescription_link}\n\n"
+            f"— MedEasy Hospital"
+        ),
+        from_email=None,
+        recipient_list=[patient.email],
+        fail_silently=True,
+    )
 
 def prescription_show(request, id=1):
     if request.user.is_authenticated:
@@ -137,6 +157,7 @@ def prescription_show(request, id=1):
             print(request.POST)
             if form.is_valid():
                 form.save()
+                _send_appointment_completed_email(request, appointment, request.user)
                 messages.success(request, "Prescription saved successfully.")
                 print(request.POST)  # Check if appointment_id is included in the POST data
 

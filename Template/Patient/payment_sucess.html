@@ -1,0 +1,37 @@
+{% extends 'Patient/common.html' %}
+
+{% load static %}
+
+{% block content %}
+<main style="text-align: center; padding: 30px; font-family: 'Arial', sans-serif; background-color: #f7f8fa;">
+    <!-- Main Title -->
+    <h2 style="color: #4CAF50; font-size: 40px; font-weight: bold; margin-bottom: 20px; line-height: 1.4;">
+        🎉 Payment Successful! 🎉
+    </h2>
+
+    <!-- Information Text -->
+    <p style="font-size: 24px; color: #555; line-height: 1.8; margin-bottom: 40px; font-weight: 500;">
+        Your payment has been processed successfully. 🏥💳<br>
+        Thank you for booking your appointment with us! We look forward to seeing you soon.<br>
+        <span style="font-size: 28px; color: #333; font-weight: bold; display: block; margin-top: 20px;">
+            Your health is our priority! 💚
+        </span>
+    </p>
+
+    <!-- Success Image -->
+    <div style="margin-bottom: 40px;">
+        <img src="{% static 'assets/img/Patient/imgesucess.jpg' %}" alt="Success"
+            style="max-width: 65%; height: auto; border-radius: 15px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+    </div>
+
+    <!-- Call to Action Text and Button -->
+    <div style="font-size: 20px; color: #666; margin-top: 30px;">
+        <p style="font-size: 24px; font-weight: 600;">Need to check your appointment details or prescription? 📅💊</p>
+        <a href="{% url 'Patient:dashboard_show' %}"
+            style="color: #fff; text-decoration: none; font-weight: bold; font-size: 18px; border: 2px solid #4CAF50; padding: 14px 30px; border-radius: 8px; background-color: #4CAF50; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); transition: background-color 0.3s;">
+            Back to Dashboard
+        </a>
+    </div>
+
+</main>
+{% endblock %}

@@ -33,7 +33,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     # 'paypal.standard.ipn',
-    'jet',
+    'jazzmin',
     'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -51,6 +51,11 @@ INSTALLED_APPS = [
 
 PAYPAL_RECEIVER_EMAIL = "hetjain0009@gmail.com"
 PAYPAL_TEST = True  # Set to False in production
+
+# razorpay configuration
+RAZORPAY_KEY_ID = 'rzp_test_T1CC7G0sBsyGD0'
+RAZORPAY_SECRET_KEY = '3uiorr2RjIPNC0Z7RDd0RWnD'
+
 
 SITE_ID = 1
 JET_DEFAULT_THEME = 'light-blue'
@@ -186,17 +191,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL ='authorization.User'
 
-# LOgin url
+# Login url
 LOGIN_URL = '/log_in/'  # Replace with your login view URL
 
     
 #EMAIL SETTINGS
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'hetjain0009@gmail.com'
-EMAIL_HOST_PASSWORD = 'nucfhljyllyaceds'
-EMAIL_USE_HTML = True  # Not required for Django but ensures formatting
-
+EMAIL_HOST_USER = 'projecttime93@gmail.com'
+EMAIL_HOST_PASSWORD = 'nnmo vsas llpj dlzx'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

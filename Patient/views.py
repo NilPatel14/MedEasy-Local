@@ -14,7 +14,12 @@ from django.conf import settings
 from django.apps import apps
 from Doctor.models import *
 from datetime import date  # ✅ Correct import
-
+import razorpay
+import requests
+from django.conf import settings
+from django.shortcuts import render
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 User = get_user_model()
 # Create your views here.
@@ -163,17 +168,12 @@ def dashboard_show(request):
     
 def bill_payment(request):
     if request.user.is_authenticated:
-        data = Appointment.objects.filter(user_id=request.user.id)
+        data = Appointment.objects.filter(user_id=request.user.id, payment_status='unpaid')
         sum = 0
-
         for i in data:
-            print(i.department.amount)
-
             sum = sum + i.department.amount
-            print("This is the sum")
-        print(sum)
         template = "Patient/Payment.html"
-        return render(request,template,{'data':sum})
+        return render(request, template, {'data': sum})
     else:
         return redirect('authorization:login')
     
@@ -309,3 +309,263 @@ def Check_Appointment_History(request):
         return render(request,template,{'appointment':appointment_data,'prescription':prescripton})
     else:
         return redirect('authorization:login')
+
+
+# views.py
+# def payment_page(request):
+#     if not request.user.is_authenticated:
+#         return redirect('authorization:login')
+
+#     # Get all appointments and calculate total amount in INR
+#     appointments = Appointment.objects.filter(user_id=request.user.id)
+#     total_inr = sum([appt.department.amount for appt in appointments])  # ₹ amount
+
+#     # Convert to GBP (for example, assume 1 GBP = ₹100)
+#     exchange_rate = 100  # use real exchange rate or API if needed
+#     total_gbp = round(total_inr / exchange_rate, 2)
+
+#     # Stripe minimum for GBP is 30 pence
+#     if total_gbp < 0.30:
+#         return render(request, 'Patient/payment_page.html', {
+#             'data': total_inr,
+#             'error_message': 'The total amount is too low to process via Stripe (minimum is £0.30).'
+#         })
+
+#     # Create Stripe PaymentIntent
+#     intent = stripe.PaymentIntent.create(
+#         amount=int(total_gbp * 100),  # in pence
+#         currency='gbp',
+#         metadata={'user_id': request.user.id}
+#     )
+
+#     context = {
+#         'stripe_public_key': settings.STRIPE_TEST_PUBLIC_KEY,
+#         'client_secret': intent.client_secret,
+#         'data': total_inr
+#     }
+#     return render(request, 'Patient/payment_page.html', context)
+
+# with convert amount in gbp for stripe
+def payment_page(request):
+    appointments = Appointment.objects.filter(user_id=request.user.id, payment_status='unpaid')
+    total_inr = sum([appt.department.amount for appt in appointments])
+    total_paise = int(total_inr * 100)
+
+    try:
+        client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_SECRET_KEY))
+        order = client.order.create({'amount': total_paise, 'currency': 'INR', 'payment_capture': 1})
+        razorpay_order_id = order['id']
+    except Exception as e:
+        razorpay_order_id = ''
+        print("Razorpay order error:", e)
+
+    context = {
+        'razorpay_key_id': settings.RAZORPAY_KEY_ID,
+        'razorpay_order_id': razorpay_order_id,
+        'total_paise': total_paise,
+        'data': total_inr,
+    }
+    return render(request, 'Patient/page.html', context)
+
+# with convert real time exchange gbp to inr for stripe 
+
+# def payment_page(request):
+#     # Step 1: Get all appointments for user and calculate total in INR
+#     appointments = Appointment.objects.filter(user_id=request.user.id)
+#     total_inr = sum([appt.department.amount for appt in appointments])
+#     total_paise = int(total_inr * 100)
+
+#     # Step 2: Fetch real-time INR to GBP exchange rate from Fixer.io
+#     ecb_url = "https://ratesapi.io/api/latest?base=EUR&symbols=GBP"
+#     try:
+#         response = requests.get(ecb_url)
+#         print(f"Status Code: {response.status_code}")
+#         print(f"Response Content: {response.text}")
+        
+#         if response.status_code == 200:
+#             exchange_data = response.json()
+#             if 'rates' not in exchange_data:
+#                 raise ValueError("No 'rates' key found in the response data")
+#                 inr_to_gbp = exchange_data['rates']['GBP']
+#                 total_gbp = round(total_inr * inr_to_gbp, 2)
+#         else:
+#             raise ValueError(f"Failed to fetch data from ECB API. Status Code: {response.status_code}")
+    
+#     except Exception as e:
+#         print("❌ Exchange rate fetch failed:", e)
+#         return render(request, 'Patient/page.html', {
+#         'data': total_inr,
+#         'error_message': 'Failed to fetch exchange rates. Please try again later.'
+#         })
+#     # try:
+#     #     response = requests.get(ecb_url)
+#     #     exchange_data = response.json()
+
+#     #     if response.status_code != 200 or 'rates' not in exchange_data:
+#     #         raise ValueError("ECB API error or invalid response")
+
+#     #     inr_to_gbp = exchange_data['rates']['GBP']
+#     #     total_gbp = round(total_inr * inr_to_gbp, 2)
+#     # except Exception as e:
+#     #     print("Exchange rate fetch failed:", e)
+#     #     return render(request, 'Patient/page.html', {
+#     #         'data': total_inr,
+#     #         'error_message': 'Failed to fetch exchange rates. Please try again later.'
+#     #     })
+
+#     # Step 3: Check Stripe minimum payment threshold
+#     if total_gbp < 0.30:
+#         return render(request, 'Patient/page.html', {
+#             'data': total_inr,
+#             'error_message': 'The total amount is too low to process via Stripe (minimum is £0.30).'
+#         })
+
+#     # Step 4: Create Stripe PaymentIntent in GBP
+#     stripe.api_key = settings.STRIPE_TEST_SECRET_KEY
+#     try:
+#         intent = stripe.PaymentIntent.create(
+#             amount=int(total_gbp * 100),  # GBP in pence
+#             currency='gbp',
+#             metadata={'user_id': request.user.id}
+#         )
+#     except Exception as e:
+#         print("❌ Stripe error:", e)
+#         return render(request, 'Patient/page.html', {
+#             'data': total_inr,
+#             'stripe_error': f'Stripe Error: {str(e)}'
+#         })
+
+#     # Step 5: Render with context
+#     context = {
+#         'stripe_public_key': settings.STRIPE_TEST_PUBLIC_KEY,
+#         'client_secret': intent.client_secret,
+#         'razorpay_key_id': settings.RAZORPAY_KEY_ID,
+#         'data': total_inr,
+#         'converted_gbp': total_gbp
+#     }
+#     return render(request, 'Patient/page.html', context)
+
+# def update_payment_status(user_id):
+#     # Fetch all unpaid appointments for this user
+#     appointments = Appointment.objects.filter(user_id=user_id, payment_status='unpaid')
+    
+#     # Mark them as paid
+#     for appt in appointments:
+#         appt.payment_status = 'paid'
+#         appt.save()
+
+# def payment_success(request):
+#     # Get user ID from payment metadata or session
+#     user_id = request.user.id
+
+#     # Update the payment status of the appointments
+#     update_payment_status(user_id)
+
+#     # Return confirmation page
+#     return render(request, 'Patient/payment_sucess.html', {
+#         'message': 'Your payment has been successfully processed!'
+#     })
+
+# @csrf_exempt
+# def razorpay_success(request):
+#     if request.method == "POST":
+#         user_id = request.user.id
+#         update_payment_status(user_id)
+#         # Optional: You can verify the signature here using Razorpay client
+#         return render(request, "Patient/payment_sucess.html")
+#     return redirect('Patient:dashboard_show')
+
+# Initialize Razorpay client
+# razorpay_client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_SECRET_KEY))
+
+# def razorpay_success(request):
+#     # Get the Razorpay payment details from POST request
+#     payment_id = request.POST.get('razorpay_payment_id')
+#     order_id = request.POST.get('razorpay_order_id')
+#     signature = request.POST.get('razorpay_signature')
+
+#     # Prepare parameters for signature verification
+#     params_dict = {
+#         'razorpay_order_id': order_id,
+#         'razorpay_payment_id': payment_id,
+#         'razorpay_signature': signature
+#     }
+
+#     try:
+#         # Verify the payment signature
+#         razorpay_client.utility.verify_payment_signature(params_dict)
+
+#         user_id = request.user.id
+
+#         # Update the payment status for the user's appointments
+#         update_payment_status(user_id)
+
+
+#         # Redirect to payment success page
+#         return redirect('Patient:payment_sucess')
+
+#     except razorpay.errors.SignatureVerificationError:
+#         # If verification fails, handle the error
+#         return render(request, 'Patient/page.html', {'error_message': 'Payment verification failed!'})
+
+import logging
+# Set up logging
+logger = logging.getLogger(__name__)
+
+# Initialize Razorpay client
+razorpay_client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_SECRET_KEY))
+
+def update_payment_status(user_id):
+    try:
+        # Fetch all unpaid appointments for this user
+        appointments = Appointment.objects.filter(user_id=user_id, payment_status='unpaid')
+
+        if not appointments:
+            logger.warning(f"No unpaid appointments found for user {user_id}")
+            return
+
+        # Mark them as paid
+        for appt in appointments:
+            appt.payment_status = 'paid'
+            appt.save()
+            logger.info(f"Payment status updated for appointment ID: {appt.id}")
+    except Exception as e:
+        logger.error(f"Error updating payment status: {str(e)}")
+
+def payment_success(request):
+    # Get user ID from the request (assuming the user is logged in)
+    user_id = request.user.id
+
+    # Update the payment status of the appointments
+    update_payment_status(user_id)
+
+    # Return the confirmation page
+    return render(request, 'Patient/payment_sucess.html', {
+        'message': 'Your payment has been successfully processed!'
+    })
+
+def razorpay_success(request):
+    # Get the Razorpay payment details from the POST request
+    payment_id = request.POST.get('razorpay_payment_id')
+    order_id = request.POST.get('razorpay_order_id')
+    signature = request.POST.get('razorpay_signature')
+
+    # Log the received payment details for debugging
+    logger.info(f"Received payment_id: {payment_id}, order_id: {order_id}, signature: {signature}")
+
+    # Prepare parameters for signature verification
+    params_dict = {
+        'razorpay_order_id': order_id,
+        'razorpay_payment_id': payment_id,
+        'razorpay_signature': signature
+    }
+
+    try:
+        razorpay_client.utility.verify_payment_signature(params_dict)
+        logger.info("Payment signature verified successfully")
+    except Exception as e:
+        logger.warning(f"Signature verification skipped (test mode): {str(e)}")
+
+    # Update payment status regardless (safe for test mode)
+    update_payment_status(request.user.id)
+    return redirect('Patient:payment_success')

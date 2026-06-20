@@ -27,7 +27,7 @@ urlpatterns = [
 
     # path('admin/', admin.site.urls),
 
-    path('jet/', include('jet.urls', namespace='jet')),  # Django JET URLs
+    # path('jet/', include('jet.urls', namespace='jet')),  # Django JET URLs
     path('secure-admin/', admin.site.urls),  # Django JET admin URL
     path('',include("authorization.urls")),
     # path('',include('paypal.standard.ipn.urls')),

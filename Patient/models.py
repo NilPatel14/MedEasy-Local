@@ -29,6 +29,7 @@ class Appointment(models.Model):
     preferred_date = models.DateField()
     preferred_time = models.TimeField()
     status = models.CharField(max_length=10, default='pending')
+    payment_status = models.CharField(max_length=20, default='unpaid') 
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

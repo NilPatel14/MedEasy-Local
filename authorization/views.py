@@ -3,10 +3,11 @@ from django.contrib import messages
 from .forms import *
 from django.contrib.auth import authenticate, login, logout
 from .models import *
+
 from django.contrib.auth.forms import AuthenticationForm,UserCreationForm
 from .forms import User_Form, Contact_Form
 import random
-from django.http import HttpResponse
+from django.http import HttpResponse,FileResponse
 from django.conf import settings
 from django.core.mail import send_mail
 from django.http import JsonResponse
@@ -14,9 +15,24 @@ from django.utils.timezone import now
 
 
 
+def _redirect_by_role(user):
+    usertype = str(user.usertype) if user.usertype else ""
+    if usertype == 'Doctor':
+        return redirect("/doctor/profile/")
+    elif usertype == 'Patient':
+        return redirect("/patient/profile/")
+    elif usertype == 'Admin' or user.is_superuser:
+        return redirect("/secure-admin/")
+    elif usertype == 'receptionist':
+        return redirect("/receptionist/profile/")
+    return None
+
+
 def home(request):
     if request.user.is_authenticated:
-        return redirect('authorization:log_out')
+        r = _redirect_by_role(request.user)
+        if r:
+            return r
     if request.method == "POST":
         
         contactForm = Contact_Form(request.POST)
@@ -38,45 +54,28 @@ def home(request):
 
 
 def log_in_page(request):
-    if not request.user.is_authenticated:
-        if request.method == "POST":
-            form = User_Form(request.POST)
-            msg = None
-            if form.is_valid():
-                username = form.cleaned_data['username']
-                password = form.cleaned_data['password']
-                user = authenticate(request, username=username, password=password)
-                if user:
-                    user.last_login = now()
-                    user.save()
-                    login(request, user)
-                    # messages.success(request, "Login successful!")
-                    user = User.objects.get(username=username)
+    if request.user.is_authenticated:
+        return _redirect_by_role(request.user) or redirect("/")
 
-                    usertype = str(user.usertype)
-                    if(usertype == 'Doctor'):
-                        return redirect("/doctor/profile/")
-                    elif(usertype == 'Patient'):
-                        return redirect("/patient/profile/")
-                    elif(usertype == 'Admin'):
-                        # return redirect("/admin_page/")
-                        return redirect("/secure-admin/")
-                        pass
-                    elif(usertype == "Receptionist"):
-                        return redirect("/receptionist/profile/")
-                        
-                else:
-                    print('something went wrong')
-                    messages.error(request, "Invalid username or password.")
+    if request.method == "POST":
+        form = User_Form(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(request, username=username, password=password)
+            if user:
+                user.last_login = now()
+                user.save()
+                login(request, user)
+                return _redirect_by_role(user) or redirect("/")
             else:
-                # If form is not valid, messages will be handled automatically by the template
-                messages.error(request, "Please fix the errors below.")
+                messages.error(request, "Invalid username or password.")
         else:
-            form = User_Form()
-        
-        return render(request, "Home/login.html", {'login_form': form})
+            messages.error(request, "Please fix the errors below.")
     else:
-        return redirect("Doctor:profile")
+        form = User_Form()
+
+    return render(request, "Home/login.html", {'login_form': form})
 
 
 def log_out(request):
@@ -104,28 +103,28 @@ from django.http import JsonResponse
 def send_otp_email(request):
     if request.method == "POST":
         try:
-            data = json.loads(request.body)  # Parse the JSON data
-            email = data.get('email')  # Extract email from JSON
-            
-            if not email:
-                return JsonResponse({"status": "error", "message": "Email not provided"})
-            
-            # Proceed with OTP logic...
-            print(f"Received email: {email}")  # Print to verify
+            data = json.loads(request.body)
+        except json.JSONDecodeError:
+            return JsonResponse({"status": "error", "message": "Invalid request data"})
 
-            # Your OTP sending logic here
-            otp = random.randint(100000, 999999)
-            request.session['otp'] = otp
+        email = data.get('email', '').strip()
+        if not email:
+            return JsonResponse({"status": "error", "message": "Email not provided"})
+
+        otp = random.randint(100000, 999999)
+        request.session['otp'] = otp
+
+        try:
             send_mail(
-                "Your OTP Code",
-                f"Your OTP is {otp}",
-                settings.DEFAULT_FROM_EMAIL,
+                "Your OTP Code - MedEasy",
+                f"Your OTP for MedEasy registration is: {otp}\n\nThis OTP is valid for this session only.",
+                settings.EMAIL_HOST_USER,
                 [email],
+                fail_silently=False,
             )
             return JsonResponse({"status": "success", "message": "OTP sent!"})
-
-        except json.JSONDecodeError:
-            return JsonResponse({"status": "error", "message": "Invalid JSON data"})
+        except Exception as e:
+            return JsonResponse({"status": "error", "message": f"Failed to send email: {str(e)}"})
 
     return JsonResponse({"status": "error", "message": "Invalid request"})
 
@@ -148,46 +147,37 @@ def verify_otp(request):
 def register(request):
     if not request.user.is_authenticated:
         if request.method == "POST":
-            form = registrationForm(request.POST or None)
+            form = registrationForm(request.POST)
             if form.is_valid():
-                form.save()
-                email_entered = request.POST.get('email', None)
-                print(email_entered)
+                otp_entered = request.POST.get('otp', '').strip()
+                session_otp = str(request.session.get('otp', ''))
 
-                # Extract OTP from the form or somewhere else
-                otp = request.POST.get('otp')  # Assuming the OTP is entered by the user
-
-                if verify_otp(request):  # Pass the OTP directly
-                    user = form.save(commit=False)
-
-                    # Assign default user type and roles (example: Patient)
+                if not session_otp:
+                    messages.error(request, "OTP not sent yet. Please click 'Verify Email' first.")
+                elif otp_entered != session_otp:
+                    messages.error(request, "Invalid OTP. Please enter the correct OTP sent to your email.")
+                else:
                     try:
-                        # Fetch the 'Patient' usertype instance from usertypeModel
                         patient_usertype = usertypeModel.objects.get(usertype="Patient")
+                        user = form.save(commit=False)
                         user.usertype = patient_usertype
                         user.is_patient = True
-
-                        # Validate before saving
                         user.full_clean()
                         user.save()
-
-                        # messages.success(request, "User created successfully!")
+                        request.session.pop('otp', None)
+                        messages.success(request, "Account created successfully! Please login.")
                         return redirect("authorization:log_in")
                     except usertypeModel.DoesNotExist:
-                        messages.error(request, "The specified usertype 'Patient' does not exist.")
+                        messages.error(request, "Registration error. Please contact support.")
                     except Exception as e:
                         messages.error(request, f"Error: {str(e)}")
-                else:
-                    send_otp_email(form.cleaned_data['email'])
-                    messages.error(request, "Something is wrong with the data!")
-            else:
-                messages.error(request, "Enter a valid OTP")
+            # field-level errors are shown inline — no additional generic message needed
         else:
             form = registrationForm()
 
         return render(request, "Home/registration.html", {"form": form})
     else:
-        return redirect("Doctor:index")
+        return _redirect_by_role(request.user) or redirect("/")
 
 # def forget_password(request):
 #     if request.method == "POST":
@@ -221,4 +211,6 @@ from .forms import CustomPasswordResetForm
 class CustomPasswordResetView(PasswordResetView):
     form_class = CustomPasswordResetForm
     template_name = 'Home/password_reset_form.html'
+    email_template_name = 'registration/password_reset_email.html'
+    subject_template_name = 'registration/password_reset_subject.txt'
     success_url = reverse_lazy('authorization:password_reset_done')

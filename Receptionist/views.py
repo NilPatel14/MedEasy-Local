@@ -154,28 +154,28 @@ from django.http import JsonResponse
 def send_otp_email(request):
     if request.method == "POST":
         try:
-            data = json.loads(request.body)  # Parse the JSON data
-            email = data.get('email')  # Extract email from JSON
-            
-            if not email:
-                return JsonResponse({"status": "error", "message": "Email not provided"})
-            
-            # Proceed with OTP logic...
-            print(f"Received email: {email}")  # Print to verify
+            data = json.loads(request.body)
+        except json.JSONDecodeError:
+            return JsonResponse({"status": "error", "message": "Invalid request data"})
 
-            # Your OTP sending logic here
-            otp = random.randint(100000, 999999)
-            request.session['otp'] = otp
+        email = data.get('email', '').strip()
+        if not email:
+            return JsonResponse({"status": "error", "message": "Email not provided"})
+
+        otp = random.randint(100000, 999999)
+        request.session['otp'] = otp
+
+        try:
             send_mail(
-                "Your OTP Code",
-                f"Your OTP is {otp}",
-                settings.DEFAULT_FROM_EMAIL,
+                "Your OTP Code - MedEasy",
+                f"Your OTP for MedEasy registration is: {otp}\n\nThis OTP is valid for this session only.",
+                settings.EMAIL_HOST_USER,
                 [email],
+                fail_silently=False,
             )
             return JsonResponse({"status": "success", "message": "OTP sent!"})
-
-        except json.JSONDecodeError:
-            return JsonResponse({"status": "error", "message": "Invalid JSON data"})
+        except Exception as e:
+            return JsonResponse({"status": "error", "message": f"Failed to send email: {str(e)}"})
 
     return JsonResponse({"status": "error", "message": "Invalid request"})
 
