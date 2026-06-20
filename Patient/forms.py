@@ -1,3 +1,4 @@
+import datetime
 from django import forms
 from Patient.models import *
 
@@ -19,11 +20,29 @@ class TimeInput(forms.TimeInput):
 
 class Appointment_Booking_Form(forms.ModelForm):
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        today = datetime.date.today().strftime('%Y-%m-%d')
+        self.fields['preferred_date'].widget.attrs['min'] = today
+
     def clean_preferred_date(self):
         preferred_date = self.cleaned_data['preferred_date']
+        today = datetime.date.today()
+        if preferred_date < today:
+            raise forms.ValidationError("Appointment date cannot be in the past.")
         if Appointment.objects.filter(user=self.instance.user, preferred_date=preferred_date).exists():
             raise forms.ValidationError("You already have an appointment on this date.")
         return preferred_date
+
+    def clean(self):
+        cleaned_data = super().clean()
+        preferred_date = cleaned_data.get('preferred_date')
+        preferred_time = cleaned_data.get('preferred_time')
+        if preferred_date and preferred_time:
+            if preferred_date == datetime.date.today():
+                if preferred_time <= datetime.datetime.now().time():
+                    self.add_error('preferred_time', "Please select a future time for today's appointment.")
+        return cleaned_data
     
     
     name = forms.CharField(

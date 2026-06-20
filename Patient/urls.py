@@ -17,4 +17,5 @@ urlpatterns = [
     path('payment/', payment_page, name='payment_page'),
     path('payment-success/', payment_success, name='payment_success'),
     path('razorpay-success/', razorpay_success, name='razorpay_success'),
+    path('payment-history/', payment_history, name='payment_history'),
 ]

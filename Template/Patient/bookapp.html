@@ -104,7 +104,31 @@
 </li>
 {% endblock %}
 {% block content %}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var dateInput = document.getElementById('id_preferred_date');
+    var timeInput = document.getElementById('id_preferred_time');
 
+    function updateTimeMin() {
+      var today = new Date().toISOString().split('T')[0];
+      if (dateInput && timeInput) {
+        if (dateInput.value === today) {
+          var now = new Date();
+          var hh = String(now.getHours()).padStart(2, '0');
+          var mm = String(now.getMinutes()).padStart(2, '0');
+          timeInput.min = hh + ':' + mm;
+        } else {
+          timeInput.removeAttribute('min');
+        }
+      }
+    }
+
+    if (dateInput) {
+      dateInput.addEventListener('change', updateTimeMin);
+      updateTimeMin();
+    }
+  });
+</script>
 <main>
   <div class="container">
     <h4 class="card-title">Doctor Appointment Request Form</h4>

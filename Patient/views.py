@@ -221,6 +221,20 @@ def check_history(request):
         return render(request,template)
     else:
         return redirect('authorization:login')
+
+def payment_history(request):
+    if request.user.is_authenticated:
+        appointments = Appointment.objects.filter(user=request.user).select_related('department').order_by('-created_at')
+        total_paid = sum(a.department.amount for a in appointments if a.payment_status == 'paid')
+        total_unpaid = sum(a.department.amount for a in appointments if a.payment_status != 'paid')
+        template = "Patient/payment_history.html"
+        return render(request, template, {
+            'appointments': appointments,
+            'total_paid': total_paid,
+            'total_unpaid': total_unpaid,
+        })
+    else:
+        return redirect('authorization:login')
     
 
 def edit_appointment(request, id):
