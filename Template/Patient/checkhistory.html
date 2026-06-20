@@ -91,8 +91,9 @@
 {% block content %}
     <main>
       <div class="center-button" style="background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url({% static 'assets/img/Patient/img1.jpg' %});">
-        <a href="{% url 'Patient:Check_Prescription_History' %}"><button class="button"><span>Check Prescription History</span></button></a>
-        <a href="{% url 'Patient:Check_Appointment_History' %}"><button class="button"><span>Check Appointment History</span></button></a>
+        <a href="{% url 'Patient:Check_Prescription_History' %}"><button style="width: 320px !important;" class="button"><span>Check Prescription History</span></button></a>
+        <a href="{% url 'Patient:Check_Appointment_History' %}"><button style="width: 320px !important;" class="button"><span>Check Appointment History</span></button></a>
+        <a href="{% url 'Patient:payment_history' %}"><button style="width: 320px !important;" class="button"><span>Payment History</span></button></a>
 
       </div>
 

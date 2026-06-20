@@ -19,8 +19,16 @@ from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
 
 admin.site.login = login_required(admin.site.login)
+
+def custom_404(request, exception=None):
+    return render(request, '404.html', status=404)
+
+handler404 = custom_404
+
+from django.urls import re_path
 
 urlpatterns = [
     # path('jet/', include('jet.urls', 'jet')),  # Django JET URLS
@@ -32,9 +40,10 @@ urlpatterns = [
     path('',include("authorization.urls")),
     # path('',include('paypal.standard.ipn.urls')),
     # path('doctor/',include("Doctor.urls")),
-    path('doctor/', include('Doctor.urls', namespace='Doctor')), 
+    path('doctor/', include('Doctor.urls', namespace='Doctor')),
     path('patient/',include('Patient.urls',namespace='Patient')),
     path('receptionist/',include('Receptionist.urls',namespace='Receptionist')),
+    re_path(r'^.*$', custom_404),
 ]
 
 if settings.DEBUG:

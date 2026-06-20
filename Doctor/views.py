@@ -22,8 +22,8 @@ def index(request):
     if request.user.is_authenticated:
         template = "Doctor/index.html"
         user = request.user
-        name = user.first_name
-        return render(request,template,{'name':name})
+        full_name = user.get_full_name() or user.username
+        return render(request, template, {'name': full_name})
     else:
         return redirect("authorization:log_in")
     
@@ -151,41 +151,42 @@ def prescription_show(request, id=1):
     if request.user.is_authenticated:
         if request.method == 'POST':
             appointment = Appointment.objects.get(id=id)
-            request.POST = request.POST.copy()  # Make it mutable
+            request.POST = request.POST.copy()
             request.POST['appointment_id'] = appointment.id
             form = Prescription_Form(request.POST)
-            print(request.POST)
             if form.is_valid():
                 form.save()
+                appointment.status = 'Completed'
+                appointment.save()
                 _send_appointment_completed_email(request, appointment, request.user)
                 messages.success(request, "Prescription saved successfully.")
-                print(request.POST)  # Check if appointment_id is included in the POST data
-
                 return redirect('Doctor:dashboard')
             else:
-                # Add errors to messages for visibility
                 for field, error_list in form.errors.items():
                     for error in error_list:
                         messages.error(request, f"{field}: {error}")
         else:
-            # Fetch appointment details for pre-filled form data
             try:
                 appointment = Appointment.objects.get(id=id)
             except Appointment.DoesNotExist:
                 messages.error(request, "Appointment not found.")
                 return redirect("Doctor:dashboard")
 
-            # Pre-fill form with appointment data
-            appointment.status = 'Completed'
-            appointment.save()
+            existing = Prescription.objects.filter(appointment_id=appointment).first()
+            if existing:
+                return render(request, 'Doctor/prescription.html', {
+                    'prescription': existing,
+                    'appointment': appointment,
+                    'readonly': True,
+                })
+
             initial_data = {
                 'patient_name': appointment.name,
                 'patient_age': calculate_age(appointment.dob),
                 'gender': appointment.gender,
-                'problem' : appointment.symptoms,
-                'appointment_id': appointment
+                'problem': appointment.symptoms,
+                'appointment_id': appointment,
             }
-            print(initial_data)
             form = Prescription_Form(initial=initial_data)
 
         return render(request, 'Doctor/prescription.html', {'form': form})

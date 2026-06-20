@@ -1,13 +1,19 @@
-{% extends 'Doctor/common.html' %}    
-{% load static %}    
+{% extends 'Doctor/common.html' %}
+{% load static %}
 
 {% block css %}
   <style>
-    
-    a{
-      text-decoration: none !important;
-     color: #1977CA; 
+    a { text-decoration: none !important; color: #1977CA; }
+    .badge-status {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
     }
+    .badge-pending   { background: #fff3cd; color: #856404; }
+    .badge-confirmed { background: #cfe2ff; color: #084298; }
+    .badge-completed { background: #d1e7dd; color: #0a3622; }
   </style>
 {% endblock %}
 {% block elementBlock %}
@@ -42,123 +48,132 @@
 {% block docContent %}
     <main>
         <div class="container" id="mainc">
-                        <header>
-                            <h1>Dashboard</h1>
-                        </header>
-                
-                        <!-- Today's Patient Appointments -->
-                        <section class="card">
-                            <h2>Today's Patient Appointments</h2>
-                            <table id="table">
-                                <thead id="thead">
-                                    <tr>
-                                        <th>Patient No.</th>
-                                        <th>Patient Name</th>
-                                        <th>Appointment Date</th>
-                                        <th>Entry Date</th>
-                <!--                         <th>Remarks</th> -->
-                                    </tr>
-                                </thead>
-                                <tbody>
-                  
-                
+                        <header>
+                            <h1>Dashboard</h1>
+                        </header>
+
+                        <!-- Today's Patient Appointments -->
+                        <section class="card">
+                            <h2>Today's Patient Appointments</h2>
+                            <table id="table">
+                                <thead id="thead">
+                                    <tr>
+                                        <th>Patient No.</th>
+                                        <th>Patient Name</th>
+                                        <th>Appointment Date</th>
+                                        <th>Entry Date</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
                                   {% if data %}
                                   {% for i in data1 %}
-                                  
                                   <tr onclick="location.href='{% url 'Doctor:prescription' i.id %}'" style="cursor: pointer;">
-                                    
+                                    <td>{{ i.id }}</td>
+                                    <td>{{ i.name }}</td>
+                                    <td>{{ i.preferred_date }}</td>
+                                    <td>{{ i.created_at|date:"d/m/Y" }}</td>
                                     <td>
-                                        <!-- <a href="{% url 'Doctor:prescription' i.id %}"> -->
-                                                {{i.id}}
-                                              <!-- </a> -->
-                                      </td>
-                                      <td>
-                                        
-                                        <!-- <a href="{% url 'Doctor:prescription' i.id %}"> -->
-                                        {{i.name}}
-                                      <!-- </a> -->
-                                      </td>
-                                      <td>
-                                        {{i.preferred_date}}
-                                      </td>
-                                      <td>
-                                        {{i.created_at|date:"d/m/Y"}}
-                                      </td>
+                                      {% if i.status == "Completed" %}
+                                        <span class="badge-status badge-completed">Completed</span>
+                                      {% elif i.status == "Confirmed" %}
+                                        <span class="badge-status badge-confirmed">Confirmed</span>
+                                      {% else %}
+                                        <span class="badge-status badge-pending">Pending</span>
+                                      {% endif %}
+                                    </td>
                                   </tr>
-                                  
                                   {% endfor %}
-                                    {% endif %} 
-                                </tbody>
-                            </table>
-                        </section>
-                
-                        <!-- New Patient Section -->
-                        <section class="card">
-                            <h2>OPD Patient</h2>
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Patient No.</th>
-                                        <th>Patient Name</th>
-                                        <th>Date</th>
-                                        <th>Age</th>
-                                    </tr>
-                                </thead>
-                                              <tbody>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </section>
+
+                        <!-- New Patient Section -->
+                        <section class="card">
+                            <h2>OPD Patient</h2>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Patient No.</th>
+                                        <th>Patient Name</th>
+                                        <th>Date</th>
+                                        <th>Age</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                              <tbody>
                   {% if opd %}
                   {% for i in opd %}
                         <tr onclick="location.href='{% url 'Doctor:prescription' i.appointment_id.id %}'" style="cursor: pointer;">
-
                           <td>{{ i.prescription_id }}</td>
                           <td>{{ i.patient_name }}</td>
                           <td>{{ i.created_at|date:"d/m/Y" }}</td>
                           <td>{{ i.patient_age }}</td>
+                          <td>
+                            {% if i.appointment_id.status == "Completed" %}
+                              <span class="badge-status badge-completed">Completed</span>
+                            {% elif i.appointment_id.status == "Confirmed" %}
+                              <span class="badge-status badge-confirmed">Confirmed</span>
+                            {% else %}
+                              <span class="badge-status badge-pending">Pending</span>
+                            {% endif %}
+                          </td>
                       </tr>
                   {% endfor %}
               {% else %}
                   <tr>
-                      <td colspan="4">No OPD patients found.</td>
+                      <td colspan="5">No OPD patients found.</td>
                   </tr>
               {% endif %}
-              
-                                </tbody>
-                            </table>
-                        </section>
-                
-                        <!-- Visited Patient Section -->
-                        <section class="card">
-                            <h2>IPD Patient</h2>
-                            <table>
-                                <thead>
-                                    <tr >
-                                          <th>Patient No.</th>
-                                          <th>Patient Name</th>
-                                          <th>Date</th>
-                                          <th>Age</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </section>
+
+                        <!-- Visited Patient Section -->
+                        <section class="card">
+                            <h2>IPD Patient</h2>
+                            <table>
+                                <thead>
+                                    <tr >
+                                          <th>Patient No.</th>
+                                          <th>Patient Name</th>
+                                          <th>Date</th>
+                                          <th>Age</th>
+                                          <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
                   {% if ipd %}
                   {% for i in ipd %}
                         <tr onclick="location.href='{% url 'Doctor:prescription' i.appointment_id.id %}'" style="cursor: pointer;">
-
                           <td>{{ i.prescription_id }}</td>
                           <td>{{ i.patient_name }}</td>
                           <td>{{ i.created_at|date:"d/m/Y" }}</td>
                           <td>{{ i.patient_age }}</td>
+                          <td>
+                            {% if i.appointment_id.status == "Completed" %}
+                              <span class="badge-status badge-completed">Completed</span>
+                            {% elif i.appointment_id.status == "Confirmed" %}
+                              <span class="badge-status badge-confirmed">Confirmed</span>
+                            {% else %}
+                              <span class="badge-status badge-pending">Pending</span>
+                            {% endif %}
+                          </td>
                       </tr>
                   {% endfor %}
               {% else %}
                   <tr>
-                      <td colspan="4">No IPD patients found.</td>
+                      <td colspan="5">No IPD patients found.</td>
                   </tr>
               {% endif %}
-              
-                                    
-                                </tbody>
-                            </table>
-                        </section>
-                    
+
+
+                                </tbody>
+                            </table>
+                        </section>
+
         </div>
     </main>
 
