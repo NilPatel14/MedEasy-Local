@@ -21,22 +21,19 @@ class Prescription(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.prescription_id:
-            if self.ipd_opd == 'IPD':
-                # a = 1
-                a = Prescription.objects.filter(ipd_opd="IPD").count()
-                if a>=1:
-                    a = a + 1
-                else:
-                    a = 1
-                self.prescription_id = f"IPD-0{a}"
-            else:
-                # a = 1
-                a = Prescription.objects.filter(ipd_opd="OPD").count()
-                if a>=1:
-                    a = a + 1
-                else:
-                    a = 1
-                self.prescription_id = f"OPD-0{a}"
+            prefix = 'IPD' if self.ipd_opd == 'IPD' else 'OPD'
+            existing_ids = Prescription.objects.filter(
+                prescription_id__startswith=f'{prefix}-'
+            ).values_list('prescription_id', flat=True)
+            max_num = 0
+            for pid in existing_ids:
+                try:
+                    num = int(pid.split('-')[1])
+                    if num > max_num:
+                        max_num = num
+                except (IndexError, ValueError):
+                    pass
+            self.prescription_id = f"{prefix}-{str(max_num + 1).zfill(2)}"
 
         super(Prescription, self).save(*args, **kwargs)
 

@@ -35,4 +35,9 @@ class Appointment(models.Model):
     def __str__(self):
         return self.name
 
-    
+
+class Billing(Appointment):
+    class Meta:
+        proxy = True
+        verbose_name = 'Billing'
+        verbose_name_plural = 'Billing'
