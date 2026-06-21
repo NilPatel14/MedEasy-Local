@@ -174,6 +174,9 @@ def prescription_show(request, id=1):
 
             existing = Prescription.objects.filter(appointment_id=appointment).first()
             if existing:
+                if appointment.status != 'Completed':
+                    appointment.status = 'Completed'
+                    appointment.save()
                 return render(request, 'Doctor/prescription.html', {
                     'prescription': existing,
                     'appointment': appointment,
