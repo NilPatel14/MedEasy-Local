@@ -2,76 +2,134 @@
 {% load static %}
 
 {% block css %}
-<link rel="stylesheet" href="{% static 'css/style1.css' %}">
 <style>
-  .alert-info {
-    color: #721c24 !important;
-    background-color: #f8d7da !important;
-    border: 1px solid #f5c6cb !important;
-    padding: 10px !important;
-    border-radius: 5px !important;
-    margin-top: 5px !important;
-  }
+  body { background: #f0f4f8; }
 
-  .alert-success {
-    color: #155724 !important;
-    background-color: #d4edda !important;
-    border: 1px solid #c3e6cb !important;
-    padding: 10px !important;
-    border-radius: 5px !important;
-    margin-top: 5px !important;
-  }
-
-  /* Style for email button */
-  .email-button {
-    margin-top: 5px;
-    background-color: #1977CA;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-
-  .email-button:hover {
-    background-color: #155d8e;
-  }
-
-  /* Overlay styles */
-  .overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    z-index: 9999;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .overlay.active {
+  .reg-wrapper {
+    min-height: 100vh;
     display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
   }
 
-  .spinner {
-    border: 4px solid rgba(255, 255, 255, 0.3);
-    border-top: 4px solid white;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 1s linear infinite;
+  .reg-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(25, 119, 202, 0.12);
+    width: 100%;
+    max-width: 660px;
+    overflow: hidden;
   }
-  
-  @keyframes spin {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
+
+  /* ── Card top banner ── */
+  .reg-banner {
+    background: linear-gradient(135deg, #1977CA 0%, #1258a0 100%);
+    padding: 28px 36px 24px;
+    color: #fff;
+    text-align: center;
   }
+  .reg-banner h2 { font-size: 1.55rem; font-weight: 700; margin: 0 0 4px; }
+  .reg-banner p  { font-size: 13px; opacity: .85; margin: 0; }
+
+  /* ── Form body ── */
+  .reg-body { padding: 28px 36px 32px; }
+
+  /* ── Section label ── */
+  .form-section {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #1977CA;
+    border-bottom: 1px solid #e8edf5;
+    padding-bottom: 6px;
+    margin: 20px 0 14px;
+  }
+  .form-section:first-of-type { margin-top: 0; }
+
+  /* ── Two-column grid ── */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 20px; }
+  .form-grid .full { grid-column: 1 / -1; }
+  @media (max-width: 520px) { .form-grid { grid-template-columns: 1fr; } .form-grid .full { grid-column: 1; } }
+
+  /* ── Field wrapper ── */
+  .field-wrap { display: flex; flex-direction: column; gap: 4px; }
+  .field-wrap label {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #444;
+  }
+  .field-wrap input, .field-wrap select {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1.5px solid #d0d8e8;
+    border-radius: 8px;
+    font-size: 13.5px;
+    color: #1a1a1a;
+    background: #f8fafc;
+    transition: border-color .2s, box-shadow .2s;
+    outline: none;
+    box-sizing: border-box;
+  }
+  .field-wrap input:focus, .field-wrap select:focus {
+    border-color: #1977CA;
+    box-shadow: 0 0 0 3px rgba(25,119,202,.12);
+    background: #fff;
+  }
+  .field-wrap .field-error { font-size: 11.5px; color: #dc3545; margin-top: 2px; }
+
+  /* ── OTP row ── */
+  .otp-row { display: flex; gap: 10px; align-items: flex-end; }
+  .otp-row .field-wrap { flex: 1; }
+  #sendOtpButton {
+    padding: 9px 14px;
+    font-size: 12.5px;
+    font-weight: 600;
+    border: 1.5px solid #1977CA;
+    border-radius: 8px;
+    background: #fff;
+    color: #1977CA;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all .2s;
+    height: 40px;
+  }
+  #sendOtpButton:hover   { background: #1977CA; color: #fff; }
+  #sendOtpButton.success { background: #0a3622; border-color: #0a3622; color: #fff; }
+  #otpStatusMsg { font-size: 12px; margin-top: 4px; display: block; }
+
+  /* ── Submit ── */
+  .reg-submit {
+    margin-top: 24px;
+    width: 100%;
+    padding: 12px;
+    background: #1977CA;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: .03em;
+    transition: background .2s;
+  }
+  .reg-submit:hover { background: #1258a0; }
+
+  /* ── Alerts ── */
+  .reg-alert-success { background:#d1e7dd; color:#0a3622; border:1px solid #a3cfbb; border-radius:8px; padding:10px 14px; font-size:13px; margin-bottom:16px; }
+  .reg-alert-error   { background:#f8d7da; color:#721c24; border:1px solid #f5c6cb; border-radius:8px; padding:10px 14px; font-size:13px; margin-bottom:16px; }
+
+  /* ── Footer link ── */
+  .reg-footer { text-align:center; margin-top:18px; font-size:13px; color:#666; }
+  .reg-footer a { color:#1977CA; font-weight:600; text-decoration:none; }
+  .reg-footer a:hover { text-decoration:underline; }
+
+  /* ── Spinner overlay ── */
+  .overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:9999; justify-content:center; align-items:center; }
+  .overlay.active { display:flex; }
+  .spinner { border:4px solid rgba(255,255,255,.3); border-top:4px solid #fff; border-radius:50%; width:50px; height:50px; animation:spin 1s linear infinite; }
+  @keyframes spin { to { transform:rotate(360deg); } }
 </style>
 {% endblock %}
 
@@ -84,91 +142,142 @@
 {% block content %}
 <main>
   <div id="hero"></div>
-  <div class="container">
-    <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
-      <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-lg-8 col-md-10 d-flex align-items-center justify-content-center">
-            <!-- Square Box -->
-            <div class="card shadow-lg border-0" style="width: 100%; max-width: 500px;">
-              <div class="card-body p-4">
-                <div class="text-center mb-4">
-                  <h5 class="card-title fs-4">Create an Account</h5>
-                  <p class="small">Enter your personal details to create an account</p>
-                </div>
 
-                {% if messages %}
-                  {% for message in messages %}
-                    <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-info{% endif %} py-2">
-                      {{ message }}
-                    </div>
-                  {% endfor %}
-                {% endif %}
+  <div class="reg-wrapper">
+    <div class="reg-card">
 
-                {% if form %}
-                <form method="post" class="row g-3 needs-validation" style="color: #1977CA !important; width: 400px !important;" novalidate>
-                  {% csrf_token %}
+      <!-- Banner -->
+      <div class="reg-banner">
+        <h2 style="color: #fff !important;">&#43; Registration</h2>
+        <p>Create your patient account to book appointments and manage your health</p>
+      </div>
 
-                  {% for field in form %}
-                    {% if field.name != "otp" %}
-                    <div class="col-12 col-md-12 form-group mb-3">
-                      <label class="form-label" for="{{ field.id_for_label }}">
-                        {% if field.name == "password1" %}Password
-                        {% elif field.name == "password2" %}Confirm Password
-                        {% elif field.name == "adhhar_no" %}Aadhaar Number
-                        {% elif field.name == "phone_no" %}Phone Number
-                        {% else %}{{ field.label }}{% endif %}
-                      </label>
+      <!-- Form body -->
+      <div class="reg-body">
 
-                      {{ field }}
+        {% if messages %}
+          {% for message in messages %}
+            <div class="{% if message.tags == 'success' %}reg-alert-success{% else %}reg-alert-error{% endif %}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        {% endif %}
 
-                      {% if field.errors %}
-                        <div class="text-danger small mt-1">
-                          {% for error in field.errors %}
-                            <p class="mb-0">{{ error }}</p>
-                          {% endfor %}
-                        </div>
-                      {% endif %}
+        {% if form %}
+        <form method="post" novalidate>
+          {% csrf_token %}
 
-                      {% if field.name == "email" %}
-                        <div id="emailError" class="text-danger small mt-1"></div>
-                        <button type="button" id="sendOtpButton" class="btn btn-outline-primary btn-sm mt-2">Verify Email &amp; Send OTP</button>
-                        <span id="otpStatusMsg" class="small ms-2"></span>
-                      {% endif %}
-                    </div>
-                    {% endif %}
-                  {% endfor %}
+          <!-- ── Personal Information ── -->
+          <div class="form-section">Personal Information</div>
+          <div class="form-grid">
 
-                  <!-- OTP field rendered separately after email -->
-                  <div class="col-12 col-md-12 form-group mb-3">
-                    <label class="form-label" for="{{ form.otp.id_for_label }}">Enter OTP</label>
-                    {{ form.otp }}
-                    {% if form.otp.errors %}
-                      <div class="text-danger small mt-1">
-                        {% for error in form.otp.errors %}<p class="mb-0">{{ error }}</p>{% endfor %}
-                      </div>
-                    {% endif %}
-                    <div id="otpFieldMsg" class="text-muted small mt-1">Enter the 6-digit OTP sent to your email.</div>
-                  </div>
-
-                  <div class="col-12 text-center mt-3">
-                    <button type="submit" class="btn btn-primary w-50">Create Account</button>
-                  </div>
-                </form>
+            <div class="field-wrap">
+              <label for="{{ form.first_name.id_for_label }}">First Name</label>
+              {{ form.first_name }}
+              {% if form.first_name.errors %}
+                {% for e in form.first_name.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
               {% endif %}
+            </div>
 
-                <div class="text-center mt-3">
-                  <p class="small mb-0">Already have an account? <a href="{% url 'authorization:log_in' %}">Log in</a></p>
+            <div class="field-wrap">
+              <label for="{{ form.last_name.id_for_label }}">Last Name</label>
+              {{ form.last_name }}
+              {% if form.last_name.errors %}
+                {% for e in form.last_name.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
+              {% endif %}
+            </div>
+
+            <div class="field-wrap full">
+              <label for="{{ form.username.id_for_label }}">Username</label>
+              {{ form.username }}
+              {% if form.username.errors %}
+                {% for e in form.username.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
+              {% endif %}
+            </div>
+
+          </div>
+
+          <!-- ── Contact Details ── -->
+          <div class="form-section">Contact Details</div>
+          <div class="form-grid">
+
+            <div class="field-wrap full">
+              <label for="{{ form.email.id_for_label }}">Email Address</label>
+              <div class="otp-row">
+                <div class="field-wrap" style="gap:0">
+                  {{ form.email }}
                 </div>
+                <button type="button" id="sendOtpButton">Send OTP</button>
               </div>
-            </div> <!-- End Card -->
-          </div> <!-- End Column -->
-        </div> <!-- End Row -->
-      </div> <!-- End Container -->
-    </section>
-  </div>
+              <div id="emailError" class="field-error" style="display:none"></div>
+              <span id="otpStatusMsg"></span>
+              {% if form.email.errors %}
+                {% for e in form.email.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
+              {% endif %}
+            </div>
 
-  <!-- Overlay -->
+            <div class="field-wrap full">
+              <label for="{{ form.otp.id_for_label }}">OTP</label>
+              {{ form.otp }}
+              {% if form.otp.errors %}
+                {% for e in form.otp.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
+              {% endif %}
+              <span style="font-size:11.5px;color:#888;">Enter the 6-digit code sent to your email.</span>
+            </div>
+
+            <div class="field-wrap">
+              <label for="{{ form.phone_no.id_for_label }}">Phone Number</label>
+              {{ form.phone_no }}
+              {% if form.phone_no.errors %}
+                {% for e in form.phone_no.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
+              {% endif %}
+            </div>
+
+            <div class="field-wrap">
+              <label for="{{ form.adhhar_no.id_for_label }}">Aadhaar Number</label>
+              {{ form.adhhar_no }}
+              {% if form.adhhar_no.errors %}
+                {% for e in form.adhhar_no.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
+              {% endif %}
+            </div>
+
+          </div>
+
+          <!-- ── Security ── -->
+          <div class="form-section">Security</div>
+          <div class="form-grid">
+
+            <div class="field-wrap">
+              <label for="{{ form.password1.id_for_label }}">Password</label>
+              {{ form.password1 }}
+              {% if form.password1.errors %}
+                {% for e in form.password1.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
+              {% endif %}
+            </div>
+
+            <div class="field-wrap">
+              <label for="{{ form.password2.id_for_label }}">Confirm Password</label>
+              {{ form.password2 }}
+              {% if form.password2.errors %}
+                {% for e in form.password2.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
+              {% endif %}
+            </div>
+
+          </div>
+
+          <button type="submit" class="reg-submit">Create Account</button>
+        </form>
+        {% endif %}
+
+        <div class="reg-footer">
+          Already have an account? <a href="{% url 'authorization:log_in' %}">Log in</a>
+        </div>
+
+      </div><!-- /.reg-body -->
+    </div><!-- /.reg-card -->
+  </div><!-- /.reg-wrapper -->
+
+  <!-- Spinner overlay -->
   <div id="overlay" class="overlay">
     <div class="spinner"></div>
   </div>
@@ -185,15 +294,19 @@
     var otpStatusMsg = document.getElementById('otpStatusMsg');
     var emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
+    emailError.style.display = 'none';
     emailError.textContent = '';
     otpStatusMsg.textContent = '';
+    otpStatusMsg.style.color = '';
 
     if (!email) {
       emailError.textContent = 'Please enter your email address.';
+      emailError.style.display = 'block';
       return;
     }
     if (!emailPattern.test(email)) {
       emailError.textContent = 'Please enter a valid email address (e.g. name@example.com).';
+      emailError.style.display = 'block';
       return;
     }
 
@@ -213,20 +326,21 @@
       btn.disabled = false;
       if (data.status === 'success') {
         btn.textContent = 'OTP Sent ✓';
-        btn.classList.remove('btn-outline-primary');
-        btn.classList.add('btn-success');
-        otpStatusMsg.style.color = 'green';
+        btn.classList.add('success');
+        otpStatusMsg.style.color = '#0a3622';
         otpStatusMsg.textContent = 'OTP sent to ' + email + '. Check your inbox.';
         document.getElementById('{{ form.otp.id_for_label }}').focus();
       } else {
-        btn.textContent = 'Verify Email & Send OTP';
+        btn.textContent = 'Send OTP';
         emailError.textContent = data.message || 'Failed to send OTP. Please try again.';
+        emailError.style.display = 'block';
       }
     })
     .catch(function () {
       btn.disabled = false;
-      btn.textContent = 'Verify Email & Send OTP';
+      btn.textContent = 'Send OTP';
       emailError.textContent = 'Network error. Please check your connection and try again.';
+      emailError.style.display = 'block';
     });
   });
 </script>

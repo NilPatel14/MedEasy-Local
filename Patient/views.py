@@ -260,31 +260,19 @@ def delete_appointment(request, id):
     
 def Check_Prescription_History(request):
     if request.user.is_authenticated:
-        appointments = Appointment.objects.filter(user=request.user)
-        
-        # Create a list to store appointment data along with department users
-        appointment_data = []
-        
+        appointments = Appointment.objects.filter(user=request.user).order_by('-created_at')
+        UserModel = apps.get_model(settings.AUTH_USER_MODEL)
+        records = []
         for appointment in appointments:
-            # Get department related to this appointment
-            department = appointment.department  # Assuming department is a ForeignKey or related field
-            
-            # Fetch all users linked to this department
-            # Assuming AUTH_USER_MODEL has a 'department' field
-            UserModel = apps.get_model(settings.AUTH_USER_MODEL)
-            users_in_department = UserModel.objects.filter(department=department)
-            # status = appointment.status
-
-            # Append appointment and department user details to the list
-            appointment_data.append({
+            users_in_department = UserModel.objects.filter(department=appointment.department)
+            prescription = Prescription.objects.filter(appointment_id=appointment).first()
+            records.append({
                 'appointment': appointment,
                 'users_in_department': users_in_department,
+                'prescription': prescription,
             })
-        
-
-        prescripton = Prescription.objects.filter(appointment_id__in=appointments)
         template = "Patient/prescription.html"
-        return render(request,template,{'appointment':appointment_data,'prescription':prescripton})
+        return render(request, template, {'records': records})
     else:
         return redirect('authorization:login')
     

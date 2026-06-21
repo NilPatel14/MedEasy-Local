@@ -2,18 +2,87 @@
 {% load static  %}
 
 {% block head %}
-<link rel="stylesheet" href="{% static 'css/prescrip.css' %}">
 <style>
-  .vertical-line {
-  border-right: 2px solid rgb(65, 65, 198); /* Line thickness and color */
-  height: 100%;
-  margin-left: 10px;
-  padding-left: 10px;  
-  padding-right: 10px;      
+  .ph-page { max-width: 860px; margin: 32px auto; padding: 0 16px 40px; }
+  .ph-page h1 { color: #1977CA; font-size: 1.6rem; margin-bottom: 24px; }
 
-  margin-right: 10px;         /* Line height */
-}
+  .rx-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    margin-bottom: 24px;
+    overflow: hidden;
+    border: 1px solid #e8edf5;
+  }
 
+  /* ── Appointment header bar ── */
+  .rx-card-header {
+    background: #1977CA;
+    color: #fff;
+    padding: 14px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .rx-card-header .appt-id { font-size: 13px; opacity: .85; }
+  .rx-card-header .doctor  { font-weight: 600; font-size: 15px; }
+  .rx-card-header .status-badge {
+    padding: 3px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;
+    background: rgba(255,255,255,0.2);
+  }
+
+  /* ── Two-column body ── */
+  .rx-card-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  @media (max-width: 600px) { .rx-card-body { grid-template-columns: 1fr; } }
+
+  .rx-section {
+    padding: 18px 22px;
+  }
+  .rx-section + .rx-section {
+    border-left: 1px solid #e8edf5;
+  }
+  .rx-section-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #1977CA;
+    margin-bottom: 12px;
+  }
+
+  .rx-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 13.5px;
+    line-height: 1.4;
+  }
+  .rx-label { color: #666; min-width: 110px; flex-shrink: 0; }
+  .rx-value { color: #1a1a1a; font-weight: 500; }
+
+  /* ── No prescription state ── */
+  .no-rx {
+    padding: 18px 22px;
+    color: #999;
+    font-size: 13px;
+    font-style: italic;
+    border-left: 1px solid #e8edf5;
+    display: flex;
+    align-items: center;
+  }
+
+  /* ── Status badges ── */
+  .badge-completed { background:#d1e7dd; color:#0a3622; }
+  .badge-confirmed { background:#cfe2ff; color:#084298; }
+  .badge-pending   { background:#fff3cd; color:#856404; }
+
+  .empty-state { text-align:center; color:#aaa; padding:60px 0; font-size:15px; }
 </style>
 {% endblock %}
 
@@ -91,56 +160,72 @@
       </li>
     {% endblock %}
     {% block content %}
-    
     <main>
-      <div class="center-image" style="
-      background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), 
-                        url({% static 'assets/img/Patient/image.jpg' %});">
-        <div class="prescription-container  ">
-        <div class="header">
-            <h1>MedEasy</h1>
-            <p></p>
-        </div>
+      <div class="ph-page">
+        <h1>Prescription History</h1>
 
-        <div class="containerBox d-flex">
-        
-          {% for i in appointment %}
-        
-          <div class="date-info vertical-line">
-            {% for user in i.users_in_department %}
-            <p><strong class="head1" style="text-wrap: nowrap; margin-right: 10px;">Doctor Name :  Dr.  {{ user.last_name }}</strong></p>
-          {%  endfor %}
-          
-            <p><strong class="head1">Patient Name:</strong> {{ i.appointment.name }}</p>
-            <p><strong class="head1">Appointment Date:</strong> {{ i.appointment.preferred_date }}</p>
-            
-            <p><strong class="head1">Date of Birth:</strong> {{ i.appointment.dob }}</p>
-            <p><strong class="head1">Address:</strong> {{ i.appointment.address}}</p>
-          </div>
-          <div class="devider">
-            <hr>
+        {% if records %}
+          {% for r in records %}
+          <div class="rx-card">
+
+            <!-- Header: doctor + appointment meta -->
+            <div class="rx-card-header">
+              <div>
+                <div class="appt-id">Appointment #{{ r.appointment.id }} &nbsp;·&nbsp; {{ r.appointment.preferred_date }}</div>
+                <div class="doctor">
+                  {% for user in r.users_in_department %}
+                    Dr. {{ user.get_full_name|default:user.username }}{% if not forloop.last %}, {% endif %}
+                  {% empty %}
+                    Department: {{ r.appointment.department.dept_name }}
+                  {% endfor %}
+                </div>
+              </div>
+              <span class="status-badge
+                {% if r.appointment.status == 'Completed' %}badge-completed
+                {% elif r.appointment.status == 'Confirmed' %}badge-confirmed
+                {% else %}badge-pending{% endif %}">
+                {{ r.appointment.status|capfirst }}
+              </span>
+            </div>
+
+            <!-- Body: appointment info + prescription side by side -->
+            <div class="rx-card-body">
+
+              <!-- Left: appointment details -->
+              <div class="rx-section">
+                <div class="rx-section-title">Patient Info</div>
+                <div class="rx-row"><span class="rx-label">Name</span><span class="rx-value">{{ r.appointment.name }}</span></div>
+                <div class="rx-row"><span class="rx-label">Date of Birth</span><span class="rx-value">{{ r.appointment.dob }}</span></div>
+                <div class="rx-row"><span class="rx-label">Gender</span><span class="rx-value">{{ r.appointment.gender }}</span></div>
+                <div class="rx-row"><span class="rx-label">Address</span><span class="rx-value">{{ r.appointment.address }}, {{ r.appointment.city }}, {{ r.appointment.state }}</span></div>
+                <div class="rx-row"><span class="rx-label">Symptoms</span><span class="rx-value">{{ r.appointment.symptoms }}</span></div>
+                <div class="rx-row"><span class="rx-label">Time</span><span class="rx-value">{{ r.appointment.preferred_time }}</span></div>
+              </div>
+
+              <!-- Right: prescription details -->
+              {% if r.prescription %}
+              <div class="rx-section">
+                <div class="rx-section-title">Prescription &nbsp;<small style="font-size:10px;color:#888;">#{{ r.prescription.prescription_id }}</small></div>
+                <div class="rx-row"><span class="rx-label">Diagnosis</span><span class="rx-value">{{ r.prescription.diagnosis }}</span></div>
+                <div class="rx-row"><span class="rx-label">Medication</span><span class="rx-value">{{ r.prescription.medication }}</span></div>
+                <div class="rx-row"><span class="rx-label">Dosage</span><span class="rx-value">{{ r.prescription.frequency }}</span></div>
+                <div class="rx-row"><span class="rx-label">Duration</span><span class="rx-value">{{ r.prescription.duration }}</span></div>
+                <div class="rx-row"><span class="rx-label">Precautions</span><span class="rx-value">{{ r.prescription.prescription_details }}</span></div>
+                <div class="rx-row"><span class="rx-label">Type</span><span class="rx-value">{{ r.prescription.ipd_opd }}</span></div>
+                <div class="rx-row"><span class="rx-label">Issued on</span><span class="rx-value">{{ r.prescription.created_at|date:"d M Y" }}</span></div>
+              </div>
+              {% else %}
+              <div class="no-rx">No prescription issued yet for this appointment.</div>
+              {% endif %}
+
+            </div>
           </div>
           {% endfor %}
-          
-        </div>
 
-  
-        <center><h2 style="color: #5b6aac;border-bottom:2px dashed #5b6aac;">Prescription</h2></center>
-        <div class="containerPrescription d-flex">
-          {% for i in prescription %}
-          <div class="prescription vertical-line">
-            <p><strong class="head1">Patient Name :</strong> {{ i.patient_name }}</p>
+        {% else %}
+          <div class="empty-state">No appointment history found.</div>
+        {% endif %}
 
-            <p><strong class="head1">Prescription Date:</strong> {{i.created_at}}</p>
-            <p><strong class="head1">Medication:</strong> {{i.medication}}</p>
-            <p><strong class="head1">Dosage:</strong> {{i.frequency}}</p>
-            <p><strong class="head1">Duration:</strong> {{i.duration}}</p>
-            <p><strong class="head1">Problem:</strong> {{i.problem}}</p>
-        </div>
-        {% endfor %}
       </div>
-      </div>
-    </div>
     </main>
-
     {% endblock %}

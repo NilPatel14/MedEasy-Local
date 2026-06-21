@@ -196,16 +196,25 @@ def verify_otp(request):
 
 def room_details(request):
     if request.user.is_authenticated:
-        all_booking = Booking.objects.all()
-        
-        # Check and update availability of rooms where check_out date has passed
+        all_booking = Booking.objects.select_related('room', 'bed', 'patient').all()
+
         for booking in all_booking:
             if booking.check_out and booking.check_out < date.today() and not booking.room.availability:
                 booking.room.availability = True
                 booking.room.save()
 
+        enriched = []
+        for booking in all_booking:
+            latest_appt = Appointment.objects.filter(
+                user=booking.patient
+            ).order_by('-created_at').first()
+            enriched.append({
+                'booking': booking,
+                'appointment': latest_appt,
+            })
+
         template = "Receptionist/roomdetails.html"
-        return render(request, template, {'all_booking': all_booking})
+        return render(request, template, {'all_booking': enriched})
     else:
         return redirect('authorization:log_in')
     

@@ -160,8 +160,9 @@
   <table>
     <thead>
       <tr>
+        <th>Patient Name</th>
+        <th>Appointment ID</th>
         <th>Status</th>
-        <th>Floor</th>
         <th>Room No./Ward No.</th>
         <th>Room Type</th>
         <th>Total Beds</th>
@@ -172,31 +173,24 @@
     </thead>
     <tbody id="roomTableBody">
       {% for i in all_booking %}
-      <tr class="room-row" data-room-type="{{ i.room.room_type|lower }}" data-availability="{{ i.room.availability }}">
+      <tr class="room-row" data-room-type="{{ i.booking.room.room_type|lower }}" data-availability="{{ i.booking.room.availability }}">
+        <td>{{ i.booking.patient.get_full_name|default:i.booking.patient.username }}</td>
+        <td>{% if i.appointment %}#{{ i.appointment.id }}{% else %}—{% endif %}</td>
         <td>
-          {% if i.room.availability == 1 %}
+          {% if i.booking.room.availability == 1 %}
           <span class="unoccupied">unoccupied</span>
           {% else %}
           <span class="occupied">occupied</span>
           {% endif %}
         </td>
-        <td>
-          {% if i.room.room_type|lower == 'delux' %}
-          <span>Third Floor</span>
-          {% elif i.room.room_type|lower == 'general' %}
-          <span>First Floor</span>
-          {% elif i.room.room_type|lower == 'ac' %}
-          <span>Second Floor</span>
-          {% endif %}
-        </td>
-        <td>{{ i.room.room_no }}</td>
-        <td>{{ i.room.room_type }}</td>
-        <td>{{ i.room.total_beds }}</td>
-        <td>{{ i.check_in }}</td>
-        <td>{{ i.check_out }}</td>
+        <td>{{ i.booking.room.room_no }}</td>
+        <td>{{ i.booking.room.room_type }}</td>
+        <td>{{ i.booking.room.total_beds }}</td>
+        <td>{{ i.booking.check_in }}</td>
+        <td>{{ i.booking.check_out }}</td>
         <td style="white-space:nowrap;">
-          <a href="{% url 'Receptionist:booking_detail' i.id %}" style="display:inline-block;padding:4px 12px;background:#1977CA;color:#fff;border-radius:5px;font-size:12px;text-decoration:none;margin-right:4px;">Details</a>
-          <a href="{% url 'Receptionist:edit_booking' i.id %}" style="display:inline-block;padding:4px 12px;background:#0a3622;color:#fff;border-radius:5px;font-size:12px;text-decoration:none;">Edit</a>
+          <a href="{% url 'Receptionist:booking_detail' i.booking.id %}" style="display:inline-block;padding:4px 12px;background:#1977CA;color:#fff;border-radius:5px;font-size:12px;text-decoration:none;margin-right:4px;">Details</a>
+          <a href="{% url 'Receptionist:edit_booking' i.booking.id %}" style="display:inline-block;padding:4px 12px;background:#0a3622;color:#fff;border-radius:5px;font-size:12px;text-decoration:none;">Edit</a>
         </td>
       </tr>
       {% endfor %}
