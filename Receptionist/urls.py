@@ -13,4 +13,6 @@ urlpatterns = [
     path("room/", room, name="room"),
     path("room_details/", room_details, name="room_details"),
     path('get-beds/', get_beds, name='get_beds'),
+    path('booking/<int:booking_id>/', booking_detail, name='booking_detail'),
+    path('booking/<int:booking_id>/edit/', edit_booking, name='edit_booking'),
 ]

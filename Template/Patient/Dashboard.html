@@ -123,9 +123,12 @@
                 {% endfor %}
               </td>
                                   <td>
+                                    {% if i.appointment.status != "Completed" %}
                                     <a href="{% url 'Patient:edit-appointment' i.appointment.id %}"><button class="btne"><i class="fa fa-edit"></i> Edit </button></a>
-
                                     <a href="{% url 'Patient:delete-appointment' i.appointment.id %}"><button class="btnc"><i class="fa fa-trash"></i> Cancel </button></a>
+                                    {% else %}
+                                    <span style="color:#0a3622; background:#d1e7dd; padding:3px 10px; border-radius:12px; font-size:12px; font-weight:600;">Completed</span>
+                                    {% endif %}
                                   </td>
                                   </tr>
                                 {% endfor %}
@@ -174,11 +177,12 @@
                     <span class="mySpan">Dr. {{ user.first_name }} {{ user.last_name }}</span>
                   {% endfor %}
                 </td><td>
-                  {% if i.appointment.id %}
+                  {% if i.appointment.status == "Completed" %}
+                    <span style="color:#0a3622; background:#d1e7dd; padding:3px 10px; border-radius:12px; font-size:12px; font-weight:600;">Completed</span>
+                  {% elif i.appointment.id %}
                     <a href="{% url 'Patient:edit-appointment' i.appointment.id %}">
                       <button class="btne"><i class="fa fa-edit"></i> Edit </button>
                     </a>
-                
                     <a href="{% url 'Patient:delete-appointment' i.appointment.id %}">
                       <button class="btnc"><i class="fa fa-trash"></i> Cancel </button>
                     </a>

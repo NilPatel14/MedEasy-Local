@@ -139,7 +139,7 @@
         <img src="{% static 'assets/img/img.jpg' %}" alt="Hospital Room">
       </div>
       <div class="reservation-form">
-        <h2>Reservation Form</h2>
+        <h2>{% if edit %}Edit Booking{% else %}Reservation Form{% endif %}</h2>
         <form id="reservationForm" method="POST">
           {% csrf_token %}
           <label for="patientName">Patient Name:</label>
@@ -159,7 +159,7 @@
             {% endfor %}
           {% endif %}            
           
-          <input type="submit" class="add-details-btn" value="Add Details"></input>
+          <input type="submit" class="add-details-btn" value="{% if edit %}Update Booking{% else %}Add Details{% endif %}">
         </form>
       </div>
     </div>

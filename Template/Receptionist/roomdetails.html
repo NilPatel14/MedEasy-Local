@@ -147,9 +147,6 @@
   <div class="filter-container">
     <select id="ward">
       <option value="all">Select Room Type</option>
-      <option value="general">General Ward</option>
-      <option value="ac">AC</option>
-      <option value="delux">Delux</option>
     </select>
 
     <!-- <select id="filter">
@@ -170,6 +167,7 @@
         <th>Total Beds</th>
         <th>Check In</th>
         <th>Check Out</th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody id="roomTableBody">
@@ -196,6 +194,10 @@
         <td>{{ i.room.total_beds }}</td>
         <td>{{ i.check_in }}</td>
         <td>{{ i.check_out }}</td>
+        <td style="white-space:nowrap;">
+          <a href="{% url 'Receptionist:booking_detail' i.id %}" style="display:inline-block;padding:4px 12px;background:#1977CA;color:#fff;border-radius:5px;font-size:12px;text-decoration:none;margin-right:4px;">Details</a>
+          <a href="{% url 'Receptionist:edit_booking' i.id %}" style="display:inline-block;padding:4px 12px;background:#0a3622;color:#fff;border-radius:5px;font-size:12px;text-decoration:none;">Edit</a>
+        </td>
       </tr>
       {% endfor %}
     </tbody>
@@ -235,22 +237,24 @@
   </div>
   <script src="{% static 'js/room.js' %}"></script>
   <script>
+    // Build dropdown from actual room types in the table
+    var seen = new Set();
+    document.querySelectorAll('.room-row').forEach(function(row) {
+      var t = row.getAttribute('data-room-type');
+      if (t && !seen.has(t)) {
+        seen.add(t);
+        var opt = document.createElement('option');
+        opt.value = t;
+        opt.textContent = t.charAt(0).toUpperCase() + t.slice(1);
+        document.getElementById('ward').appendChild(opt);
+      }
+    });
+
     function filterRooms() {
       var selectedType = document.getElementById('ward').value;
-      var rows = document.querySelectorAll('.room-row');
-      rows.forEach(function(row) {
+      document.querySelectorAll('.room-row').forEach(function(row) {
         var roomType = row.getAttribute('data-room-type');
-        var showRow = true;
-
-        if (selectedType !== 'all' && roomType !== selectedType) {
-          showRow = false;
-        }
-
-        if (showRow) {
-          row.style.display = '';
-        } else {
-          row.style.display = 'none';
-        }
+        row.style.display = (selectedType === 'all' || roomType === selectedType) ? '' : 'none';
       });
     }
 
