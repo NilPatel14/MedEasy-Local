@@ -252,6 +252,35 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+def booking_detail(request, booking_id):
+    if not request.user.is_authenticated:
+        return redirect('authorization:log_in')
+    booking = get_object_or_404(Booking, id=booking_id)
+    return render(request, "Receptionist/bookingdetail.html", {'booking': booking})
+
+
+def edit_booking(request, booking_id):
+    if not request.user.is_authenticated:
+        return redirect('authorization:log_in')
+    booking = get_object_or_404(Booking, id=booking_id)
+    if request.method == 'POST':
+        form = BookingForm(request.POST, instance=booking)
+        if form.is_valid():
+            check_in = form.cleaned_data['check_in']
+            check_out = form.cleaned_data['check_out']
+            if check_out < check_in:
+                messages.error(request, 'Check-out date cannot be before check-in date.')
+                return render(request, "Receptionist/room.html", {'form': form, 'edit': True, 'booking_id': booking_id})
+            form.save()
+            messages.success(request, 'Booking updated successfully.')
+            return redirect('Receptionist:room_details')
+        else:
+            messages.error(request, 'Update failed! Please check the form.')
+    else:
+        form = BookingForm(instance=booking)
+    return render(request, "Receptionist/room.html", {'form': form, 'edit': True, 'booking_id': booking_id})
+
+
 def get_beds(request):
     room_id = request.GET.get('room_id')
 

@@ -168,12 +168,7 @@ def dashboard_show(request):
     
 def bill_payment(request):
     if request.user.is_authenticated:
-        data = Appointment.objects.filter(user_id=request.user.id, payment_status='unpaid')
-        sum = 0
-        for i in data:
-            sum = sum + i.department.amount
-        template = "Patient/Payment.html"
-        return render(request, template, {'data': sum})
+        return redirect('Patient:payment_history')
     else:
         return redirect('authorization:login')
     
@@ -360,14 +355,51 @@ def Check_Appointment_History(request):
 #     return render(request, 'Patient/payment_page.html', context)
 
 # with convert amount in gbp for stripe
-def payment_page(request):
-    appointments = Appointment.objects.filter(user_id=request.user.id, payment_status='unpaid')
-    total_inr = sum([appt.department.amount for appt in appointments])
+def payment_page_all(request):
+    if not request.user.is_authenticated:
+        return redirect('authorization:login')
+    appointments = Appointment.objects.filter(user=request.user, payment_status='unpaid').select_related('department')
+    if not appointments.exists():
+        return redirect('Patient:payment_history')
+    total_inr = sum(a.department.amount for a in appointments)
     total_paise = int(total_inr * 100)
+    appointment_ids = ','.join(str(a.id) for a in appointments)
+    try:
+        client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_SECRET_KEY))
+        order = client.order.create({
+            'amount': total_paise,
+            'currency': 'INR',
+            'payment_capture': 1,
+            'notes': {'appointment_ids': appointment_ids},
+        })
+        razorpay_order_id = order['id']
+    except Exception as e:
+        razorpay_order_id = ''
+        print("Razorpay order error:", e)
+    context = {
+        'razorpay_key_id': settings.RAZORPAY_KEY_ID,
+        'razorpay_order_id': razorpay_order_id,
+        'total_paise': total_paise,
+        'data': total_inr,
+        'appointment_ids': appointment_ids,
+        'is_bulk': True,
+    }
+    return render(request, 'Patient/page.html', context)
+
+
+def payment_page(request, appointment_id):
+    appointment = get_object_or_404(Appointment, id=appointment_id, user=request.user)
+    amount_inr = appointment.department.amount
+    amount_paise = int(amount_inr * 100)
 
     try:
         client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_SECRET_KEY))
-        order = client.order.create({'amount': total_paise, 'currency': 'INR', 'payment_capture': 1})
+        order = client.order.create({
+            'amount': amount_paise,
+            'currency': 'INR',
+            'payment_capture': 1,
+            'notes': {'appointment_id': str(appointment_id)},
+        })
         razorpay_order_id = order['id']
     except Exception as e:
         razorpay_order_id = ''
@@ -376,8 +408,9 @@ def payment_page(request):
     context = {
         'razorpay_key_id': settings.RAZORPAY_KEY_ID,
         'razorpay_order_id': razorpay_order_id,
-        'total_paise': total_paise,
-        'data': total_inr,
+        'total_paise': amount_paise,
+        'data': amount_inr,
+        'appointment_id': appointment_id,
     }
     return render(request, 'Patient/page.html', context)
 
@@ -559,27 +592,32 @@ def payment_success(request):
     })
 
 def razorpay_success(request):
-    # Get the Razorpay payment details from the POST request
     payment_id = request.POST.get('razorpay_payment_id')
     order_id = request.POST.get('razorpay_order_id')
     signature = request.POST.get('razorpay_signature')
+    appointment_id = request.POST.get('appointment_id')
 
-    # Log the received payment details for debugging
-    logger.info(f"Received payment_id: {payment_id}, order_id: {order_id}, signature: {signature}")
+    logger.info(f"Received payment_id: {payment_id}, order_id: {order_id}, appointment_id: {appointment_id}")
 
-    # Prepare parameters for signature verification
     params_dict = {
         'razorpay_order_id': order_id,
         'razorpay_payment_id': payment_id,
-        'razorpay_signature': signature
+        'razorpay_signature': signature,
     }
-
     try:
         razorpay_client.utility.verify_payment_signature(params_dict)
         logger.info("Payment signature verified successfully")
     except Exception as e:
         logger.warning(f"Signature verification skipped (test mode): {str(e)}")
 
-    # Update payment status regardless (safe for test mode)
-    update_payment_status(request.user.id)
+    # Mark paid: bulk (all) or single appointment
+    appointment_ids = request.POST.get('appointment_ids')
+    if appointment_ids:
+        ids = [int(x) for x in appointment_ids.split(',') if x.strip().isdigit()]
+        Appointment.objects.filter(id__in=ids, user=request.user).update(payment_status='paid')
+    elif appointment_id:
+        Appointment.objects.filter(id=appointment_id, user=request.user).update(payment_status='paid')
+    else:
+        update_payment_status(request.user.id)
+
     return redirect('Patient:payment_success')
