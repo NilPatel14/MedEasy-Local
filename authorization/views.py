@@ -39,6 +39,7 @@ def home(request):
         if contactForm.is_valid():
             contactForm.save()
             messages.success(request, "Your message has been sent successfully.")
+            contactForm = Contact_Form()
         else:
             messages.error(request, "Enter valid data")
     else:
