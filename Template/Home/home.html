@@ -557,6 +557,16 @@
                   </div>
               </div>
           </form>
+
+          {% if messages %}
+              {% for message in messages %}
+                  <div class="alert alert-{{ message.tags }} alert-dismissible fade show mt-3" role="alert" id="contact-success-msg">
+                      <i class="bi bi-check-circle-fill me-2"></i>
+                      {{ message }}
+                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+              {% endfor %}
+          {% endif %}
           
           </div><!-- End Contact Form -->
 
@@ -567,4 +577,12 @@
 
     </section><!-- /Contact Section -->
   </main>
+
+<script>
+  var msg = document.getElementById('contact-success-msg');
+  if (msg) {
+    msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+</script>
+
 {% endblock %}  
